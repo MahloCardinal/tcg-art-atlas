@@ -1,0 +1,3005 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-24",
+  "scope": "Origine dell’illustrazione; non certifica la lingua o l’autenticità della scansione OPPP, né tutte le distribuzioni che riutilizzano la stessa illustrazione.",
+  "artworks": {
+    "op-OP01-001AA": {
+      "label": "OPPP · Origine non verificata",
+      "status": "unverified",
+      "sourceUrl": "https://oppp.online/proxies/one-piece/op01-001-roronoa-zoro",
+      "note": "Nessuna corrispondenza con le stampe ufficiali EN/JP/CN e le promo TCGplayer confrontate. Non attribuire a un prodotto ufficiale."
+    },
+    "op-OP01-001AA1": {
+      "label": "Weekly Shonen Jump — Readers Offer",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "週刊少年ジャンプ応募者全員サービス カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-001_p3.png",
+      "referenceKey": "prt_rsenxdcfw6hv",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-001AA2": {
+      "label": "Premium Card Collection — 25th Anniversary",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション 25周年エディション カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-001_p1.png",
+      "referenceKey": "prt_od0xq2vaw7et",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-001AA3": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-001_p2.png",
+      "referenceKey": "prt_g4vlhcbesdzg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-001AA4": {
+      "label": "OPPP · Origine non verificata",
+      "status": "unverified",
+      "sourceUrl": "https://oppp.online/proxies/one-piece/op01-001-roronoa-zoro",
+      "note": "Nessuna corrispondenza con le stampe ufficiali EN/JP/CN e le promo TCGplayer confrontate. Non attribuire a un prodotto ufficiale."
+    },
+    "op-OP01-002AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-002_p1.png",
+      "referenceKey": "prt_y4ygrb0s6o6b",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-003AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-003_p1.png",
+      "referenceKey": "prt_coj46wh4j57o",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-004AA": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-004_p1.png",
+      "referenceKey": "prt_2b59sxobjtch",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-004AA1": {
+      "label": "Championship 2022 — Qualifier Top 32",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2022 予選 ベスト32記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-004_p2.png",
+      "referenceKey": "prt_o87xquoy5ffn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-005AA": {
+      "label": "Premium Card Collection — Uta",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション-ウタ- カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-005_p3.png",
+      "referenceKey": "prt_4vmrovppoizh",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-005AA1": {
+      "label": "GIFT COLLECTION 2023 [GC-01]",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "GIFT COLLECTION 2023 [GC-01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-005_p2.png",
+      "referenceKey": "prt_axdwiz9t0r3f",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-005AA2": {
+      "label": "Film Red — Finale Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "『ONE PIECE FILM RED』入場者プレゼント フィナーレセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-005_p1.png",
+      "referenceKey": "prt_7wtadab4qk6k",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-006AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p3.png",
+      "referenceKey": "prt_om9l7i4sbkxg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-006AA1": {
+      "label": "Japanese 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Otama (Japanese 1st Anniversary Set)",
+      "sourceUrl": "https://www.tcgplayer.com/product/536170/one-piece-card-game-one-piece-promotion-cards-otama-japanese-1st-anniversary-set",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/536170_200w.jpg",
+      "referenceKey": "536170",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-006AA2": {
+      "label": "Offline Regional 2023 · Participant",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Otama (Offline Regional 2023) [Participant]",
+      "sourceUrl": "https://www.tcgplayer.com/product/514167/one-piece-card-game-one-piece-promotion-cards-otama-offline-regional-2023-participant",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514167_200w.jpg",
+      "referenceKey": "514167",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-006AA3": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p2.png",
+      "referenceKey": "prt_09omz5xacn18",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-008AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-008_p1.png",
+      "referenceKey": "prt_kmn2zj9hciru",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-013_p4.png",
+      "referenceKey": "prt_wcww8ly3hzca",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA1": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-013_p4.png",
+      "referenceKey": "prt_wcww8ly3hzca",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA2": {
+      "label": "Premium Card Collection — 25th Anniversary",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション 25周年エディション カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-013_p1.png",
+      "referenceKey": "prt_px15gheiueg3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA3": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-013_p2.png",
+      "referenceKey": "prt_qkv8ydqqx2q7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA4": {
+      "label": "Promotion Card Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションカードセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-013_p3.png",
+      "referenceKey": "prt_ghjnuyt9bp41",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA5": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554788254OP01-013_05.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554788254OP01-013_05.png",
+      "referenceKey": "prt_mg6wanbotxsj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA6": {
+      "label": "Premium Card Collection — 25th Anniversary",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション 25周年エディション カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-013_p1.png",
+      "referenceKey": "prt_px15gheiueg3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-013AA7": {
+      "label": "Two Legends · OPC08 (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "补充包 传说的强者【OPC-08】",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1720666299237OP01-013_04.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1720666299237OP01-013_04.png",
+      "referenceKey": "prt_fe5w5d2dw4bk",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-014AA": {
+      "label": "Film Red — Finale Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "『ONE PIECE FILM RED』入場者プレゼント フィナーレセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-014_p1.png",
+      "referenceKey": "prt_w5kq7vcha5ss",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-014AA1": {
+      "label": "Premium Card Collection — Film Red",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション ‐ONE PIECE FILM RED ‐ カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-014_p2.png",
+      "referenceKey": "prt_jq5r3kdivkdg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-015AA": {
+      "label": "Promotion Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECEカードゲーム プロモーションパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-015_p1.png",
+      "referenceKey": "prt_35ohy8efst40",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-015AA1": {
+      "label": "Offline Regional Participation Pack 2024 Vol. 3",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Offline Regional Participation Pack 2024 Vol. 3",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-015_p1.png",
+      "referenceKey": "prt_g2s32af4m91q",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-016_p7.png",
+      "referenceKey": "prt_yfh098c5ohc3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA1": {
+      "label": "Premium Card Collection — 25th Anniversary",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション 25周年エディション カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p1.png",
+      "referenceKey": "prt_iyflw3efpgkd",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA2": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-ROMANCE DAWN- [OP01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-016_p1.png",
+      "referenceKey": "prt_cfwyi8hw1ygh",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA3": {
+      "label": "Jump GIGA — Spring 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ジャンプGIGA 2023 SPRING 応募者全員サービス カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p5.png",
+      "referenceKey": "prt_fgyqaxj99ga4",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA4": {
+      "label": "Promotion Card Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションカードセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p6.png",
+      "referenceKey": "prt_xcs5oxc741qj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA5": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554901811OP01-016P_07.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554901811OP01-016P_07.png",
+      "referenceKey": "prt_kr01zsvq8iev",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA6": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554851018OP01-016_06.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554851018OP01-016_06.png",
+      "referenceKey": "prt_ajo2icpkfejm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA7": {
+      "label": "The Three Captains · ST10",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "“三船長”集結【ST-10】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550010",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p3.png",
+      "referenceKey": "prt_64bib5zvx68j",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA8": {
+      "label": "Awakening of the New Era · OP05",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "新時代の主役【OP-05】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550105",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p4.png",
+      "referenceKey": "prt_zivmxcqbqt50",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-016AA9": {
+      "label": "OPPP · Origine non verificata",
+      "status": "unverified",
+      "sourceUrl": "https://oppp.online/proxies/one-piece/op01-016-nami",
+      "note": "Nessuna corrispondenza con le stampe ufficiali EN/JP/CN e le promo TCGplayer confrontate. Non attribuire a un prodotto ufficiale."
+    },
+    "op-OP01-016AA10": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-016_p7.png",
+      "referenceKey": "prt_y2hv58suiyed",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-017_p2.png",
+      "referenceKey": "prt_zkfufgdo66mg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA1": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-017_p2.png",
+      "referenceKey": "prt_zkfufgdo66mg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA2": {
+      "label": "Championship 2023 — Store Qualifier Pack (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "锦标赛2023 店铺预选赛 参加纪念宣传包",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1695091996400OP01-017SP.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1695091996400OP01-017SP.png",
+      "referenceKey": "prt_o3m67wc64g5x",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA3": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554956269OP01-017_03.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554956269OP01-017_03.png",
+      "referenceKey": "prt_r2y7xk3ax3cr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA4": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554956269OP01-017_03.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717554956269OP01-017_03.png",
+      "referenceKey": "prt_r2y7xk3ax3cr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA5": {
+      "label": "Film Red — Finale Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "『ONE PIECE FILM RED』入場者プレゼント フィナーレセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-017_p1.png",
+      "referenceKey": "prt_5upgn0gqzkjf",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-017AA6": {
+      "label": "Premium Card Collection — Film Red",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション ‐ONE PIECE FILM RED ‐ カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-017_p2.png",
+      "referenceKey": "prt_20jhpw2renm4",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-021AA": {
+      "label": "Standard Battle Pack 2022 Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパック2022 Vol.1 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-021_p3.png",
+      "referenceKey": "prt_jvs0a274y6s7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-021AA1": {
+      "label": "Promotion Card Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションカードセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-021_p5.png",
+      "referenceKey": "prt_2k7y452yf1f3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-021AA2": {
+      "label": "Film Red — Finale Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "『ONE PIECE FILM RED』入場者プレゼント フィナーレセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-021_p1.png",
+      "referenceKey": "prt_ebhftna7czhr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-021AA3": {
+      "label": "Premium Card Collection — Film Red",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション ‐ONE PIECE FILM RED ‐ カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-021_p4.png",
+      "referenceKey": "prt_9lmlao0b5x4d",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-021AA4": {
+      "label": "Standard Battle — September Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトル 9月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-021_p2.png",
+      "referenceKey": "prt_c9uld1iekaa0",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-022AA": {
+      "label": "Premium Card Collection — 25th Anniversary",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション 25周年エディション カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-022_p1.png",
+      "referenceKey": "prt_q2yy116n6v08",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-024AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-024_p1.png",
+      "referenceKey": "prt_yudzbogbhm6e",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-024AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-024_p2.png",
+      "referenceKey": "prt_w9akiupbzz7m",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-025AA": {
+      "label": "English Version 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "English Version 1st Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-025_p3.png",
+      "referenceKey": "prt_besahq9pbmqg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-025AA1": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-025_p1.png",
+      "referenceKey": "prt_e0xni7kitk7k",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-025AA2": {
+      "label": "1st Anniversary Set (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "航海王卡牌对战 一周年纪念限定套装",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1717555011722OP01-025_05.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1717555011722OP01-025_05.png",
+      "referenceKey": "prt_8m37xf6j3kj3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-025AA3": {
+      "label": "The Three Captains · ST10",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "“三船長”集結【ST-10】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550010",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-025_p2.png",
+      "referenceKey": "prt_fofq2mogjgru",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-025AA4": {
+      "label": "Flagship Battle — April 2023 Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "フラッグシップバトル2023 4月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-025_p4.png",
+      "referenceKey": "prt_l1nmz7qx9ozz",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-029AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-029_p2.png",
+      "referenceKey": "prt_1xpy4p45xfj1",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-030AA": {
+      "label": "Japanese 2nd Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "2nd ANNIVERSARY SET カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-030_p1.png",
+      "referenceKey": "prt_h3lwo1jjy4ja",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-031AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-ROMANCE DAWN- [OP01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-031_p1.png",
+      "referenceKey": "prt_0mh5qjvle649",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-033AA": {
+      "label": "Standard Battle Pack 2022 Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパック2022 Vol.1 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-033_p1.png",
+      "referenceKey": "prt_ynx2q312urme",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-033AA1": {
+      "label": "Premium Card Collection — Bandai Card Games Fest. 23–24",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Premium Card Collection -BANDAI CARD GAMES Fest. 23-24 Edition-",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-033_p6.png",
+      "referenceKey": "prt_5e0hbb0zocdn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-033AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-033_p4.png",
+      "referenceKey": "prt_y7ik98hx7265",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-034AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-034_p1.png",
+      "referenceKey": "prt_iwqb9k8jrs8s",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-035AA": {
+      "label": "Standard Battle Pack Vol. 3",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパック Vol.3 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-035_p1.png",
+      "referenceKey": "prt_1vpyzfrumq7u",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-035AA1": {
+      "label": "Premium Card Collection — Bandai Card Games Fest. 23–24",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Okiku (Premium Card Collection -BANDAI CARD GAMES Fest. 23-24 Edition-)",
+      "sourceUrl": "https://www.tcgplayer.com/product/564253/one-piece-card-game-one-piece-promotion-cards-okiku-premium-card-collection-bandai-card-games-fest-23-24-edition",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/564253_200w.jpg",
+      "referenceKey": "564253",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-035AA2": {
+      "label": "500 Years in the Future · OP07",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-500 YEARS IN THE FUTURE- [OP-07]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569107",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-035_p2.png",
+      "referenceKey": "prt_wk7483tvr2vo",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-039AA": {
+      "label": "Promotion Pack EX Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションパックEX Vol.1 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-039_p1.png",
+      "referenceKey": "prt_y4cabeyoq611",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-040AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-040_p1.png",
+      "referenceKey": "prt_oxpccnkx43g1",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-041AA": {
+      "label": "Standard Battle Pack Vol. 7",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.7 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-041_p1.png",
+      "referenceKey": "prt_0w3ayqkfusei",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-041AA1": {
+      "label": "CS 2024 Celebration Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Kouzuki Momonosuke (CS 2024 Celebration Pack)",
+      "sourceUrl": "https://www.tcgplayer.com/product/580042/one-piece-card-game-one-piece-promotion-cards-kouzuki-momonosuke-cs-2024-celebration-pack",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/580042_200w.jpg",
+      "referenceKey": "580042",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-041AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-041_p4.png",
+      "referenceKey": "prt_h4ykzxxhnoqg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-041AA3": {
+      "label": "Winner Pack Vol. 7",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Kouzuki Momonosuke (Winner Pack Vol. 7)",
+      "sourceUrl": "https://www.tcgplayer.com/product/548395/one-piece-card-game-one-piece-promotion-cards-kouzuki-momonosuke-winner-pack-vol-7",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/548395_200w.jpg",
+      "referenceKey": "548395",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-047AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-047_p1.png",
+      "referenceKey": "prt_46m7y6mizyv7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-047AA1": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-047_p2.png",
+      "referenceKey": "prt_jdvnsxjmymfb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-047AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-047_p3.png",
+      "referenceKey": "prt_bgelztf2jesp",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-047AA3": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-047_p2.png",
+      "referenceKey": "prt_jdvnsxjmymfb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-048AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-ROMANCE DAWN- [OP01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-048_p1.png",
+      "referenceKey": "prt_yj56674ygfkl",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-051AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-051_p1.png",
+      "referenceKey": "prt_msge37d4g103",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-051AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-051_p3.png",
+      "referenceKey": "prt_lhuhy24er7q8",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-051AA2": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-051_p2.png",
+      "referenceKey": "prt_khkm279imne0",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-052AA": {
+      "label": "Event Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Included in Event Pack Vol.2",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-052_p1.png",
+      "referenceKey": "prt_gkla3sw3bna6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-052AA1": {
+      "label": "CS 2023 Event Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Raizo (CS 2023 Event Pack)",
+      "sourceUrl": "https://www.tcgplayer.com/product/525295/one-piece-card-game-one-piece-promotion-cards-raizo-cs-2023-event-pack",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/525295_200w.jpg",
+      "referenceKey": "525295",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-052AA2": {
+      "label": "The Best · PRBC01 (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "豪华补充包 历代典藏合集【PRBC-01】",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1726626190422OP01-052_06.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1726626190422OP01-052_06.png",
+      "referenceKey": "prt_uitbmt44sw11",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-057AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-057_p2.png",
+      "referenceKey": "prt_9i1dmxwj2azz",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-060AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-060_p1.png",
+      "referenceKey": "prt_y5yig88i200e",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-060AA1": {
+      "label": "Blue Donquixote Doflamingo · ST17",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタートデッキ 青 ドンキホーテ・ドフラミンゴ【ST-17】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550017",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-060_p2.png",
+      "referenceKey": "prt_um9z709hg00r",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-061AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-061_p1.png",
+      "referenceKey": "prt_sog7brdr2t0y",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-062AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-062_p1.png",
+      "referenceKey": "prt_46u6qqw8xa59",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-064AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-064_p1.png",
+      "referenceKey": "prt_3upv4l0neohy",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-067AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-067_p1.png",
+      "referenceKey": "prt_kos41ky44r4h",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-070AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-070_p1.png",
+      "referenceKey": "prt_jvait6e1a9lk",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-070AA1": {
+      "label": "Flagship Battle — January 2024 Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "フラッグシップバトル2024 1月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-070_p2.png",
+      "referenceKey": "prt_avqa3drt1r7q",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-070AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-070_p3.png",
+      "referenceKey": "prt_0os5yfu7waah",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-073AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-073_p1.png",
+      "referenceKey": "prt_6j0vp98wyyrq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-073AA1": {
+      "label": "500 Years in the Future · OP07",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "500年後の未来【OP-07】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550107",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-073_p2.png",
+      "referenceKey": "prt_q0uw6l8m1ysr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-077AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-077_p1.png",
+      "referenceKey": "prt_wbkwiv2a3qsx",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-077AA1": {
+      "label": "Start Playing Campaign — Promotion Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "始めようキャンペーン プロモーションパック カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-077_p5.png",
+      "referenceKey": "prt_dqle5ubclb0s",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-077AA2": {
+      "label": "Jump GIGA — Spring 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ジャンプGIGA 2023 SPRING 応募者全員サービス カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-077_p3.png",
+      "referenceKey": "prt_628llrbs8j1y",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-077AA3": {
+      "label": "Start Playing Campaign — Promotion Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "始めようキャンペーン プロモーションパック カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-077_p5.png",
+      "referenceKey": "prt_dqle5ubclb0s",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-078AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-078_p1.png",
+      "referenceKey": "prt_7fmm0mci6nba",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-078AA1": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-078_p2.png",
+      "referenceKey": "prt_ota84t9cfqal",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-078AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-078_p3.png",
+      "referenceKey": "prt_y6vsi2eywa37",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-078AA3": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-078_p2.png",
+      "referenceKey": "prt_ota84t9cfqal",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-079AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-ROMANCE DAWN- [OP01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-079.png",
+      "referenceKey": "prt_2bhdfsxwhtrb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-084AA": {
+      "label": "Bentham) (Store Championship Participation Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Mr.2.Bon.Kurei (Bentham) (Store Championship Participation Pack Vol. 2)",
+      "sourceUrl": "https://www.tcgplayer.com/product/510707/one-piece-card-game-one-piece-promotion-cards-mr2bonkurei-bentham-store-championship-participation-pack-vol-2",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/510707_200w.jpg",
+      "referenceKey": "510707",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-091AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-091_p1.png",
+      "referenceKey": "prt_4g0xflibrn1e",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-093AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-093.png",
+      "referenceKey": "prt_843d23pm9tif",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-093AA1": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-093_p1.png",
+      "referenceKey": "prt_9qyabfsbzkeb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-094AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-094_p1.png",
+      "referenceKey": "prt_qxln5eokcq15",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-094AA1": {
+      "label": "Flagship Battle — October 2023 Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "フラッグシップバトル2023 10月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-094_p3.png",
+      "referenceKey": "prt_bdks6wfb6z47",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-096AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-096_p1.png",
+      "referenceKey": "prt_u45zb8gbxfml",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-097AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-097_p1.png",
+      "referenceKey": "prt_0m6i7w2dsmno",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-101AA": {
+      "label": "Event Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Included in Event Pack Vol.2",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-101_p1.png",
+      "referenceKey": "prt_piaz25gdhclq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-102AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-102_p1.png",
+      "referenceKey": "prt_3ss20ihha6kj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-108AA": {
+      "label": "Promotion Pack Vol. 5",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECEカードゲーム プロモーションパックVol.5 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-108_p1.png",
+      "referenceKey": "prt_19ugl838iab4",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-109AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-109_p1.png",
+      "referenceKey": "prt_45xotuxl3x08",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-114AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.2 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-114_p2.png",
+      "referenceKey": "prt_t1gb3fqo5ga4",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-120AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-120_p1.png",
+      "referenceKey": "prt_rphyauz41cmb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-120AA1": {
+      "label": "Romance Dawn · OP01 · Manga",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-ROMANCE DAWN- [OP01]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-120_p2.png",
+      "referenceKey": "prt_e60654sw0f47",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-120AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-120_p5.png",
+      "referenceKey": "prt_lyr88yvo9woz",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-120AA3": {
+      "label": "Flagship Battle — July 2023 Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "フラッグシップバトル2023 7月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-120_p4.png",
+      "referenceKey": "prt_x7mn76qayhjm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-121AA": {
+      "label": "Romance Dawn · OP01 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ROMANCE DAWN【OP-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-121_p1.png",
+      "referenceKey": "prt_5zln30wtfl24",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-121AA1": {
+      "label": "Awakening of the New Era · OP05",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "新時代の主役【OP-05】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550105",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-121_p2.png",
+      "referenceKey": "prt_eyqnvzfyf074",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP01-121AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-121_p3.png",
+      "referenceKey": "prt_aormvci4n9vs",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-001AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-PARAMOUNT WAR- [OP02]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569102",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-001_p1.png",
+      "referenceKey": "prt_8dzz9z5amn80",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-001AA1": {
+      "label": "Championship Set 2023 — Former Four Emperors",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップセット2023(旧四皇) カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-001_p3.png",
+      "referenceKey": "prt_m9qqe00h17qc",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-001AA2": {
+      "label": "Red Edward.Newgate · ST15",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタートデッキ 赤 エドワード・ニューゲート【ST-15】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550015",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-001_p4.png",
+      "referenceKey": "prt_o5wcq70tndue",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-002AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-002_p1.png",
+      "referenceKey": "prt_p7iz78kvs1ca",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-004AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-004_p1.png",
+      "referenceKey": "prt_bfz3ws4dmd10",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-004AA1": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-004_p2.png",
+      "referenceKey": "prt_mb9xae8dtlj2",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-004AA2": {
+      "label": "Promotion Pack EX Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションパックEX Vol.1 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-004_p3.png",
+      "referenceKey": "prt_l0xwpq74m1z6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-004AA3": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-004_p4.png",
+      "referenceKey": "prt_dj6hxw371dxq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-004AA4": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-004_p2.png",
+      "referenceKey": "prt_mb9xae8dtlj2",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-005AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-005_p2.png",
+      "referenceKey": "prt_m3shw7r5y3od",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-008AA": {
+      "label": "Championship 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Jozu (Championship 2023)",
+      "sourceUrl": "https://www.tcgplayer.com/product/514044/one-piece-card-game-one-piece-promotion-cards-jozu-championship-2023",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514044_200w.jpg",
+      "referenceKey": "514044",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-009AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-009_p1.png",
+      "referenceKey": "prt_fxte3mbbiqzj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-013AA": {
+      "label": "Japanese 2nd Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Japanese 2nd Anniversary Set",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-013_p5.png",
+      "referenceKey": "prt_gxytf8q3idvn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-013AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-013_p1.png",
+      "referenceKey": "prt_de61ax2hcjlw",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-013AA2": {
+      "label": "Paramount War · OP02 · Manga",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "-PARAMOUNT WAR- [OP02]",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569102",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-013_p2.png",
+      "referenceKey": "prt_t7oim4lmq41g",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-013AA3": {
+      "label": "Two Legends · OP08",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ブースターパック 二つの伝説【OP-08】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550108",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-013_p3.png",
+      "referenceKey": "prt_sdp1qr5l2770",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-015AA": {
+      "label": "Japanese 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "1st ANNIVERSARY SET カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-015_p3.png",
+      "referenceKey": "prt_8eph3s11ezk6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-015AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-015_p2.png",
+      "referenceKey": "prt_bchnsgmnn2sy",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-017AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-017_p1.png",
+      "referenceKey": "prt_c7os04sinos1",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-018AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-018_p1.png",
+      "referenceKey": "prt_c6xhvapdgylu",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-018AA1": {
+      "label": "Promotion Pack 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Marco (Promotion Pack 2023)",
+      "sourceUrl": "https://www.tcgplayer.com/product/483105/one-piece-card-game-one-piece-promotion-cards-marco-promotion-pack-2023",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/483105_200w.jpg",
+      "referenceKey": "483105",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-018AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-018_p4.png",
+      "referenceKey": "prt_zbbjuwry1nzb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-018AA3": {
+      "label": "The Best · PRBC01 (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "豪华补充包 历代典藏合集【PRBC-01】",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1726626190433OP02-018_05.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1726626190433OP02-018_05.png",
+      "referenceKey": "prt_7y8n91rjz98i",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-025AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-025_p1.png",
+      "referenceKey": "prt_lkqyf1x2wby6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-026AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-026_p1.png",
+      "referenceKey": "prt_efcvaz9y5at6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-029AA": {
+      "label": "Jump GIGA — Spring 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ジャンプGIGA 2023 SPRING 応募者全員サービス カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-029_p2.png",
+      "referenceKey": "prt_0ad8tynaajap",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-030AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-030_p1.png",
+      "referenceKey": "prt_5sm1j0ebhmtw",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-031AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-031_p1.png",
+      "referenceKey": "prt_efurvyayj0sg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-034AA": {
+      "label": "Promotion Pack Vol. 5",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECEカードゲーム プロモーションパックVol.5 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-034_p3.png",
+      "referenceKey": "prt_ysk6fak394dn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-035AA": {
+      "label": "Online Regional Participation Pack Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Included in Online Regional Participation Pack Vol.1",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-035_p1.png",
+      "referenceKey": "prt_bs8ob9cqww1l",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-036AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-036_p1.png",
+      "referenceKey": "prt_7drmjox0arrv",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-036AA1": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-036_p3.png",
+      "referenceKey": "prt_7au2dx3h8vzm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-041AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-041_p1.png",
+      "referenceKey": "prt_cidiz1jq13zq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-049AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-049_p1.png",
+      "referenceKey": "prt_1l03sky1dqo4",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-051AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-051_p1.png",
+      "referenceKey": "prt_owbcpvytk5ov",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-053AA": {
+      "label": "Offline Regional 2023 · Participant",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Crocodile (Offline Regional 2023) [Participant]",
+      "sourceUrl": "https://www.tcgplayer.com/product/514179/one-piece-card-game-one-piece-promotion-cards-crocodile-offline-regional-2023-participant",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514179_200w.jpg",
+      "referenceKey": "514179",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-058AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-058_p1.png",
+      "referenceKey": "prt_ygche9gve3v5",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-059AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-059_p1.png",
+      "referenceKey": "prt_8dujgglcnu3z",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-059AA1": {
+      "label": "Promotion Card Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションカードセット カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-059_p2.png",
+      "referenceKey": "prt_5aswbkpylujx",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-062AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-062_p1.png",
+      "referenceKey": "prt_cu0cyi5ep32z",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-063AA": {
+      "label": "Promotion Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECEカードゲーム プロモーションパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-063_p1.png",
+      "referenceKey": "prt_tyd4smzc8wh9",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-063AA1": {
+      "label": "Offline Regional Participation Pack 2024 Vol. 3",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Offline Regional Participation Pack 2024 Vol. 3",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-063_p1.png",
+      "referenceKey": "prt_aco0wxxnms0s",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-068AA": {
+      "label": "The Best Vol. 2 · PRB02",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST vol.2【PRB-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550302",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-068_p1.png",
+      "referenceKey": "prt_ptaqxja3o0ka",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-071AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-071_p1.png",
+      "referenceKey": "prt_ahhe6p6c3hud",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-072AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-072_p1.png",
+      "referenceKey": "prt_90wwgwbgh7d5",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-073AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-073_p1.png",
+      "referenceKey": "prt_ky4a56o3pb38",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-085AA": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-085_p2.png",
+      "referenceKey": "prt_aflpwaflb1mq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-085AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-085_p1.png",
+      "referenceKey": "prt_32p11iehyt5i",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-085AA2": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-085_p2.png",
+      "referenceKey": "prt_aflpwaflb1mq",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-086AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-086_p1.png",
+      "referenceKey": "prt_jmvr9p0q1xsd",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-089AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-089_p3.png",
+      "referenceKey": "prt_6w6tyrxvyxc9",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-093AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-093_p1.png",
+      "referenceKey": "prt_mc8nxzdqsvig",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-093AA1": {
+      "label": "Black Smoker · ST19",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタートデッキ 黒 スモーカー【ST-19】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550019",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-093_p2.png",
+      "referenceKey": "prt_fd99gkecnlz2",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-096AA": {
+      "label": "Championship 2023 — Area Qualifier Top 8",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2023 1次予選エリア大会 ベスト8記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-096_p3.png",
+      "referenceKey": "prt_gsmqn3jz5r0q",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-096AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-096_p1.png",
+      "referenceKey": "prt_ly773q4w9fcm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-096AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-096_p4.png",
+      "referenceKey": "prt_nbv31rnugdx8",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-098AA": {
+      "label": "Online Regional Participation Pack Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Included in Online Regional Participation Pack Vol.1",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-098_p1.png",
+      "referenceKey": "prt_w3nbkwgmvbd2",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-098AA1": {
+      "label": "Flagship Battle — July 2023 Top 8",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "フラッグシップバトル2023 7月ベスト8記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-098_p3.png",
+      "referenceKey": "prt_fa5yafpgw88z",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-099AA": {
+      "label": "Championship 2023 — Qualifier Finals Top 32",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2023 1次予選決勝大会 ベスト32記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-099_p4.png",
+      "referenceKey": "prt_rkb1a32gffvx",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-099AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-099_p1.png",
+      "referenceKey": "prt_hsaz64v24y8u",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-099AA2": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-099_p2.png",
+      "referenceKey": "prt_wd8ne4ws5lay",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-099AA3": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-099_p5.png",
+      "referenceKey": "prt_joxzahay7zqi",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-099AA4": {
+      "label": "Kingdoms of Intrigue · OP04",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "謀略の王国【OP-04】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-099_p2.png",
+      "referenceKey": "prt_wd8ne4ws5lay",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-105AA": {
+      "label": "Jump GIGA — Spring 2023",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ジャンプGIGA 2023 SPRING 応募者全員サービス カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-105_p3.png",
+      "referenceKey": "prt_svhue3b8ldk7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-105AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-105_p1.png",
+      "referenceKey": "prt_f86i39c07x4q",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-106AA": {
+      "label": "Event Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Included in Event Pack Vol.2",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP02-106_p1.png",
+      "referenceKey": "prt_uzitcf00rhxw",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-106AA1": {
+      "label": "CS 2023 Event Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Tsuru (CS 2023 Event Pack)",
+      "sourceUrl": "https://www.tcgplayer.com/product/525297/one-piece-card-game-one-piece-promotion-cards-tsuru-cs-2023-event-pack",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/525297_200w.jpg",
+      "referenceKey": "525297",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-106AA2": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-106_p2.png",
+      "referenceKey": "prt_h8a3f97tn83r",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-106AA3": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-106_p5.png",
+      "referenceKey": "prt_w81gyxayozar",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-108AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-108_p1.png",
+      "referenceKey": "prt_m9vhpvumwywc",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-108AA1": {
+      "label": "Promotion Pack Vol. 5",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECEカードゲーム プロモーションパックVol.5 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-108_p2.png",
+      "referenceKey": "prt_z8005u2qseh9",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-114AA": {
+      "label": "Championship 2023 — Area Qualifier Top 16",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2023 1次予選エリア大会 ベスト16記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-114_p3.png",
+      "referenceKey": "prt_sw7sf6oshjbi",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-114AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-114_p1.png",
+      "referenceKey": "prt_av972tu0v0i3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-114AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-114_p4.png",
+      "referenceKey": "prt_u652j7z886x6",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-115AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-115_p1.png",
+      "referenceKey": "prt_ofc7gcranxnt",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-117AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-117_p2.png",
+      "referenceKey": "prt_2w4u4f0jteou",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-120AA": {
+      "label": "Awakening of the New Era · OP05",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "新時代の主役【OP-05】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550105",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-120_p2.png",
+      "referenceKey": "prt_4a82zi6dpj56",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-120AA1": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-120_p1.png",
+      "referenceKey": "prt_s7ozlbq3bpof",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-120AA2": {
+      "label": "Premium Card Collection — Uta",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション-ウタ- カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-120_p3.png",
+      "referenceKey": "prt_jt33wu7ecv0e",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-121AA": {
+      "label": "Paramount War · OP02 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "頂上決戦【OP-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-121_p1.png",
+      "referenceKey": "prt_wyqbus5yjpqg",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP02-121AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP02-121_p2.png",
+      "referenceKey": "prt_ncpwi3zv6mja",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-001AA": {
+      "label": "Championship Set 2023 — Ace, Sabo & Luffy",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップセット2023（エース・サボ・ルフィ） カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-001_p2.png",
+      "referenceKey": "prt_h9yed2jts48p",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-001AA1": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-001_p1.png",
+      "referenceKey": "prt_w24apb8f7s1r",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-003AA": {
+      "label": "500 Years in the Future · OP07",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "500年後の未来【OP-07】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550107",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-003_p1.png",
+      "referenceKey": "prt_yl253v507njj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-003AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-003_p5.png",
+      "referenceKey": "prt_hz2yvemcb516",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-003AA2": {
+      "label": "500 Years in the Future · OP07",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "500年後の未来【OP-07】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550107",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-003_p1.png",
+      "referenceKey": "prt_yl253v507njj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-006AA": {
+      "label": "Starter Deck STC09 — Promo (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "基本卡组 继承御殿遗志的人【STC-09】宣传卡牌",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142200068OP03-006P.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142200068OP03-006P.png",
+      "referenceKey": "prt_w9vvfaeu6p04",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-008AA": {
+      "label": "Wings of the Captain · OP06",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "双璧の覇者【OP-06】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550106",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-008_p1.png",
+      "referenceKey": "prt_k0ymee4kafcv",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-013AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-013_p1.png",
+      "referenceKey": "prt_q7yinu2n3l25",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-013AA1": {
+      "label": "Japanese 1st Anniversary Set",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "1st ANNIVERSARY SET カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-013_p3.png",
+      "referenceKey": "prt_ftz8qnu9a9qa",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-013AA2": {
+      "label": "Promotion Pack EX Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プロモーションパックEX Vol.1 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-013_p2.png",
+      "referenceKey": "prt_2q6rj8sovyoi",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-018AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-018_p1.png",
+      "referenceKey": "prt_9lnvvc24vvtd",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-021AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-021_p1.png",
+      "referenceKey": "prt_3jcpihg8qmt9",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-022AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-022_p1.png",
+      "referenceKey": "prt_pi94fhv3r7xp",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-024AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-024_p1.png",
+      "referenceKey": "prt_u44cq36uzkl3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-025AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-025_p1.png",
+      "referenceKey": "prt_2baei0g6uo0l",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-026AA": {
+      "label": "Online Regional 2023 · Participant",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Kuroobi (Online Regional 2023) [Participant]",
+      "sourceUrl": "https://www.tcgplayer.com/product/514036/one-piece-card-game-one-piece-promotion-cards-kuroobi-online-regional-2023-participant",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514036_200w.jpg",
+      "referenceKey": "514036",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-031AA": {
+      "label": "Store Championship Participation Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Pearl (Store Championship Participation Pack Vol. 2)",
+      "sourceUrl": "https://www.tcgplayer.com/product/510718/one-piece-card-game-one-piece-promotion-cards-pearl-store-championship-participation-pack-vol-2",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/510718_200w.jpg",
+      "referenceKey": "510718",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-032AA": {
+      "label": "Starter Deck STC08 — Promo (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "基本卡组 第五个海上皇帝【STC-08】宣传卡牌",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188966OP03-032P.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188966OP03-032P.png",
+      "referenceKey": "prt_d0bkicnhwsmt",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-033AA": {
+      "label": "CS 2024 Celebration Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Hatchan (CS 2024 Celebration Pack)",
+      "sourceUrl": "https://www.tcgplayer.com/product/580043/one-piece-card-game-one-piece-promotion-cards-hatchan-cs-2024-celebration-pack",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/580043_200w.jpg",
+      "referenceKey": "580043",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-033AA1": {
+      "label": "Standard Battle Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-033_p1.png",
+      "referenceKey": "prt_zpf2egkdzyqu",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-033AA2": {
+      "label": "Winner Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Hatchan (Winner Pack Vol. 6)",
+      "sourceUrl": "https://www.tcgplayer.com/product/537441/one-piece-card-game-one-piece-promotion-cards-hatchan-winner-pack-vol-6",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/537441_200w.jpg",
+      "referenceKey": "537441",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-040AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-040_p1.png",
+      "referenceKey": "prt_oxy8dd0rkgdl",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-041AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-041_p1.png",
+      "referenceKey": "prt_71q0icbrzzsh",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-044AA": {
+      "label": "Japanese 2nd Anniversary Collection (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "豪华卡牌收藏 日版两周年特别纪念（简体中文版）",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1742888432526OP03-044_03.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1742888432526OP03-044_03.png",
+      "referenceKey": "prt_y7d8mvvuclqh",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-044AA1": {
+      "label": "Standard Battle Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-044_p1.png",
+      "referenceKey": "prt_fnygfv2bk57r",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-044AA2": {
+      "label": "Standard Battle — January 2024 Winner",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトル 2024年1月優勝記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-044_p2.png",
+      "referenceKey": "prt_okijur71a8wm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-044AA3": {
+      "label": "Winner Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Kaya (Winner Pack Vol. 6)",
+      "sourceUrl": "https://www.tcgplayer.com/product/537443/one-piece-card-game-one-piece-promotion-cards-kaya-winner-pack-vol-6",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/537443_200w.jpg",
+      "referenceKey": "537443",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-047AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-047_p1.png",
+      "referenceKey": "prt_ejdtzcihsl4z",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-055AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.2 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-055_p1.png",
+      "referenceKey": "prt_31m10km0pest",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-056AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-056_p3.png",
+      "referenceKey": "prt_b7p46ngz98w3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-057AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-057_p3.png",
+      "referenceKey": "prt_rus4pzf375zm",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-058AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-058_p1.png",
+      "referenceKey": "prt_8skvkoag77mb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-060AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-060_p2.png",
+      "referenceKey": "prt_2ylskhb38u9g",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-066AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-066_p1.png",
+      "referenceKey": "prt_9bykvdgzm1f3",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-069AA": {
+      "label": "Online Regional 2023 · Participant",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Minorhinoceros (Online Regional 2023) [Participant]",
+      "sourceUrl": "https://www.tcgplayer.com/product/514038/one-piece-card-game-one-piece-promotion-cards-minorhinoceros-online-regional-2023-participant",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514038_200w.jpg",
+      "referenceKey": "514038",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-069AA1": {
+      "label": "Starter Deck STC08 — Promo (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "基本卡组 第五个海上皇帝【STC-08】宣传卡牌",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188974OP03-069P.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188974OP03-069P.png",
+      "referenceKey": "prt_9vrd1uhlnq0k",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-070AA": {
+      "label": "Promotion Pack 2023 Vol. 1 (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "宣传包2023 Vol.1",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142212083OP03-070P.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142212083OP03-070P.png",
+      "referenceKey": "prt_a5vt7ih2k2am",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-072AA": {
+      "label": "The Best Vol. 2 · PRB02",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST vol.2【PRB-02】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550302",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-072_p1.png",
+      "referenceKey": "prt_vptt2cq4alqj",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-076AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-076_p1.png",
+      "referenceKey": "prt_xl75h2andomb",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-077AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-077_p1.png",
+      "referenceKey": "prt_90sregmpiscr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-078AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-078_p1.png",
+      "referenceKey": "prt_ike6n93ndgvy",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-078AA1": {
+      "label": "500 Years in the Future · OP07",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "500年後の未来【OP-07】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550107",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-078_p2.png",
+      "referenceKey": "prt_55ow2ltywswz",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-079AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-079_p3.png",
+      "referenceKey": "prt_iljrmo074vjz",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-080AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-080_p1.png",
+      "referenceKey": "prt_y6rqsdzwlq63",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-081AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-081_p1.png",
+      "referenceKey": "prt_khvknod5is83",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-081AA1": {
+      "label": "Starter Deck STC08 — Promo (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "基本卡组 第五个海上皇帝【STC-08】宣传卡牌",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188977OP03-081SP.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188977OP03-081SP.png",
+      "referenceKey": "prt_4vv8rqd0imc1",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-086AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-086_p1.png",
+      "referenceKey": "prt_qao9erq54il7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-086AA1": {
+      "label": "Online Regional 2023 · Participant",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Spandam (Online Regional 2023) [Participant]",
+      "sourceUrl": "https://www.tcgplayer.com/product/514040/one-piece-card-game-one-piece-promotion-cards-spandam-online-regional-2023-participant",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/514040_200w.jpg",
+      "referenceKey": "514040",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-088AA": {
+      "label": "Starter Deck STC08 — Promo (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "基本卡组 第五个海上皇帝【STC-08】宣传卡牌",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188983OP03-088P.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1691142188983OP03-088P.png",
+      "referenceKey": "prt_xmf8h5ed4nzp",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-088AA1": {
+      "label": "Standard Battle Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-088_p1.png",
+      "referenceKey": "prt_nzgfjuij0vq7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-088AA2": {
+      "label": "Premium Card Collection — Bandai Card Games Fest. 23–24",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Premium Card Collection -BANDAI CARD GAMES Fest. 23-24 Edition-",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569801",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP03-088_p2.png",
+      "referenceKey": "prt_1wd0sb9hg5vo",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-089AA": {
+      "label": "Standard Battle Pack Vol. 4",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.4 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-089_p1.png",
+      "referenceKey": "prt_6neqznm0lzl7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-089AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-089_p5.png",
+      "referenceKey": "prt_h3pe2fnj0nm7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-089AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-089_p4.png",
+      "referenceKey": "prt_azvouw0yyfdk",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-089AA3": {
+      "label": "Offline Regional Participation Pack 2024 Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Offline Regional Participation Pack 2024 Vol. 1",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP03-089_p1.png",
+      "referenceKey": "prt_83klkmisir15",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-092AA": {
+      "label": "Awakening of the New Era · OP05",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "新時代の主役【OP-05】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550105",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-092_p2.png",
+      "referenceKey": "prt_5x38trg607ky",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-092AA1": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-092_p1.png",
+      "referenceKey": "prt_0l4t05aoymqs",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-099AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-099_p1.png",
+      "referenceKey": "prt_x0gbd917legd",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-099AA1": {
+      "label": "Yellow Charlotte Katakuri · ST20",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタートデッキ 黄 シャーロット・カタクリ【ST-20】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550020",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-099_p2.png",
+      "referenceKey": "prt_461mqsewhoxs",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-102AA": {
+      "label": "Standard Battle Pack Vol. 4",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.4 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-102_p1.png",
+      "referenceKey": "prt_tfphksxjdj5z",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-102AA1": {
+      "label": "Store Championship Participation Pack Vol. 2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Sanji (Store Championship Participation Pack Vol. 2)",
+      "sourceUrl": "https://www.tcgplayer.com/product/510726/one-piece-card-game-one-piece-promotion-cards-sanji-store-championship-participation-pack-vol-2",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/510726_200w.jpg",
+      "referenceKey": "510726",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-102AA2": {
+      "label": "Premium Card Collection — Bandai Card Games Fest. 23–24",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Sanji (Premium Card Collection -BANDAI CARD GAMES Fest. 23-24 Edition-)",
+      "sourceUrl": "https://www.tcgplayer.com/product/564260/one-piece-card-game-one-piece-promotion-cards-sanji-premium-card-collection-bandai-card-games-fest-23-24-edition",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/564260_200w.jpg",
+      "referenceKey": "564260",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-108AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-108_p1.png",
+      "referenceKey": "prt_m5m0akwxzs5j",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-108AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-108_p2.png",
+      "referenceKey": "prt_hw3q0z9r5x6q",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-110AA": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-110_p4.png",
+      "referenceKey": "prt_qkw40w1hczhc",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-110AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-110_p3.png",
+      "referenceKey": "prt_ul8yqfj96mzx",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-112AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-112_p1.png",
+      "referenceKey": "prt_63gknroimn2c",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-112AA1": {
+      "label": "Standard Battle Pack Vol. 8",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.8 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-112_p2.png",
+      "referenceKey": "prt_y0efaiou64wn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-112AA2": {
+      "label": "CS 25-26 Celebration Pack",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "CS 25-26 Celebration Pack",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP03-112_p6.png",
+      "referenceKey": "prt_e5uom7cms4ox",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-112AA3": {
+      "label": "Championship 2024 — Wave 1 Top 16",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2024 WAVE1 エリア大会 ベスト16記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-112_p3.png",
+      "referenceKey": "prt_x127rm7ibdac",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-112AA4": {
+      "label": "Two Legends · OP08",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ブースターパック 二つの伝説【OP-08】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550108",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-112_p4.png",
+      "referenceKey": "prt_mn0q005mfbo1",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-113AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-113_p1.png",
+      "referenceKey": "prt_dyvn39u421i9",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-113AA1": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-113_p2.png",
+      "referenceKey": "prt_q74zy0z0yqnw",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-114AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-114_p1.png",
+      "referenceKey": "prt_sm0zk18zuwjn",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-114AA1": {
+      "label": "Regional 2024 wave2",
+      "status": "artwork-reviewed",
+      "sourceRegion": "en",
+      "sourceText": "Regional 2024 wave2",
+      "sourceUrl": "https://en.onepiece-cardgame.com/cardlist/?series=569901",
+      "referenceImageUrl": "https://en.onepiece-cardgame.com/images/cardlist/card/OP03-114_p3.png",
+      "referenceKey": "prt_iatl337xjysx",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-114AA2": {
+      "label": "Wings of the Captain · OP06",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "双璧の覇者【OP-06】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550106",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-114_p2.png",
+      "referenceKey": "prt_zpte2fpdp030",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-116AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-116.png",
+      "referenceKey": "prt_4iwxai7d9d95",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-116AA1": {
+      "label": "Championship 2024 — Participation Pack B (CN)",
+      "status": "artwork-reviewed",
+      "sourceRegion": "cn",
+      "sourceText": "锦标赛2024 参加纪念宣传包B",
+      "sourceUrl": "https://source.windoent.com/OnePiecePc/Picture/1716795780155OP03-116_03.png",
+      "referenceImageUrl": "https://source.windoent.com/OnePiecePc/Picture/1716795780155OP03-116_03.png",
+      "referenceKey": "prt_uo1710gpx3i5",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-116AA2": {
+      "label": "Standard Battle Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "スタンダードバトルパックVol.6 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-116_p1.png",
+      "referenceKey": "prt_i53gsnsnwcys",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-116AA3": {
+      "label": "Championship 2024 — 3on3 Autumn Top 16",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2024 WAVE2 3on3 Autumn ベスト16記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-116_p4.png",
+      "referenceKey": "prt_kukwf2vlrngd",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-116AA4": {
+      "label": "Winner Pack Vol. 6",
+      "status": "artwork-reviewed",
+      "sourceRegion": "tcgplayer",
+      "sourceText": "Shirahoshi (Winner Pack Vol. 6)",
+      "sourceUrl": "https://www.tcgplayer.com/product/537447/one-piece-card-game-one-piece-promotion-cards-shirahoshi-winner-pack-vol-6",
+      "referenceImageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/537447_200w.jpg",
+      "referenceKey": "537447",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-121AA": {
+      "label": "Premium Card Collection — Best Selection Vol. 1",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "プレミアムカードコレクション - ベストセレクションvol.1 - カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550801",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-121_p2.png",
+      "referenceKey": "prt_x1t3k4xtuzmv",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-122AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-122_p1.png",
+      "referenceKey": "prt_cyomp9mn8cor",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-122AA1": {
+      "label": "Pillars of Strength · OP03 · Manga",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-122_p2.png",
+      "referenceKey": "prt_mqi24rkm6dh7",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-123AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-123_p1.png",
+      "referenceKey": "prt_cxfdvkm4sry5",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-123AA1": {
+      "label": "Championship 2024 — Wave 1 Top 8",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "チャンピオンシップ2024 WAVE1 エリア大会 ベスト8記念品 カードリスト",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550901",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-123_p2.png",
+      "referenceKey": "prt_j4tgyp2x35gr",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-OP03-123AA2": {
+      "label": "The Best · PRB01",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "ONE PIECE CARD THE BEST【PRB-01】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/OP03-123_p3.png",
+      "referenceKey": "prt_xv2k32fspjxw",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-ST01-012AA5": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-012_p1.png",
+      "referenceKey": "prt_skf8ryc01368",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-ST03-009AA": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-009_p1.png",
+      "referenceKey": "prt_f5yx2hi2nfoc",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-ST04-003AA6": {
+      "label": "Pillars of Strength · OP03 · Parallel",
+      "status": "artwork-reviewed",
+      "sourceRegion": "jp",
+      "sourceText": "強大な敵【OP-03】 カードリスト 商品情報",
+      "sourceUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "referenceImageUrl": "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-003_p1.png",
+      "referenceKey": "prt_nzpz307fb32l",
+      "reviewedAt": "2026-11-24"
+    },
+    "op-don-456059": {
+      "label": "Romance Dawn · OP01 · DON!! Luffy",
+      "status": "product-reference",
+      "sourceUrl": "https://www.tcgplayer.com/product/456059/one-piece-card-game-romance-dawn-don-card-manga-alternate-art"
+    },
+    "op-don-482273": {
+      "label": "Paramount War · OP02 · DON!! Shanks",
+      "status": "product-reference",
+      "sourceUrl": "https://oplaytcg.com/en/dons/op02-shanks"
+    },
+    "op-don-549342": {
+      "label": "DON!! Standard",
+      "status": "product-reference",
+      "sourceUrl": "https://www.tcgplayer.com/product/549342/one-piece-card-game-paramount-war-don-card"
+    },
+    "op-don-498519": {
+      "label": "Pillars of Strength · OP03 · DON!! Sanji",
+      "status": "product-reference",
+      "sourceUrl": "https://oplaytcg.com/en/dons/op03-sanji"
+    }
+  }
+}

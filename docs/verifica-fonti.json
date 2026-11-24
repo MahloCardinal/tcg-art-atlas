@@ -1,0 +1,988 @@
+{
+  "checkedOn": "2026-11-24",
+  "scope": "Verifica fonti EN/JP; nessuna importazione nel catalogo frontend",
+  "catalogSha256": "8678efac29ffbdb2d215c9af9b803151ae3befa7f535225f3d2972fa7cf69870",
+  "pokemon": {
+    "cardCorpus": {
+      "repository": "https://github.com/cardcorpus/pokemon-card-dataset",
+      "snapshot": "2026-11-21",
+      "catalogs": [
+        {
+          "id": "english",
+          "setRows": 324,
+          "cardRows": 25335,
+          "rowsInRequestedLanguage": 25319,
+          "frontImageReferenceMissingCount": 7,
+          "frontImageReferencesMissing": [
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-1-trainer-e12a6c",
+              "language": "en"
+            },
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-2-trainer-b18be4",
+              "language": "en"
+            },
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-2-trainer-7c343a",
+              "language": "en"
+            },
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-3-trainer-fb4963",
+              "language": "en"
+            },
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-3-trainer-bc02d9",
+              "language": "en"
+            },
+            {
+              "set": "english/miscellaneous-promos",
+              "id": "no-4-trainer-508548",
+              "language": "en"
+            },
+            {
+              "set": "english/me-black-star-promos",
+              "id": "120",
+              "language": "en"
+            }
+          ],
+          "setCountMismatches": [],
+          "cardIndexSha256": "bf0b8436cb1f47e6e2ebff464c30a290770bf38754d25ae167cb4a230bee017c",
+          "note": "I conteggi sono record del catalogo, non artwork unici né prova di download di tutte le immagini."
+        },
+        {
+          "id": "japanese",
+          "setRows": 449,
+          "cardRows": 28359,
+          "rowsInRequestedLanguage": 28350,
+          "frontImageReferenceMissingCount": 151,
+          "frontImageReferencesMissing": [
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-b1988d",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-7bd0f9",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-ea538b",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-331a8d",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-55666e",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-ff4126",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-1-trainer-0752bb",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-8040bb",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-f94e8b",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-cb5547",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-aa130c",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-7edcc9",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-01f4bd",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-2-trainer-1fe0a1",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-bf7ea0",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-1184c6",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-705547",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-820107",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-bdfcd1",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-66433e",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-3915ea",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/miscellaneous-promos",
+              "id": "no-3-trainer-aab99c",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/crossing-the-ruins-neo-discovery",
+              "id": "no-000-ruin-wall-v2",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "002",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "012",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "018",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "022",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "027",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "038",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "040",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "051",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "061",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "078",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "083",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "087",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "130",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "139",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "142",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "grass-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "fire-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "water-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "lightning-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "psychic-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/leaders-pokemon-movie-limited-edition",
+              "id": "fighting-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "002",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "012",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "018",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "022",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "027",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "038",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "040",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "051",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "061",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "078",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "083",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "087",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "130",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "139",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "grass-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "fire-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "water-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "lightning-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "psychic-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/tropical-mega-battle",
+              "id": "fighting-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/fighting-quick-construction-pack",
+              "id": "012",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-101",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-102",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-103",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-104",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-105",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-106",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-107",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beat-of-the-frontier",
+              "id": "no-108",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-091",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-092",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-093",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-094",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-095",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-096",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-097",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/advent-of-arceus",
+              "id": "no-098",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/heartgold-collection",
+              "id": "071",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "4",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "6",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "7",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "8",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "9",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "10",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "11",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "12",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "13",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "15",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "16",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "17",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "18",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "19",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "20",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "21",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "22",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "27",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "28",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "30",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "31",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "32",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "basic-fire-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "basic-lightning-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "basic-psychic-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white",
+              "id": "basic-water-energy",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/black-white-promos",
+              "id": "no-259",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/black-white-promos",
+              "id": "no-289",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/black-white-promos",
+              "id": "no-290",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/black-white-promos",
+              "id": "no-291",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/black-white-promos",
+              "id": "no-292",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white-2",
+              "id": "4",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white-2",
+              "id": "13",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-black-white-2",
+              "id": "17",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "4",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "6",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "7",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "9",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "10",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "11",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "12",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "13",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "15",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "16",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "17",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "18",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "19",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "20",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "21",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "27",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "29",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "37",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "38",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "39",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/beginning-set-pikachu",
+              "id": "40",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/national-beginning-set",
+              "id": "38",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/national-beginning-set",
+              "id": "39",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/national-beginning-set",
+              "id": "40",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/collection-x",
+              "id": "008-vivillon-v1",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sun-moon-promos",
+              "id": "no-447",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sun-moon-promos",
+              "id": "no-452",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sun-moon-promos",
+              "id": "no-453",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sun-moon-promos",
+              "id": "no-454",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sword-shield-promos",
+              "id": "no-357",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sword-shield-promos",
+              "id": "no-358",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sword-shield-promos",
+              "id": "no-359",
+              "language": "ja"
+            },
+            {
+              "set": "japanese/sword-shield-promos",
+              "id": "no-360",
+              "language": "ja"
+            }
+          ],
+          "setCountMismatches": [],
+          "cardIndexSha256": "d1a1262683b8fe480279b6d767ee682c16a7ac58ad60abb16adb0ccedb84c88b",
+          "note": "I conteggi sono record del catalogo, non artwork unici né prova di download di tutte le immagini."
+        }
+      ],
+      "firstSets": [
+        {
+          "id": "english/base-set",
+          "cards": 102,
+          "withFrontImageReference": 102
+        },
+        {
+          "id": "english/jungle",
+          "cards": 64,
+          "withFrontImageReference": 64
+        },
+        {
+          "id": "english/fossil",
+          "cards": 62,
+          "withFrontImageReference": 62
+        },
+        {
+          "id": "japanese/expansion-pack-base-set",
+          "cards": 102,
+          "withFrontImageReference": 102
+        },
+        {
+          "id": "japanese/pokemon-jungle",
+          "cards": 48,
+          "withFrontImageReference": 48
+        },
+        {
+          "id": "japanese/mystery-of-the-fossils",
+          "cards": 48,
+          "withFrontImageReference": 48
+        }
+      ],
+      "issues": [
+        {
+          "field": "released.date",
+          "set": "japanese/mystery-of-the-fossils",
+          "value": "1997-06-20",
+          "comparisonValue": "1997-06-21",
+          "comparisonSources": [
+            "https://bulbapedia.bulbagarden.net/wiki/Fossil_(TCG)",
+            "https://jp.pokellector.com/Mystery-of-the-Fossils-Expansion/"
+          ],
+          "status": "Da riconciliare prima della futura importazione"
+        }
+      ]
+    },
+    "tcgdex": {
+      "api": "https://api.tcgdex.net/v2/",
+      "indexedSets": {
+        "en": 221,
+        "ja": 204
+      },
+      "firstSets": [
+        {
+          "language": "en",
+          "id": "base1",
+          "cards": 102,
+          "withImageReference": 102
+        },
+        {
+          "language": "en",
+          "id": "base2",
+          "cards": 64,
+          "withImageReference": 64
+        },
+        {
+          "language": "en",
+          "id": "base3",
+          "cards": 62,
+          "withImageReference": 62
+        },
+        {
+          "language": "ja",
+          "id": "PMCG1",
+          "cards": 102,
+          "withImageReference": 0
+        },
+        {
+          "language": "ja",
+          "id": "PMCG2",
+          "cards": 48,
+          "withImageReference": 0
+        },
+        {
+          "language": "ja",
+          "id": "PMCG3",
+          "cards": 48,
+          "withImageReference": 0
+        }
+      ]
+    }
+  },
+  "onePiece": {
+    "koala": {
+      "repository": "https://github.com/hotavocado/koala-kollect-data",
+      "manifestGeneratedAt": "2026-10-22T04:46:19Z",
+      "firstSets": [
+        {
+          "site": "en",
+          "product": "en:569101",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 121,
+          "missingImageIds": [],
+          "extraImageIds": []
+        },
+        {
+          "site": "en",
+          "product": "en:569102",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 121,
+          "missingImageIds": [],
+          "extraImageIds": []
+        },
+        {
+          "site": "en",
+          "product": "en:569103",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 127,
+          "missingImageIds": [],
+          "extraImageIds": []
+        },
+        {
+          "site": "jp",
+          "product": "jp:550101",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 121,
+          "missingImageIds": [],
+          "extraImageIds": []
+        },
+        {
+          "site": "jp",
+          "product": "jp:550102",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 121,
+          "missingImageIds": [],
+          "extraImageIds": []
+        },
+        {
+          "site": "jp",
+          "product": "jp:550103",
+          "officialImageIds": 154,
+          "datasetImageIds": 154,
+          "distinctCardCodes": 127,
+          "missingImageIds": [],
+          "extraImageIds": []
+        }
+      ],
+      "downloadHashesMatch": {
+        "data/printings/en.jsonl": true,
+        "data/products/en.jsonl": true,
+        "data/printing_products/en.jsonl": true,
+        "data/printings/jp.jsonl": true,
+        "data/products/jp.jsonl": true,
+        "data/printing_products/jp.jsonl": true
+      }
+    },
+    "cleanImages": "Nessuna fonte unica verificata completa e priva di Sample in entrambe le lingue"
+  }
+}

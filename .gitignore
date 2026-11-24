@@ -1,0 +1,13 @@
+node_modules/
+dist/
+data/sources/
+data/qa/
+data/retired-images/
+data/sample-check.json
+__pycache__/
+*.pyc
+.vercel/
+.env*
+!.env.example
+.DS_Store
+Thumbs.db
