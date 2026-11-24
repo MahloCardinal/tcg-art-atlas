@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#20232d" />
+  <meta name="description" content="TCG Art Atlas — Catalogo personale di artwork Pokémon e One Piece." />
+  <meta name="application-name" content="TCG Art Atlas" />
+  <title>TCG Art Atlas — Catalogo carte</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any" />
+  <link rel="stylesheet" href="./style.css" />
+  <script defer src="./catalog.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#gallery">Vai alle carte</a>
+  <header class="app-header">
+    <h1><a id="home-link" href="#catalogo/pokemon" aria-label="TCG Art Atlas — Catalogo Pokémon"><img class="site-logo" src="./logos/tcg_art_atlas_logo.webp" alt="TCG Art Atlas" width="88" height="64" /></a></h1>
+    <details class="game-picker" id="game-picker"><summary aria-label="Scegli gioco"><span class="game-logo"><img id="current-game-logo" src="./logos/pokemon_logo.webp" alt="Pokémon Trading Card Game" width="112" height="40"/></span><span class="picker-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 10 4 4 4-4"/></svg></span></summary><div class="game-options" role="group" aria-label="Gioco"><button data-game="pokemon" aria-pressed="true"><img src="./logos/pokemon_logo.webp" alt="Pokémon Trading Card Game" width="112" height="40"/></button><button data-game="onepiece" aria-pressed="false"><img src="./logos/onepiece_logo.webp" alt="One Piece Card Game" width="112" height="40"/></button></div></details>
+    <nav class="view-tabs" aria-label="Viste">
+      <button data-view="catalog" class="active" aria-current="page"><span data-icon="cards"></span>Catalogo</button>
+      <button data-view="expansions"><span data-icon="layers"></span>Espansioni</button>
+      <button data-view="favorites"><span data-icon="heart"></span>Preferiti <span id="favorite-count">0</span></button>
+    </nav>
+    <button id="backup-open" class="icon-button" aria-label="Backup preferiti" title="Backup preferiti"><span data-icon="download"></span></button>
+  </header>
+  <div class="layout">
+    <section id="filters" class="filters" aria-label="Filtri catalogo">
+      <div class="filter-bar">
+        <label class="search-filter" for="search"><span>Nome, codice o artista</span><span class="search-input"><span data-icon="search"></span><input id="search" type="search" placeholder="Cerca una carta…" autocomplete="off" /></span></label>
+        <details id="set-filter" class="multi-filter"><summary><span class="filter-label">Espansione</span><span class="filter-value">Tutte</span></summary><div class="filter-options" role="group" aria-label="Espansioni"></div></details>
+        <details id="category-filter" class="multi-filter" hidden><summary><span class="filter-label">Tipo</span><span class="filter-value">Tutti</span></summary><div class="filter-options" role="group" aria-label="Tipi One Piece"></div></details>
+        <details id="rarity-filter" class="multi-filter"><summary><span class="filter-label">Rarità</span><span class="filter-value">Tutte</span></summary><div class="filter-options" role="group" aria-label="Rarità"></div></details>
+        <details id="type-filter" class="multi-filter"><summary><span class="filter-label" id="type-filter-label">Tipo</span><span class="filter-value">Tutti</span></summary><div class="filter-options" role="group" aria-label="Tipi"></div></details>
+        <label class="select-filter" for="art-filter"><span>Artwork</span><select id="art-filter"><option value="standard" selected>Standard</option><option value="alternative">Alternativi</option><option value="all">Tutti</option></select></label>
+        <label class="select-filter sort-filter" for="sort"><span>Ordina per</span><select id="sort"><option value="index">Numero carta</option><option value="name">Nome A–Z</option><option value="recent">Uscita più recente</option><option value="oldest">Uscita meno recente</option></select></label>
+        <label class="select-filter" for="card-size"><span>Dimensione immagini</span><select id="card-size"><option value="small">Piccole</option><option value="medium" selected>Medie</option><option value="large">Grandi</option></select></label>
+        <button id="reset-filters" class="secondary-button" aria-label="Azzera filtri" title="Azzera filtri"><span data-icon="reset"></span><span>Azzera filtri</span></button>
+      </div>
+    </section>
+    <main class="catalog">
+      <section id="expansions-page" hidden aria-labelledby="expansions-title"><div class="expansions-heading"><h2 id="expansions-title">Espansioni</h2></div><div id="expansions-grid" class="expansions-grid"></div></section>
+      <section id="cards-page">
+      <header id="illustrator-heading" class="illustrator-heading" hidden><h2 id="illustrator-title"></h2><div id="illustrator-games" class="illustrator-games" role="group" aria-label="Giochi dell’illustratore"></div></header>
+      <div class="catalog-toolbar" tabindex="-1">
+        <p id="results-count" role="status" aria-live="polite">Caricamento…</p>
+        <div class="catalog-tools"><label class="page-size-label" for="page-size"><span>Carte per pagina</span><select id="page-size"><option value="100">100</option><option value="200" selected>200</option><option value="300">300</option></select></label><nav class="page-controls" aria-label="Pagine del catalogo"><button class="icon-button" data-page="-1" aria-label="Pagina precedente"><span data-icon="left"></span></button><span id="page-info" aria-live="polite"></span><button class="icon-button" data-page="1" aria-label="Pagina successiva"><span data-icon="right"></span></button></nav></div>
+      </div>
+      <div id="gallery" class="gallery" tabindex="-1" aria-label="Carte"></div>
+      <div id="empty-state" class="empty-state" hidden></div>
+      <nav id="page-bottom" class="page-bottom page-controls" aria-label="Pagine a fondo lista"><button class="icon-button" data-page="-1" aria-label="Pagina precedente"><span data-icon="left"></span></button><span id="page-info-bottom" aria-live="polite"></span><button class="icon-button" data-page="1" aria-label="Pagina successiva"><span data-icon="right"></span></button></nav>
+      </section>
+    </main>
+  </div>
+  <button id="back-to-top" class="secondary-button back-to-top" hidden><span data-icon="up"></span>Torna su</button>
+  <dialog id="card-dialog" class="card-dialog" aria-labelledby="detail-title"></dialog>
+  <dialog id="image-dialog" class="image-dialog" aria-label="Immagine della carta a schermo intero"><button class="image-close icon-button" data-close="image-dialog" aria-label="Torna al popup"><span data-icon="close"></span></button><img id="fullscreen-image" alt="" /></dialog>
+  <dialog id="backup-dialog" class="backup-dialog" aria-labelledby="backup-title">
+    <div class="dialog-heading"><h2 id="backup-title">Backup preferiti</h2><button class="icon-button" data-close="backup-dialog" aria-label="Chiudi backup"><span data-icon="close"></span></button></div>
+    <p>I preferiti sono salvati in questo browser.</p>
+    <p id="backup-summary"></p>
+    <button id="export-backup" class="primary-button"><span data-icon="download"></span>Esporta JSON</button>
+    <label class="import-button secondary-button"><span data-icon="upload"></span>Importa JSON<input id="import-backup" type="file" accept="application/json,.json" aria-label="Importa backup JSON" /></label>
+    <p class="secondary-text">L’importazione unisce i preferiti. I dati dei backup precedenti vengono conservati.</p>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript>Abilita JavaScript per usare il catalogo.</noscript>
+</body>
+</html>

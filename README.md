@@ -1,113 +1,64 @@
-# CList — Carte da amare
+# TCG Art Atlas — riferimento per gli aggiornamenti IA
 
-Database visivo personale di carte Pokémon e One Piece, statico e locale. **865 artwork in sei set**: Pokémon Base Set, Jungle, Fossil; One Piece OP01, OP02, OP03. Interfaccia compatta con filtri e preferiti.
+Sito statico personale per consultare carte Pokémon e One Piece. Tutta la logica gira nel browser: nessun database, backend, account, dipendenza JavaScript o chiamata ad API esterne a runtime. I file in `public/` sono direttamente pubblicabili e funzionano anche aprendo `public/index.html` con doppio clic.
 
-Il catalogo è prevalentemente inglese; due DON hanno scansioni giapponesi e otto carte One Piece permettono già lo scambio EN/JP nel popup. Non contiene ancora due cataloghi EN/JP completi. Restano **14 immagini inglesi One Piece con Sample da correggere**: stato in [docs/STATO.md](docs/STATO.md).
-
-Il 24 novembre è stata completata la ricerca delle fonti EN/JP, senza nuove importazioni: [rapporto delle fonti](docs/FONTI.md) e [conteggi/lacune verificati](docs/verifica-fonti.json). Il progetto non è ancora un archivio completo di tutte le carte.
-
-## Avvio
-
-**Apri `index.html` con doppio clic dalla cartella CList.** Catalogo, filtri, immagini e preferiti funzionano senza server e senza connessione. Mantieni insieme `index.html`, `src/` e `public/`.
-
-Per consultare il catalogo non serve Node.js. I file pronti per l'apertura diretta sono già inclusi. Dopo modifiche al codice o ai dati, lo sviluppo usa Node.js 20 o successivo per aggiornare il pacchetto locale:
-
-```powershell
-npm run prepare:local
-```
-
-Il comando viene eseguito anche dalla build, prima dell'avvio del server e al termine di un'importazione. Non ci sono dipendenze npm da installare.
-
-Il server resta un'opzione per lo sviluppo:
-
-```powershell
-npm run dev
-```
-
-Apri [http://localhost:5300](http://localhost:5300). Per scegliere una porta diversa:
-
-```powershell
-npm run dev -- --port 5301
-```
-
-Preferiti e note dipendono dal browser e dall'indirizzo: il file locale, `localhost` e `127.0.0.1` hanno archivi separati. Per trasferirli fra modalità usa **Backup**. Per l'apertura diretta conserva lo stesso percorso e browser.
-
-## Funzionalità
-
-- Griglia compatta con dimensioni regolabili e pagine da 30, 60 o 120 artwork (60 iniziali).
-- Header con menu dei giochi e loghi ufficiali locali in WebP; Catalogo, Espansioni e Preferiti accanto al menu. Home torna al catalogo del gioco selezionato e azzera i filtri.
-- Ricerca per nome, codice, espansione, artista e tipo di artwork. Premi `/` per raggiungere la ricerca nel catalogo.
-- Espansioni, rarità e tipi Pokémon/colori One Piece selezionabili con più checkbox. Le scelte nello stesso filtro si uniscono; filtri diversi si combinano.
-- One Piece ha anche Tipo: Personaggio, Evento, Stage, DON!! e Leader. Se Tipo include DON!!, i DON ignorano il colore selezionato. Pokémon usa il nome italiano Elettro.
-- Artwork parte da Standard, seguito da Alternativi e Tutti. Rarità in progressione comune → rara; i tipi One Piece seguono Personaggio, Evento, Stage, Leader, DON!!.
-- Pannello filtri richiudibile e riapribile anche su desktop, senza perdere le selezioni. Il cambio pagina torna all'inizio della toolbar.
-- Gli elenchi dei filtri si aprono in sovrimpressione, senza modificare l'altezza dei controlli. Si chiudono cliccando fuori o con Esc.
-- Pagina Espansioni con loghi Pokémon e immagini OP01/OP02/OP03, date di uscita e accesso al catalogo del set, dalle più recenti alle più vecchie. I badge Pokémon riportano il gruppo Pokellector (Base Set Series per i tre set attuali), senza conteggi di caricamento.
-- Dettaglio compatto con immagine in un riquadro standard (420×588 su desktop, adattabile allo schermo), senza ritagli. Selettore delle lingue effettivamente caricate, con stesso artwork e stesso preferito.
-- Sotto le immagini della griglia compare solo il nome. Nel popup espansione e numero/codice sono le prime due informazioni sotto il nome; tipi e colori restano nei filtri. La lingua è testo semplice quando unica, un selettore quando sono caricate più versioni. Il footer Precedente/Successiva resta in fondo alla colonna delle informazioni anche scorrendola. La scrollbar della pagina rimane visibile all'apertura del popup.
-- Gli illustratori sono cliccabili: la pagina `#illustratore/Nome` mostra tutte le loro carte e artwork, raggruppate per gioco, con scelta Tutti i giochi o singolo gioco. La corrispondenza del nome è esatta, senza distinguere maiuscole e accenti. I metadati attuali degli artisti sono presenti solo per Pokémon.
-- Le edizioni Pokémon sono raggruppate in Versioni, senza creare immagini o selettori per scansioni non caricate. Le finiture One Piece aggregate per codice restano nei dati e non sono mostrate come proprietà dell'immagine.
-- Varianti One Piece collegate per codice e nominate in base al prodotto o alla distribuzione dell'illustrazione. Lo scorrimento orizzontale resta fermo quando cambia l'artwork. Tre immagini OPPP hanno origine non verificata, dichiarata nell'etichetta e documentata nel rapporto fonti.
-- Le coppie holo/non holo di Jungle e Fossil con la stessa illustrazione sono accorpate, preservando numeri e finiture nelle informazioni. La versione Pokémon Standard / Non holo è sottintesa.
-- Preferiti per singolo artwork, salvati in `localStorage`. La sezione note è stata rimossa; i dati dei backup precedenti vengono conservati.
-- Backup JSON esportabile e importabile; unisce la selezione e preserva anche i riferimenti a carte fuori dal catalogo attuale.
-- Navigazione da tastiera nel dettaglio: frecce sinistra/destra, `Esc` per chiudere.
-
-I preferiti non si sincronizzano fra dispositivi. La cancellazione dei dati del browser li elimina: usa **Backup** per conservarli. Catalogo e immagini sono file locali; durante l'uso l'app non contatta API, CDN, font esterni o servizi di analisi. La provenienza delle immagini resta nei metadati e nella documentazione.
-
-## Struttura
+## Struttura e comandi
 
 ```text
-index.html                   Struttura dell'interfaccia
-src/app.js                   Interazioni e viste
-src/core.js                  Ricerca, filtri e validazione backup
-src/style.css                Stile e adattamento ai dispositivi
-public/app.js                Pacchetto generato con codice e catalogo, apribile senza server
-public/data/catalog.json     Metadati statici e provenienza
-public/images/cards/         Originali e miniature, solo WebP
-data/artwork-origins.json    Provenienze delle varianti One Piece riviste
-scripts/import_cards.py      Importazione dei sei set attuali
-scripts/build.mjs            Validazione e build statica
-scripts/prepare-local.mjs    Generazione del pacchetto per index.html
-scripts/serve.mjs            Server HTTP locale, solo loopback
-tests/core.test.js           Test di filtri, varianti e backup
-docs/FONTI.md                Verifica fonti e piano di copertura
-docs/verifica-fonti.json     Conteggi, lacune e hash della ricerca EN/JP
-docs/STATO.md                Checkpoint e lavoro ancora pendente
-vercel.json                  Configurazione per il futuro deploy
+public/index.html      Struttura, navigazione, filtri e dialog
+public/style.css       Tema scuro, responsive, animazioni
+public/app.js          Unica sorgente della logica e dei filtri
+public/catalog.js      Unica sorgente dei dati: globalThis.TCG_ART_ATLAS_CATALOG={...};
+public/cards/          Gioco/set/immagine: un WebP per artwork e lingua disponibile
+public/logos/          Loghi di giochi ed espansioni
+public/favicon.svg    Icona vettoriale, Poké Ball su carta gialla senza bordo
+scripts/site.mjs       Server locale, controlli strutturali e regressioni essenziali
+package.json          Comandi Node senza dipendenze
+vercel.json           Hosting statico con output public/
 ```
 
-Ogni artwork ha un ID stabile, un gruppo di variante, lingua, espansione, numero carta, rarità, artista se disponibile, URL dei metadati, URL originale dell'immagine, dimensioni e hash SHA-256. Non importiamo prezzi o dati di mercato.
+`npm run dev` avvia `http://127.0.0.1:5300`; `npm test` verifica ricerca, filtri, set, lingue e backup; `npm run build` controlla sintassi, riferimenti, immagini inutilizzate e annidamento. La build non genera copie o bundle: si pubblica direttamente `public/`. Node >=20 serve solo per questi comandi, non al sito pubblicato. Non occorre `npm install`.
 
-## Immagini e nuova importazione
+Mantenere al massimo una sottocartella dentro ogni cartella della root, con eccezione di `public/cards/`, che organizza le immagini per gioco e set e può avere ulteriori annidamenti. Conservare un solo README. Non creare `.agents`, altri documenti, copie di immagini, cartelle di output o script di importazione permanenti senza una nuova richiesta dell'utente. La cartella `temp/` è un'area di ingresso ignorata da Git: spostare o convertire gli elementi utili nelle destinazioni definitive, aggiornare i riferimenti e svuotare sempre `temp/` al termine, lasciando la cartella esistente.
 
-I file necessari sono già inclusi. Python serve **solo** per le importazioni, non per avviare il sito. Non è necessario rilanciare l'importatore per consultare il catalogo.
+## Comportamento da preservare
 
-```powershell
-python -m pip install -r requirements.txt
-npm run import:cards
+- Header con il solo logo TCG Art Atlas (`logos/tcg_art_atlas_logo.webp`) su sfondo trasparente al posto della precedente coppia icona/nome. Seguono scelta Pokémon/One Piece e sottosezioni Catalogo, Espansioni, Preferiti. Il logo home torna al catalogo del gioco corrente e azzera i filtri. La freccia del gioco è separata visivamente, ma tutto il selettore è cliccabile. La favicon è una carta gialla senza bordo esterno nero con una Poké Ball stilizzata inclinata, senza scritte. Logo e favicon riprendono il giallo #FFE05A della sottosezione selezionata.
+- Filtri orizzontali: ricerca per nome/codice/artista, espansione, rarità, tipo Pokémon o colore One Piece, categoria One Piece, artwork, ordinamento e dimensione carte. Selezioni multiple in OR nello stesso filtro, AND tra filtri. DON!! ignora il colore quando selezionato esplicitamente. I nomi delle espansioni Pokémon non hanno codici tra parentesi. Ogni menu si dimensiona sulla propria voce più larga, con minimo 220 px e limite dello schermo, indipendentemente dal selettore. In One Piece, Leader precede Personaggio e le rarità hanno nome esteso con sigla (es. Common (C)); i valori interni restano invariati. Azzera filtri condivide bordo spesso, testo rosso e sfondo bianco con Torna su.
+- Toolbar: solo numero di elementi filtrati a sinistra; a destra Carte per pagina (100/200/300, predefinito 200) e freccia precedente, N/M, freccia successiva. Stessa paginazione in fondo e nelle pagine illustratore. Il cambio pagina torna alla toolbar; Torna su, bianco con bordo e testo rosso in grassetto, torna a scrollY=0 includendo i filtri.
+- Pagina Espansioni: due espansioni per riga su mobile. Gli illustratori nel popup aprono una pagina con corrispondenza esatta del nome, senza distinguere maiuscole/accenti, e selettore del gioco.
+- Popup: espansione e numero/codice sono le prime informazioni; il preferito appartiene al singolo artwork. Le frecce e il contatore seguono esclusivamente i risultati filtrati memorizzati all'apertura, anche oltre la pagina corrente. `filteredCardIds` e `filteredCardIndex` rappresentano quella posizione; `currentCardId` è l'artwork visualizzato. I pulsanti `data-variant` cambiano solo quest'ultimo, senza alterare la navigazione né applicare transizioni (`instant-version`). Non ricavare la posizione delle frecce dall'ID della variante.
+- Desktop: Mostra a schermo intero è sovrapposto all'immagine e apre il WebP corrente in una nuova scheda con solo l'immagine. Mobile (<=700px): quel pulsante è nascosto; toccare l'immagine apre `image-dialog`, con X in alto a destra per tornare al popup preservato. Anche Escape chiude il visualizzatore. La lingua selezionata aggiorna sia l'immagine sia i link di apertura.
+- Animazioni brevi per popup, menu, espansioni e Torna su; disabilitarle con `prefers-reduced-motion`, incluso il backdrop. I cambi di variante devono rimanere immediati.
+- Preferiti e note usano `tcg-art-atlas.collection.v1` in localStorage e `schemaVersion: 1`. Le chiavi legacy `tcg-art-collector.collection.v1` e `clist.collection.v1` rimangono solo per migrare automaticamente i dati al primo avvio, se manca la nuova chiave. Conservarle per compatibilità: il cambio di nome non deve perdere preferiti o note. Esportazione/importazione JSON uniscono i preferiti e preservano anche ID non presenti nel catalogo. Non rinominare gli ID esistenti.
+
+## Catalogo e immagini
+
+Il catalogo attuale contiene 865 artwork in sei espansioni: Pokémon Base Set, Jungle, Fossil; One Piece OP01, OP02, OP03. Il formato di `catalog.js` è un'assegnazione JSON compatta con `schemaVersion: 3`, `cards` e `sets`, caricata prima di `app.js` con script `defer`. Non aggiungere una copia JSON o incorporare nuovamente i dati nell'app.
+
+Carte: `id`, `game`, `name`, `code`, `number`, `setId`, `releaseDate`, `rarity`, `category`, `isAlternative`, `variantGroup`, `variantLabel`, `image`, `imageWidth`, `imageHeight`, `imageLanguage`. Campi multipli `codes`, `numbers`, `setIds`, `rarities` sono opzionali e hanno fallback ai campi singoli. `setName` si ricava dai set all'inizializzazione. `types`/`colors`, `illustrator`, `finishes`, `editions` e `printings` descrivono gli attributi disponibili. `imageVersions`, quando presente, contiene lingue realmente disponibili dello stesso artwork, con `language` e `image`; non inventare traduzioni o versioni. `sourceUrl` e `artworkOrigin` conservano la provenienza essenziale.
+
+Set: `id`, `game`, `name`, `folder`, `releaseDate`, `image`, eventuali `seriesName`, `sourceUrl`, `expectedCodes`. `folder` è il nome esplicito della cartella immagini, separato dall'ID storico della fonte. `expectedCodes` conta i codici distinti, non gli artwork. Jungle e Fossil uniscono le coppie holo/non-holo nella stessa carta con numeri e finiture multiple. Le Special di OP03 includono codici di altri set attraverso `setIds`: non assegnare l'espansione solo dal prefisso del codice.
+
+Usare esclusivamente underscore singoli come separatori nei nomi delle immagini, senza trattini, doppi separatori o la parola `standard`. Cartelle gioco: `pokemon`, `onepiece`; cartelle set e nomi delle carte in maiuscolo ASCII, salvo l'estensione `.webp`. Gli ID storici delle carte e delle fonti restano invariati per i preferiti e i riferimenti: non vanno interpretati come nomi delle espansioni o riutilizzati per nominare i file.
+
+Pokémon: `cards/pokemon/{folder}/{numero}[_A01][_ITA|_JAP|_UND].webp`, con almeno tre cifre per il numero. Le espansioni attuali sono Base Set, Jungle, Fossil: cartelle `BASE`, `JUNGLE`, `FOSSIL`. `BASE_2` è riservato all'espansione Base Set 2, attualmente assente. Esempi: `cards/pokemon/BASE/001.webp`, `cards/pokemon/JUNGLE/001.webp`, `cards/pokemon/FOSSIL/001_JAP.webp` per una futura scansione giapponese realmente disponibile. Non chiamare Jungle "Base Set 2".
+
+One Piece: `cards/onepiece/{folder}/{codice}[_A01][_ITA|_JAP|_UND].webp`. Esempi: `cards/onepiece/OP01/OP01_001.webp`, `cards/onepiece/OP01/OP01_001_A01_UND.webp`, `cards/onepiece/OP03/OP03_007_JAP.webp`, `cards/onepiece/OP03/ST01_012_A06.webp`. La cartella identifica il set della stampa; il nome conserva il codice originale anche nelle ristampe con prefisso diverso. DON!! usa `DON` come codice. Le appartenenze multiple restano nel catalogo: non duplicare la stessa immagine in più set.
+
+Inglese: nessun suffisso lingua. Italiano: `_ITA`; giapponese: `_JAP`. `_UND` indica una lingua non ancora verificata, non una lingua inventata: 296 immagini alternative importate sono ancora in questa condizione. Non assegnare loro `_JAP` o `_ITA` senza verificarle. Il catalogo usa i codici lingua `en`, `it`, `ja` (con compatibilità per le precedenti forme `jp`/`source`). Per le varianti usare `_A01`, `_A02`, ecc., mantenendo stabili i numeri già assegnati.
+
+Loghi: `logos/{gioco}_logo.webp`, `logos/{gioco}_{folder}_logo.webp`, `logos/tcg_art_atlas_logo.webp`. Conservare un solo file per immagine effettiva e ridimensionarlo via CSS in griglia, popup e selettore delle varianti. Niente `thumbnail`, `srcset` con duplicati o immagini inutilizzate. Gli originali delle carte sono stati mantenuti senza ricompressione; caricamento lazy e cache condivisa evitano download di tutte le immagini e duplicati tra viste. La favicon è un unico SVG scalabile senza limite di risoluzione; il logo è un WebP con alfa.
+
+Fonti dei dati esistenti: TCGdex per Pokémon; OPPP per One Piece, con TCGplayer/OPlayTCG per DON!! e Tier One per otto scansioni giapponesi. `artworkOrigin.status` conserva i casi non verificati: `op-OP01-001AA`, `op-OP01-001AA4`, `op-OP01-016AA9`. Non trasformarli in attribuzioni certe. Le URL conservate nel catalogo sono riferimenti per gli aggiornamenti, non chiamate del frontend.
+
+Per aggiunte: seguire le direttive dell'utente, mantenere ID stabili, verificare artwork/lingua/provenienza, aggiungere solo i WebP necessari e aggiornare `catalog.js`. Eseguire `npm test` e `npm run build`, quindi verificare nel browser filtri, pagina mobile, navigazione tra carte e varianti, visualizzazione a schermo intero e backup. Non pubblicare, committare o fare push salvo richiesta.
+
+## Grafica
+
+Il colore principale è `--accent: #ffe05a`, lo stesso della sottosezione selezionata. La favicon è un unico SVG con `viewBox="0 0 512 512"` e `sizes="any"`: carta gialla a tutta superficie con angoli arrotondati, nessun bordo esterno nero, Poké Ball nera stilizzata inclinata di 18 gradi e trasparenza negli angoli. Non generare copie raster a diverse dimensioni. Il logo rimane un WebP con alfa, modificato con imagegen integrato; conservare testo, carte e proporzioni.
+
+Prompt dell'ultima modifica del logo:
+```text
+Use case: precise-object-edit. Edit target: existing transparent TCG ART ATLAS logo. Change only the yellow fill in every card and letter to solid HEX #FFE05A (RGB 255,224,90), the website selected navigation tab color. Keep the exact TCG ART ATLAS wording, three cards, black lettering and outlines, geometry, proportions and layout unchanged. Remove yellow gradients and texture. All yellow areas must be the same flat #FFE05A. Preserve true alpha transparency outside the logo; do not add any background rectangle or new elements. Corrective cleanup: remove all outer glow, halos, shadows, paper texture and mottling. Clean transparent cutout with razor-sharp flat vector-like black and #FFE05A fills only. Preserve the logo text and layout.
 ```
-
-L'importatore attuale usa TCGdex per Pokémon, Bandai per i metadati One Piece, OPPP per le immagini e fonti aggiuntive per DON/finiture. Conserva la risoluzione nativa e converte in WebP qualità 92, con miniature entro 300×420, qualità 86. Preserva la trasparenza e il rapporto d'aspetto. Le immagini OPPP non sono tutte pulite: consultare il checkpoint prima di rilanciare un'importazione.
-
-Le risposte originali vengono memorizzate in `data/sources/`, esclusa da Git e dalla build. Gli identificativi sono letti dalle fonti, senza inventare suffissi. L'importatore non integra ancora CardCorpus, Koala Kollect o un inventario JP separato: la ricerca delle fonti è documentata, ma queste integrazioni sono rinviate alla fase successiva.
-
-## Verifica e build
-
-```powershell
-npm test
-npm run build
-npm run preview
-```
-
-La build verifica ID univoci, collegamenti alle espansioni e presenza/firma WebP di tutte le immagini. Rigenera il pacchetto locale e copia in `dist/` solo HTML, CSS, JavaScript, JSON e immagini. Anche `dist/index.html` è apribile direttamente e supporta hosting in sottocartelle. Il server di anteprima usa la stessa porta del server di sviluppo: ferma prima quest'ultimo o aggiungi `-- --port 5301`.
-
-## GitHub e Vercel
-
-Repository: [MahloCardinal/collector-card-list](https://github.com/MahloCardinal/collector-card-list), branch `main`. Contiene sorgenti, catalogo JSON, pacchetto per l'apertura diretta e immagini WebP; `dist/`, cache di ricerca e file temporanei sono esclusi.
-
-Il sito non è ancora pubblicato su Vercel. La configurazione è pronta per un progetto statico: comando di build `npm run build`, cartella di output `dist`, nessuna variabile d'ambiente e nessun database.
-
-L'architettura può restare statica ampliando il catalogo. La griglia è già paginata; per molte migliaia di immagini andranno divisi anche i metadati per gioco/espansione e caricati a richiesta. Il peso totale dei file andrà misurato prima di importare tutto.
-
-Carte e illustrazioni appartengono ai rispettivi titolari. Progetto personale non affiliato a Pokémon, TCGdex o Bandai.

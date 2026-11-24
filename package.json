@@ -1,19 +1,15 @@
 {
-  "name": "clist",
+  "name": "tcg-art-atlas",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "La mia galleria personale di carte Pokémon e One Piece",
+  "description": "TCG Art Atlas — Catalogo personale di artwork Pokémon e One Piece",
   "engines": { "node": ">=20" },
   "scripts": {
-    "prepare:local": "node scripts/prepare-local.mjs",
-    "predev": "npm run prepare:local",
-    "dev": "node scripts/serve.mjs",
-    "prestart": "npm run prepare:local",
-    "start": "node scripts/serve.mjs",
-    "build": "node scripts/build.mjs",
-    "preview": "node scripts/serve.mjs --dist",
-    "test": "node --test",
-    "import:cards": "python scripts/import_cards.py"
+    "dev": "node scripts/site.mjs",
+    "start": "node scripts/site.mjs",
+    "build": "node scripts/site.mjs --check",
+    "preview": "node scripts/site.mjs",
+    "test": "node scripts/site.mjs --test"
   }
 }
