@@ -39,8 +39,8 @@ function filterCards(cards, filters, favorites = []) {
     query.every(word => normalize([card.name, card.code, ...(card.codes || []), ...(card.numbers || []), card.setName, card.setId, card.illustrator, card.artwork, card.variantLabel].join(' ')).includes(word))
   );
   if (filters.sort === 'name') result.sort((a, b) => a.name.localeCompare(b.name, 'it') || a.id.localeCompare(b.id));
-  if (filters.sort === 'recent') result.sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
-  if (filters.sort === 'oldest') result.sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
+  if (filters.sort === 'recent') result.sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || ''));
+  if (filters.sort === 'oldest') result.sort((a, b) => (a.releaseDate || '').localeCompare(b.releaseDate || ''));
   return result;
 }
 
@@ -58,6 +58,15 @@ function resolveAlias(id, aliases = {}) {
   const seen = new Set();
   while (aliases[id] && !seen.has(id)) { seen.add(id); id = aliases[id]; }
   return id;
+}
+function groupExpansionSets(sets) {
+  const groups = new Map();
+  for (const set of sets) {
+    const name = set.group || set.seriesName || 'Altre espansioni';
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(set);
+  }
+  return [...groups].map(([name, items]) => ({ name, sets: items.sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || '') || a.name.localeCompare(b.name)) }));
 }
 
 function validateCollection(value, knownIds) {
@@ -114,7 +123,54 @@ let filteredCardIndex = 0;
 let toastTimer;
 let storageAvailable = true;
 const imageLanguages = new Map();
-const languageName = code => ({ en: 'Inglese', ja: 'Giapponese', it: 'Italiano', und: 'Non verificata' }[code] || code.toUpperCase());
+const backTop = $('#back-to-top');
+let backTopPosition = .5;
+let backTopHold;
+let backTopDragging = false;
+let backTopSuppressClick = false;
+let backTopOffset = 0;
+let backTopPointer;
+let backTopStartX = 0;
+function positionBackTop(clientX) {
+  const box = $('.catalog').getBoundingClientRect();
+  const half = backTop.offsetWidth / 2;
+  const left = Math.max(half + 10, box.left + half + 10);
+  const right = Math.min(innerWidth - half - 10, box.right - half - 10);
+  const x = Math.max(left, Math.min(right, clientX ?? left + (right - left) * backTopPosition));
+  if (right > left) backTopPosition = (x - left) / (right - left);
+  backTop.style.left = `${x}px`;
+}
+backTop.addEventListener('pointerdown', event => {
+  if (!event.isPrimary || event.button !== 0) return;
+  backTopSuppressClick = false;
+  backTopPointer = event.pointerId;
+  backTopStartX = event.clientX;
+  backTopOffset = event.clientX - (backTop.getBoundingClientRect().left + backTop.offsetWidth / 2);
+  backTop.setPointerCapture(event.pointerId);
+  backTopHold = setTimeout(() => {
+    backTopDragging = true;
+    backTopSuppressClick = true;
+    backTop.classList.add('dragging');
+  }, 260);
+});
+backTop.addEventListener('pointermove', event => {
+  if (backTopPointer !== event.pointerId) return;
+  if (!backTopDragging && Math.abs(event.clientX - backTopStartX) > 6) {
+    clearTimeout(backTopHold);
+    backTopDragging = true;
+    backTopSuppressClick = true;
+    backTop.classList.add('dragging');
+  }
+  if (backTopDragging) positionBackTop(event.clientX - backTopOffset);
+});
+for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) backTop.addEventListener(type, () => {
+  clearTimeout(backTopHold);
+  backTopDragging = false;
+  backTopPointer = undefined;
+  backTop.classList.remove('dragging');
+});
+window.addEventListener('resize', () => { if (!backTop.hidden) positionBackTop(); });
+const languageName = code => ({ en: 'Inglese', ja: 'Giapponese', it: 'Italiano', und: '—' }[code] || code.toUpperCase());
 const gameName = value => value === 'pokemon' ? 'Pokémon' : 'One Piece';
 const finishName = value => ({ normal: 'Non holo', holo: 'Holo', reverse: 'Reverse holo' }[value] || value);
 const favoriteIds = () => [...new Set(collection.favorites.map(id => resolveAlias(id, catalog.aliases)))];
@@ -133,7 +189,7 @@ function persist() {
   catch { storageAvailable = false; toast('Salvataggio non disponibile. Esporta un backup prima di chiudere.'); }
 }
 function populateFilters() {
-  const sets = catalog.sets.filter(set => set.game === state.game).sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
+  const sets = catalog.sets.filter(set => set.game === state.game).sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || ''));
   const cards = catalog.cards.filter(card => card.game === state.game);
   const rarities = orderedRarities(cards.flatMap(card => card.rarities || [card.rarity]), state.game);
   const traits = [...new Set(cards.flatMap(cardTraits))].sort((a, b) => (traitNames[a] || a).localeCompare(traitNames[b] || b, 'it'));
@@ -197,12 +253,30 @@ window.addEventListener('scroll', event => {
 }, true);
 function syncBackToTop() {
   $('#back-to-top').hidden = state.view === 'expansions' || !results.length || window.scrollY < 240 || $('.catalog-toolbar').getBoundingClientRect().bottom > 0;
+  if (!backTop.hidden) positionBackTop();
 }
 window.addEventListener('scroll', syncBackToTop, { passive: true });
+let productImageObserver;
+function expansionArtwork(set) {
+  if (!set.image) return `<span class="expansion-wordmark">${esc(set.name)}</span>`;
+  if (set.imageFit) return `<svg class="expansion-product" viewBox="${set.imageFit.viewBox.join(' ')}" role="img" aria-label="${esc(set.name)}" focusable="false"><image data-src="${esc(set.image)}" width="${set.imageFit.width}" height="${set.imageFit.height}"/></svg>`;
+  return `<img src="${esc(set.image)}" alt="${esc(set.name)}" width="720" height="400" loading="lazy"/>`;
+}
+function loadProductImages() {
+  productImageObserver?.disconnect();
+  const products = $$('.expansion-product', $('#expansions-grid'));
+  const load = product => { const image = $('image', product); image.setAttribute('href', image.dataset.src); image.removeAttribute('data-src'); };
+  if (!('IntersectionObserver' in window)) return products.forEach(load);
+  productImageObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) { load(entry.target); productImageObserver.unobserve(entry.target); }
+  }, { rootMargin: '300px' });
+  products.forEach(product => productImageObserver.observe(product));
+}
 function renderExpansions() {
-  const sets = catalog.sets.filter(set => set.game === state.game).sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
+  const sets = catalog.sets.filter(set => set.game === state.game).sort((a, b) => (a.groupOrder ?? 999) - (b.groupOrder ?? 999) || (b.releaseDate || '').localeCompare(a.releaseDate || ''));
   $('#expansions-title').textContent = `Espansioni ${gameName(state.game)}`;
-  $('#expansions-grid').innerHTML = sets.map(set => `<a class="expansion-tile" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}"><div class="expansion-art"><img src="${esc(set.image)}" alt="${esc(set.name)}" width="720" height="400"/></div><div class="expansion-caption"><h3>${esc(set.name)}</h3><span class="expansion-code">${esc(set.game === 'pokemon' ? set.seriesName || set.id : set.id)}</span><time datetime="${esc(set.releaseDate)}">${dateLabel(set.releaseDate)}${set.language ? ` · ${esc(languageName(set.language))}` : ''}</time></div></a>`).join('');
+  $('#expansions-grid').innerHTML = groupExpansionSets(sets).map((group, index) => `<section class="expansion-group" aria-labelledby="set-group-${index}"><h3 id="set-group-${index}" class="expansion-group-title">${esc(group.name)}</h3><div class="expansions-grid">${group.sets.map(set => `<a class="expansion-tile" data-set-game="${set.game}" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}" title="${esc(set.name)}"><div class="expansion-art">${expansionArtwork(set)}</div><div class="expansion-caption"><div class="expansion-name">${set.symbol ? `<img class="set-symbol" src="${esc(set.symbol)}" alt="" width="22" height="22" loading="lazy"/>` : ''}<h4>${esc(set.name)}</h4></div><p class="expansion-meta">${set.releaseDate ? `<time datetime="${esc(set.releaseDate)}">${dateLabel(set.releaseDate)}</time><span aria-hidden="true"> · </span>` : ''}${esc(set.region || (set.language === 'ja' ? 'Giappone' : 'Internazionale'))}</p></div></a>`).join('')}</div></section>`).join('');
+  loadProductImages();
 }
 function navigate(view, game = state.game, setId) {
   const route = `${view === 'expansions' ? 'espansioni' : view === 'favorites' ? 'preferiti' : 'catalogo'}/${game}${setId ? '/' + encodeURIComponent(setId) : ''}`;
@@ -229,7 +303,7 @@ function favoriteMarkup(card, detail = false) {
   return `<button class="${detail ? 'detail-favorite primary-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${on ? 'Rimuovi dai' : 'Aggiungi ai'} preferiti: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}${detail ? `<span>${on ? 'Nei preferiti' : 'Aggiungi ai preferiti'}</span>` : ''}</button>`;
 }
 function tile(card, index) {
-  return `<article class="card-tile"><div class="card-art"><button class="art-open" data-open-card="${esc(card.id)}" aria-label="Apri ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}"><img src="${card.image}" alt="${esc(card.name)} — ${esc(card.variantLabel)}" width="${card.imageWidth}" height="${card.imageHeight}" loading="${index < 12 ? 'eager' : 'lazy'}" decoding="async"/></button>${favoriteMarkup(card)}</div><div class="card-caption"><button class="card-name" data-open-card="${esc(card.id)}">${esc(card.name)}</button></div></article>`;
+  return `<article class="card-tile" data-card-game="${card.game}"><div class="card-art"><button class="art-open" data-open-card="${esc(card.id)}" aria-label="Apri ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}"><img src="${card.image}" alt="${esc(card.name)} — ${esc(card.variantLabel)}" width="${card.imageWidth}" height="${card.imageHeight}" loading="${index < 12 ? 'eager' : 'lazy'}" decoding="async"/></button>${favoriteMarkup(card)}</div><div class="card-caption"><button class="card-name" data-open-card="${esc(card.id)}">${esc(card.name)}</button></div></article>`;
 }
 function render() {
   if (!catalog) return;
@@ -305,6 +379,7 @@ function openCard(id, mode = 'card') {
   const variantScroll = previous?.variantGroup === card.variantGroup && $('#card-dialog').open ? $('.variant-list')?.scrollLeft || 0 : 0;
   currentCardId = id;
   const dialog = $('#card-dialog');
+  dialog.dataset.cardGame = card.game;
   if (mode === 'card') {
     filteredCardIds = results.map(card => card.id);
     filteredCardIndex = Math.max(0, filteredCardIds.indexOf(id));
@@ -320,7 +395,7 @@ function openCard(id, mode = 'card') {
     [card.game === 'pokemon' ? 'Numero' : 'Codice', esc(numbersLabel(card)), true],
     ['Rarità', (card.rarities || [card.rarity]).join(' / ')],
     ...(card.illustrator ? [['Illustratore', `<a href="#illustratore/${encodeURIComponent(card.illustrator)}" data-illustrator="${esc(card.illustrator)}">${esc(card.illustrator)}</a>`, true]] : []),
-    ...(card.game === 'onepiece' ? [['Uscita set', dateLabel(card.releaseDate)]] : []),
+    ...(card.game === 'onepiece' && card.releaseDate ? [['Uscita set', dateLabel(card.releaseDate)]] : []),
   ];
   const printVersions = card.game === 'pokemon' ? [
     ...prints.filter(print => prints.length > 1 || print.finishes.some(finish => finish !== 'normal')).map(print => `${prints.length > 1 ? '#' + print.number + ' · ' : print.finishes.length ? 'Standard · ' : ''}${print.finishes.map(finishName).join(' / ') || 'Standard'}`),
@@ -337,7 +412,6 @@ function openCard(id, mode = 'card') {
       </dl>
       ${favoriteMarkup(card, true)}
         ${variants.length > 1 || printVersions.length ? `<section class="variants" aria-label="Versioni della carta"><h3>Versioni</h3>${printVersions.length ? `<ul class="print-versions">${printVersions.map(value => `<li>${esc(value)}</li>`).join('')}</ul>` : ''}${variants.length > 1 ? `<div class="variant-list" tabindex="0" aria-label="Artwork disponibili">${variants.map(other => `<button class="variant-thumb ${other.id === id ? 'selected' : ''}" data-variant="${esc(other.id)}" title="${esc(other.variantLabel)}" aria-label="${esc(other.variantLabel)} — ${esc(other.code)}" aria-pressed="${other.id === id}"><img src="${esc(other.image)}" alt="" loading="lazy"/><span>${esc(other.variantLabel)}</span></button>`).join('')}</div>` : ''}</section>` : ''}
-      ${card.artworkOrigin?.status === 'unverified' || card.reviewNote ? `<aside class="review-note" aria-label="Note temporanee di verifica"><h3>NOTE</h3><p>${esc(card.reviewNote || 'Illustrazione presente nell’archivio immagini, ma non ancora associata a una pubblicazione ufficiale verificabile. Provenienza in verifica.')}</p></aside>` : ''}
     </div><nav class="detail-navigation page-controls" aria-label="Navigazione carte filtrate"><button class="icon-button" data-step="-1" aria-label="Carta precedente" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('left')}</button><span aria-live="polite">${filteredCardIndex + 1}/${filteredCardIds.length}</span><button class="icon-button" data-step="1" aria-label="Carta successiva" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('right')}</button></nav></div></div>`;
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
@@ -361,6 +435,7 @@ document.addEventListener('click', event => {
   if (enlarge && window.matchMedia('(max-width: 700px)').matches) {
     event.preventDefault();
     const image = $('#detail-image');
+    $('#image-dialog').dataset.cardGame = $('#card-dialog').dataset.cardGame;
     $('#fullscreen-image').src = image.src;
     $('#fullscreen-image').alt = image.alt;
     $('#image-dialog').showModal();
@@ -386,6 +461,7 @@ document.addEventListener('click', event => {
     state.page = 1; populateFilters(); render(); return;
   }
   if (button.id === 'back-to-top') {
+    if (backTopSuppressClick) { backTopSuppressClick = false; if (event.detail) return; }
     const target = $('#filters').hidden ? $('.catalog-toolbar') : $('#search');
     target.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
@@ -476,7 +552,7 @@ function initialize() {
       setName: setNames.get(`${card.game}:${card.setId}`),
       image: new URL(card.image.replace(/^\//, ''), assetBase).href,
       imageVersions: card.imageVersions?.map(version => ({ ...version, image: new URL(version.image.replace(/^\//, ''), assetBase).href })),
-    })), sets: catalogData.sets.map(set => ({ ...set, image: new URL(set.image.replace(/^\//, ''), assetBase).href })) };
+    })), sets: catalogData.sets.map(set => ({ ...set, image: set.image ? new URL(set.image.replace(/^\//, ''), assetBase).href : '', symbol: set.symbol ? new URL(set.symbol, assetBase).href : '' })) };
     try { const saved = loadCollection(localStorage); collection = saved.collection; if (saved.needsMigration) persist(); }
     catch { toast('Preferiti non leggibili. Puoi ripristinare un backup.'); }
     readRoute();

@@ -17,6 +17,7 @@ async function readCatalog() {
 
 async function check() {
   const catalog = await readCatalog();
+  const audit = JSON.parse(await readFile(path.join(root, 'CARD_REVIEW.json'), 'utf8'));
   const app = await readFile(path.join(site, 'app.js'), 'utf8');
   new Script(app, { filename: 'app.js' });
   const ids = new Set();
@@ -30,6 +31,7 @@ async function check() {
     assert.ok(card.imageWidth > 0 && card.imageHeight > 0, `Dimensioni mancanti: ${card.id}`);
     assert.ok(!('assetPath' in card), `Percorso temporaneo nel catalogo: ${card.id}`);
     assert.ok(!('thumbnail' in card), `Miniatura duplicata: ${card.id}`);
+    for (const key of ['reviewNote', 'artworkOrigin', 'imageHasSample', 'sourceUrl', 'sourceImageUrl', 'printSources', 'catalogReference']) assert.ok(!(key in card), `Metadato interno nel frontend: ${card.id}/${key}`);
     if (card.imageVersions?.length) {
       const languages = card.imageVersions.map(image => image.language);
       assert.equal(new Set(languages).size, languages.length, `Lingua duplicata: ${card.id}`);
@@ -48,20 +50,27 @@ async function check() {
   }
   for (const set of catalog.sets) {
     assert.match(set.folder, /^[A-Z0-9]+(?:_[A-Z0-9]+)*$/);
-    images.add(set.image);
+    if (set.image) images.add(set.image);
+    if (set.symbol) images.add(set.symbol);
+    if (set.imageFit) {
+      const { viewBox: [x, y, width, height], width: canvasWidth, height: canvasHeight } = set.imageFit;
+      assert.ok([x, y, width, height, canvasWidth, canvasHeight].every(Number.isFinite), `Riquadro immagine non valido: ${set.id}`);
+      assert.ok(x >= 0 && y >= 0 && width > 0 && height > 0 && x + width <= canvasWidth && y + height <= canvasHeight, `Riquadro fuori dall’immagine: ${set.id}`);
+    }
+    assert.ok(set.group, `Gruppo mancante: ${set.id}`);
     const members = catalog.cards.filter(card => card.game === set.game && (card.setIds || [card.setId]).includes(set.id));
+    assert.ok(members.length, `Anteprima mancante: ${set.game}/${set.id}`);
     const codes = new Set(members.filter(card => card.category !== 'DON!!').flatMap(card => card.codes || [card.code]));
-    if (set.expectedCodeList) for (const code of set.expectedCodeList) assert.ok(codes.has(code), `Codice mancante in ${set.id}: ${code}`);
-    else if (set.expectedCodes) assert.equal(codes.size, set.expectedCodes, `Set incompleto: ${set.id}`);
+    const inventory = audit.sets[`${set.game}:${set.id}`];
+    if (inventory.preview) assert.equal(members.length, 1, `Il set di anteprima deve contenere solo la prima carta: ${set.id}`);
+    if (inventory.expectedCodeList) for (const code of inventory.expectedCodeList) assert.ok(codes.has(code), `Codice mancante in ${set.id}: ${code}`);
+    else if (inventory.expectedCodes) assert.equal(codes.size, inventory.expectedCodes, `Set incompleto: ${set.id}`);
   }
   for (const [alias, target] of Object.entries(catalog.aliases || {})) {
     assert.ok(!ids.has(alias), `Alias ancora presente come carta: ${alias}`);
     const visited = new Set([alias]); let resolved = target;
     while (catalog.aliases[resolved]) { assert.ok(!visited.has(resolved), `Ciclo alias: ${alias}`); visited.add(resolved); resolved = catalog.aliases[resolved]; }
     assert.ok(ids.has(resolved), `Destinazione alias mancante: ${alias}`);
-  }
-  for (const card of catalog.cards.filter(card => card.game === 'onepiece')) {
-    if (card.artworkOrigin?.status === 'unverified') assert.ok(card.reviewNote, `NOTE mancanti: ${card.id}`);
   }
   let imageBytes = 0;
   for (const image of images) {
@@ -91,14 +100,14 @@ async function check() {
   const favicon = await readFile(path.join(site, 'favicon.svg'), 'utf8');
   assert.ok(favicon.startsWith('<svg ') && favicon.includes('viewBox="0 0 512 512"'), 'Favicon SVG non valida');
   console.log(`Verifica completata: ${catalog.cards.length} artwork, ${catalog.sets.length} espansioni, ${images.size} immagini (${(imageBytes / 1024 / 1024).toFixed(2)} MB). Nessun bundle o immagine duplicata.`);
-  return { catalog, app };
+  return { catalog, app, audit };
 }
 
 async function test() {
-  const { catalog, app } = await check();
+  const { catalog, app, audit } = await check();
   const context = createContext({ URL, Intl });
   new Script(app).runInContext(context);
-  const { filterCards, groupCardResults, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  const { filterCards, groupCardResults, groupExpansionSets, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,groupExpansionSets,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
   const cards = catalog.cards.map(card => ({ ...card, setName: catalog.sets.find(set => set.game === card.game && set.id === card.setId).name }));
   const defaults = { game: 'all', art: 'all', query: '' };
   assert.equal(filterCards(cards, { ...defaults, query: 'MITSUHIRO charizard' })[0].id, 'pk-base1-4');
@@ -110,10 +119,10 @@ async function test() {
   assert.equal(filterCards(cards, { ...defaults, game: 'all', illustrator: 'Ken Sugimori' }).some(card => card.illustrator !== 'Ken Sugimori'), false);
   const filtered = filterCards(cards, { ...defaults, game: 'onepiece', sets: ['onepiece:OP01'], art: 'standard' });
   assert.ok(filtered.length > 0 && filtered.every(card => !card.isAlternative || !cards.some(other => other.game === card.game && other.code === card.code && !other.isAlternative)));
-  assert.equal(catalog.sets.filter(set => set.game === 'onepiece').length, 13);
-  for (const set of catalog.sets.filter(set => set.game === 'onepiece')) {
+  assert.ok(catalog.sets.filter(set => set.game === 'onepiece').length >= 13);
+  for (const set of catalog.sets.filter(set => set.game === 'onepiece' && audit.sets[`onepiece:${set.id}`].expectedCodesByLanguage)) {
     for (const language of ['en','ja']) {
-      const expected = set.expectedCodesByLanguage[language];
+      const expected = audit.sets[`onepiece:${set.id}`].expectedCodesByLanguage[language];
       assert.ok(expected.length >= 120, `Inventario regionale incompleto: ${set.id}/${language}`);
       const available = new Set(cards.filter(card => card.game === 'onepiece' && (card.setIds || [card.setId]).includes(set.id) && languageImages(card).some(image => image.language === language)).map(card => card.code));
       for (const code of expected) assert.ok(available.has(code), `Immagine regionale mancante: ${set.id}/${language}/${code}`);
@@ -155,6 +164,12 @@ async function test() {
   assert.equal(grouped.length, 2);
   assert.equal(grouped[0].id, 'b');
   assert.equal(resolveAlias('legacy', {legacy:'duplicate', duplicate:'canonical'}), 'canonical');
+  for (const game of ['pokemon','onepiece']) {
+    const groups = groupExpansionSets(catalog.sets.filter(set => set.game === game));
+    assert.equal(groups.flatMap(group => group.sets).length, catalog.sets.filter(set => set.game === game).length);
+    assert.equal(new Set(groups.map(group => group.name)).size, groups.length);
+  }
+  for (const [legacy, target] of Object.entries(catalog.aliases)) assert.ok(catalog.cards.some(card => card.id === resolveAlias(target, catalog.aliases)), `Preferito senza destinazione: ${legacy}`);
   console.log('Test funzionali superati: ricerca, set, filtri, artwork, lingue, backup e migrazione dei preferiti.');
 }
 
