@@ -26,8 +26,8 @@
   </header>
   <div class="layout">
     <section id="filters" class="filters" aria-label="Filtri catalogo">
+      <div class="filter-topline"><label class="search-filter" for="search"><span>Nome, codice o artista</span><span class="search-input"><span data-icon="search"></span><input id="search" type="search" placeholder="Cerca per nome, codice o illustratore…" autocomplete="off" /></span></label><div class="filter-meta"><span id="filter-count" class="filter-count">Nessun filtro attivo</span><button id="reset-filters" class="secondary-button" aria-label="Azzera filtri" title="Azzera filtri"><span data-icon="reset"></span><span>Azzera filtri</span></button></div></div>
       <div class="filter-bar">
-        <label class="search-filter" for="search"><span>Nome, codice o artista</span><span class="search-input"><span data-icon="search"></span><input id="search" type="search" placeholder="Cerca una carta…" autocomplete="off" /></span></label>
         <details id="set-filter" class="multi-filter"><summary><span class="filter-label">Espansione</span><span class="filter-value">Tutte</span></summary><div class="filter-options" role="group" aria-label="Espansioni"></div></details>
         <details id="category-filter" class="multi-filter" hidden><summary><span class="filter-label">Tipo</span><span class="filter-value">Tutti</span></summary><div class="filter-options" role="group" aria-label="Tipi One Piece"></div></details>
         <details id="rarity-filter" class="multi-filter"><summary><span class="filter-label">Rarità</span><span class="filter-value">Tutte</span></summary><div class="filter-options" role="group" aria-label="Rarità"></div></details>
@@ -35,8 +35,8 @@
         <label class="select-filter" for="art-filter"><span>Artwork</span><select id="art-filter"><option value="standard" selected>Standard</option><option value="alternative">Alternativi</option><option value="all">Tutti</option></select></label>
         <label class="select-filter sort-filter" for="sort"><span>Ordina per</span><select id="sort"><option value="index">Numero carta</option><option value="name">Nome A–Z</option><option value="recent">Uscita più recente</option><option value="oldest">Uscita meno recente</option></select></label>
         <label class="select-filter" for="card-size"><span>Dimensione immagini</span><select id="card-size"><option value="small">Piccole</option><option value="medium" selected>Medie</option><option value="large">Grandi</option></select></label>
-        <button id="reset-filters" class="secondary-button" aria-label="Azzera filtri" title="Azzera filtri"><span data-icon="reset"></span><span>Azzera filtri</span></button>
       </div>
+      <div id="filter-chips" class="filter-chips" aria-label="Filtri attivi" hidden></div>
     </section>
     <main class="catalog">
       <section id="expansions-page" hidden aria-labelledby="expansions-title"><div class="expansions-heading"><h2 id="expansions-title">Espansioni</h2></div><div id="expansions-grid" class="expansions-grid"></div></section>

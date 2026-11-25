@@ -5,10 +5,10 @@ const normalize = (text) => String(text).normalize('NFD').replace(/[\u0300-\u036
 
 const traitNames = { Grass: 'Erba', Fire: 'Fuoco', Water: 'Acqua', Lightning: 'Elettro', Psychic: 'Psico', Fighting: 'Lotta', Darkness: 'Buio', Metal: 'Acciaio', Dragon: 'Drago', Fairy: 'Folletto', Colorless: 'Incolore', Trainer: 'Allenatore', Energy: 'Energia', Red: 'Rosso', Green: 'Verde', Blue: 'Blu', Purple: 'Viola', Black: 'Nero', Yellow: 'Giallo' };
 const categoryNames = { LEADER: 'Leader', CHARACTER: 'Personaggio', EVENT: 'Evento', STAGE: 'Stage', 'DON!!': 'DON!!' };
-const onepieceRarityNames = { C: 'Common', UC: 'Uncommon', R: 'Rare', SR: 'Super Rare', SEC: 'Secret Rare', 'SP CARD': 'Special Card', L: 'Leader' };
+const onepieceRarityNames = { C: 'Common', UC: 'Uncommon', R: 'Rare', SR: 'Super Rare', SEC: 'Secret Rare', 'SP CARD': 'Special Card', TR: 'Treasure Rare', L: 'Leader' };
 const rarityOrders = {
-  pokemon: ['Common', 'Uncommon', 'Rare'],
-  onepiece: ['C', 'UC', 'R', 'SR', 'SEC', 'SP CARD', 'L', 'DON!!'],
+  pokemon: ['Common', 'Uncommon', 'Rare', 'Holo Rare', 'Shining Rare', 'Promo', 'Unknown'],
+  onepiece: ['C', 'UC', 'R', 'SR', 'SEC', 'SP CARD', 'TR', 'L', 'DON!!'],
 };
 function orderedRarities(values, game) {
   const order = rarityOrders[game] || [];
@@ -26,12 +26,13 @@ const matchesAny = (selected, values) => !selected || selected === 'all' || (Arr
 
 function filterCards(cards, filters, favorites = []) {
   const query = normalize(filters.query || '').trim().split(/\s+/).filter(Boolean);
+  const standardCodes = new Set(cards.filter(card => !card.isAlternative).map(card => `${card.game}:${card.code}`));
   const result = cards.filter(card =>
     (filters.game === 'all' || card.game === filters.game) &&
     (!filters.illustrator || normalize(card.illustrator || '').trim() === normalize(filters.illustrator).trim()) &&
     matchesAny(filters.categories, [card.category]) &&
     matchesAny(filters.sets ?? filters.set, (card.setIds || [card.setId]).map(set => `${card.game}:${set}`)) &&
-    (!filters.art || filters.art === 'all' || card.isAlternative === (filters.art === 'alternative')) &&
+    (!filters.art || filters.art === 'all' || card.isAlternative === (filters.art === 'alternative') || (filters.art === 'standard' && !standardCodes.has(`${card.game}:${card.code}`))) &&
     matchesAny(filters.rarities ?? filters.rarity, card.rarities || [card.rarity]) &&
     (matchesAny(filters.traits, cardTraits(card)) || (card.game === 'onepiece' && card.category === 'DON!!' && filters.categories?.includes('DON!!'))) &&
     (!filters.onlyFavorites || favorites.includes(card.id)) &&
@@ -41,6 +42,22 @@ function filterCards(cards, filters, favorites = []) {
   if (filters.sort === 'recent') result.sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
   if (filters.sort === 'oldest') result.sort((a, b) => a.releaseDate.localeCompare(b.releaseDate));
   return result;
+}
+
+// One grid entry per printed card code; artworks remain individually addressable.
+function groupCardResults(cards) {
+  const groups = new Map();
+  for (const card of cards) {
+    const key = `${card.game}:${card.code}`;
+    const previous = groups.get(key);
+    if (!previous || (previous.isAlternative && !card.isAlternative)) groups.set(key, card);
+  }
+  return [...groups.values()];
+}
+function resolveAlias(id, aliases = {}) {
+  const seen = new Set();
+  while (aliases[id] && !seen.has(id)) { seen.add(id); id = aliases[id]; }
+  return id;
 }
 
 function validateCollection(value, knownIds) {
@@ -100,8 +117,9 @@ const imageLanguages = new Map();
 const languageName = code => ({ en: 'Inglese', ja: 'Giapponese', it: 'Italiano', und: 'Non verificata' }[code] || code.toUpperCase());
 const gameName = value => value === 'pokemon' ? 'Pokémon' : 'One Piece';
 const finishName = value => ({ normal: 'Non holo', holo: 'Holo', reverse: 'Reverse holo' }[value] || value);
-const knownFavorites = () => catalog.cards.filter(card => collection.favorites.includes(card.id));
-const numbersLabel = card => card.game === 'pokemon' ? '#' + (card.numbers || [card.number]).join(' / ') : card.code;
+const favoriteIds = () => [...new Set(collection.favorites.map(id => resolveAlias(id, catalog.aliases)))];
+const knownFavorites = () => catalog.cards.filter(card => favoriteIds().includes(card.id));
+const numbersLabel = card => card.game === 'pokemon' ? Object.hasOwn(card, 'printedNumber') ? card.printedNumber ? '#' + card.printedNumber : 'Senza numero' : '#' + (card.numbers || [card.number]).join(' / ') : card.code;
 const dateLabel = date => new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
 
 function toast(message) {
@@ -184,7 +202,7 @@ window.addEventListener('scroll', syncBackToTop, { passive: true });
 function renderExpansions() {
   const sets = catalog.sets.filter(set => set.game === state.game).sort((a, b) => b.releaseDate.localeCompare(a.releaseDate));
   $('#expansions-title').textContent = `Espansioni ${gameName(state.game)}`;
-  $('#expansions-grid').innerHTML = sets.map(set => `<a class="expansion-tile" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}"><div class="expansion-art"><img src="${esc(set.image)}" alt="${esc(set.name)}" width="720" height="400"/></div><div class="expansion-caption"><h3>${esc(set.name)}</h3><span class="expansion-code">${esc(set.game === 'pokemon' ? set.seriesName || set.id : set.id)}</span><time datetime="${esc(set.releaseDate)}">${dateLabel(set.releaseDate)}</time></div></a>`).join('');
+  $('#expansions-grid').innerHTML = sets.map(set => `<a class="expansion-tile" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}"><div class="expansion-art"><img src="${esc(set.image)}" alt="${esc(set.name)}" width="720" height="400"/></div><div class="expansion-caption"><h3>${esc(set.name)}</h3><span class="expansion-code">${esc(set.game === 'pokemon' ? set.seriesName || set.id : set.id)}</span><time datetime="${esc(set.releaseDate)}">${dateLabel(set.releaseDate)}${set.language ? ` · ${esc(languageName(set.language))}` : ''}</time></div></a>`).join('');
 }
 function navigate(view, game = state.game, setId) {
   const route = `${view === 'expansions' ? 'espansioni' : view === 'favorites' ? 'preferiti' : 'catalogo'}/${game}${setId ? '/' + encodeURIComponent(setId) : ''}`;
@@ -202,12 +220,12 @@ function readRoute() {
   state.artistGame = 'all';
   let setId;
   try { setId = decodeURIComponent(rawSet || ''); } catch { setId = ''; }
-  Object.assign(state, { query: '', sets: state.view !== 'illustrator' && catalog.sets.some(set => set.game === state.game && set.id === setId) ? [`${state.game}:${setId}`] : [], categories: [], rarities: [], traits: [], art: state.view === 'illustrator' ? 'all' : 'standard', sort: 'index', page: 1 });
+  Object.assign(state, { query: '', sets: state.view !== 'illustrator' && catalog.sets.some(set => set.game === state.game && set.id === setId) ? [`${state.game}:${setId}`] : [], categories: [], rarities: [], traits: [], art: ['illustrator', 'favorites'].includes(state.view) ? 'all' : 'standard', sort: 'index', page: 1 });
   populateFilters(); render();
   window.scrollTo({ top: 0 });
 }
 function favoriteMarkup(card, detail = false) {
-  const on = collection.favorites.includes(card.id);
+  const on = favoriteIds().includes(card.id);
   return `<button class="${detail ? 'detail-favorite primary-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${on ? 'Rimuovi dai' : 'Aggiungi ai'} preferiti: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}${detail ? `<span>${on ? 'Nei preferiti' : 'Aggiungi ai preferiti'}</span>` : ''}</button>`;
 }
 function tile(card, index) {
@@ -230,10 +248,10 @@ function render() {
   $('.layout').classList.toggle('show-expansions', expansions || artist);
   $('#illustrator-heading').hidden = !artist;
   if (expansions) { renderExpansions(); syncBackToTop(); return; }
-  results = filterCards(catalog.cards, { ...state, game: artist ? state.artistGame : state.game, illustrator: artist ? state.illustrator : '', onlyFavorites: state.view === 'favorites' }, collection.favorites);
+  results = groupCardResults(filterCards(catalog.cards, { ...state, game: artist ? state.artistGame : state.game, illustrator: artist ? state.illustrator : '', onlyFavorites: state.view === 'favorites' }, favoriteIds()));
   if (artist) {
     $('#illustrator-title').textContent = state.illustrator || 'Illustratore';
-    const all = filterCards(catalog.cards, { game: 'all', illustrator: state.illustrator });
+    const all = groupCardResults(filterCards(catalog.cards, { game: 'all', illustrator: state.illustrator }));
     const games = ['all', ...['pokemon', 'onepiece'].filter(game => all.some(card => card.game === game))];
     $('#illustrator-games').innerHTML = games.map(game => `<button class="secondary-button ${state.artistGame === game ? 'active' : ''}" data-artist-game="${game}" aria-pressed="${state.artistGame === game}">${game === 'all' ? 'Tutti i giochi' : gameName(game)} <span>${game === 'all' ? all.length : all.filter(card => card.game === game).length}</span></button>`).join('');
   }
@@ -241,7 +259,7 @@ function render() {
   state.page = Math.max(1, Math.min(state.page, pages));
   const start = (state.page - 1) * state.pageSize;
   const page = results.slice(start, start + state.pageSize);
-  $('#results-count').innerHTML = `<strong>${results.length}</strong> ${results.length === 1 ? 'elemento selezionato' : 'elementi selezionati'}`;
+  $('#results-count').innerHTML = `<strong>${results.length}</strong> ${results.length === 1 ? 'carta' : 'carte'}`;
   $('#gallery').dataset.size = state.size;
   $('#gallery').innerHTML = page.map((card, index) => `${artist && (index === 0 || page[index - 1].game !== card.game) ? `<h3 class="gallery-game-heading">${esc(gameName(card.game))}</h3>` : ''}${tile(card, index)}`).join('');
   $('#page-info').textContent = $('#page-info-bottom').textContent = `${state.page}/${pages}`;
@@ -249,20 +267,38 @@ function render() {
   $('#page-bottom').hidden = pages < 2;
   $('#empty-state').hidden = !!results.length;
   if (!results.length) $('#empty-state').innerHTML = `<p>${state.view === 'favorites' && !knownFavorites().length ? 'Nessun preferito nei set attuali.' : 'Nessuna carta trovata.'}</p><button class="secondary-button" data-action="reset">Azzera filtri</button>`;
+  renderFilterChips();
   syncBackToTop();
 }
+function renderFilterChips() {
+  const items = [];
+  if (state.query.trim()) items.push(['query', '', `Ricerca: ${state.query.trim()}`]);
+  for (const [key, values] of [['sets', state.sets], ['categories', state.categories], ['rarities', state.rarities], ['traits', state.traits]]) {
+    for (const value of values) {
+      const label = key === 'sets' ? catalog.sets.find(set => `${set.game}:${set.id}` === value)?.name || value : key === 'categories' ? categoryNames[value] || value : key === 'traits' ? traitNames[value] || value : value;
+      items.push([key, value, label]);
+    }
+  }
+  if (state.art !== 'standard') items.push(['art', '', state.art === 'all' ? 'Tutti gli artwork' : 'Artwork alternativi']);
+  $('#filter-count').textContent = items.length ? `${items.length} ${items.length === 1 ? 'filtro attivo' : 'filtri attivi'}` : 'Nessun filtro attivo';
+  $('#filter-count').classList.toggle('active', !!items.length);
+  $('#filter-chips').hidden = !items.length;
+  $('#filter-chips').innerHTML = items.map(([key, value, label]) => `<button class="filter-chip" data-remove-filter="${key}" data-filter-value="${esc(value)}" aria-label="Rimuovi filtro: ${esc(label)}">${esc(label)}${icon('close')}</button>`).join('');
+}
+
 function resetFilters() {
   Object.assign(state, { query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1 });
   populateFilters(); render();
 }
 function toggleFavorite(id) {
-  const on = collection.favorites.includes(id);
-  collection.favorites = on ? collection.favorites.filter(value => value !== id) : [...collection.favorites, id];
+  const on = favoriteIds().includes(id);
+  collection.favorites = on ? collection.favorites.filter(value => resolveAlias(value, catalog.aliases) !== id) : [...collection.favorites, id];
   persist(); render();
   if ($('#card-dialog').open) $('.detail-favorite').outerHTML = favoriteMarkup(catalog.cards.find(card => card.id === currentCardId), true);
   if (storageAvailable) toast(on ? 'Rimosso dai preferiti' : 'Aggiunto ai preferiti');
 }
 function openCard(id, mode = 'card') {
+  id = resolveAlias(id, catalog.aliases);
   const card = catalog.cards.find(card => card.id === id);
   if (!card) return;
   const previous = catalog.cards.find(card => card.id === currentCardId);
@@ -274,7 +310,7 @@ function openCard(id, mode = 'card') {
     filteredCardIndex = Math.max(0, filteredCardIds.indexOf(id));
   }
   dialog.classList.toggle('instant-version', mode === 'variant');
-  const variants = catalog.cards.filter(other => other.variantGroup === card.variantGroup);
+  const variants = catalog.cards.filter(other => other.game === card.game && other.code === card.code);
   const versions = languageImages(card);
   const image = versions.find(version => version.language === imageLanguages.get(id)) || versions[0];
   imageLanguages.set(id, image.language);
@@ -301,6 +337,7 @@ function openCard(id, mode = 'card') {
       </dl>
       ${favoriteMarkup(card, true)}
         ${variants.length > 1 || printVersions.length ? `<section class="variants" aria-label="Versioni della carta"><h3>Versioni</h3>${printVersions.length ? `<ul class="print-versions">${printVersions.map(value => `<li>${esc(value)}</li>`).join('')}</ul>` : ''}${variants.length > 1 ? `<div class="variant-list" tabindex="0" aria-label="Artwork disponibili">${variants.map(other => `<button class="variant-thumb ${other.id === id ? 'selected' : ''}" data-variant="${esc(other.id)}" title="${esc(other.variantLabel)}" aria-label="${esc(other.variantLabel)} — ${esc(other.code)}" aria-pressed="${other.id === id}"><img src="${esc(other.image)}" alt="" loading="lazy"/><span>${esc(other.variantLabel)}</span></button>`).join('')}</div>` : ''}</section>` : ''}
+      ${card.artworkOrigin?.status === 'unverified' || card.reviewNote ? `<aside class="review-note" aria-label="Note temporanee di verifica"><h3>NOTE</h3><p>${esc(card.reviewNote || 'Illustrazione presente nell’archivio immagini, ma non ancora associata a una pubblicazione ufficiale verificabile. Provenienza in verifica.')}</p></aside>` : ''}
     </div><nav class="detail-navigation page-controls" aria-label="Navigazione carte filtrate"><button class="icon-button" data-step="-1" aria-label="Carta precedente" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('left')}</button><span aria-live="polite">${filteredCardIndex + 1}/${filteredCardIds.length}</span><button class="icon-button" data-step="1" aria-label="Carta successiva" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('right')}</button></nav></div></div>`;
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
@@ -314,8 +351,8 @@ function stepCard(delta) {
   openCard(filteredCardIds[filteredCardIndex], 'step');
 }
 function openBackup() {
-  const extra = collection.favorites.length - knownFavorites().length;
-  $('#backup-summary').textContent = `${collection.favorites.length} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
+  const extra = favoriteIds().length - knownFavorites().length;
+  $('#backup-summary').textContent = `${favoriteIds().length} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
   $('#backup-dialog').showModal();
 }
 
@@ -341,6 +378,13 @@ document.addEventListener('click', event => {
   if (!button) return;
   if (button.dataset.close) return document.getElementById(button.dataset.close).close();
   if (!catalog) return;
+  if (button.dataset.removeFilter) {
+    const key = button.dataset.removeFilter;
+    if (key === 'query') state.query = '';
+    else if (key === 'art') state.art = 'standard';
+    else if (['sets', 'categories', 'rarities', 'traits'].includes(key)) state[key] = state[key].filter(value => value !== button.dataset.filterValue);
+    state.page = 1; populateFilters(); render(); return;
+  }
   if (button.id === 'back-to-top') {
     const target = $('#filters').hidden ? $('.catalog-toolbar') : $('#search');
     target.focus({ preventScroll: true });
@@ -401,8 +445,8 @@ $('#import-backup').addEventListener('change', async event => {
   event.target.value = '';
 });
 function openBackupSummary() {
-  const extra = collection.favorites.length - knownFavorites().length;
-  $('#backup-summary').textContent = `${collection.favorites.length} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
+  const extra = favoriteIds().length - knownFavorites().length;
+  $('#backup-summary').textContent = `${favoriteIds().length} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
 }
 $$('dialog').forEach(dialog => {
   dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });

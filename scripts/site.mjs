@@ -28,14 +28,21 @@ async function check() {
     ids.add(card.id);
     assert.ok(setKeys.has(`${card.game}:${card.setId}`), `Set mancante: ${card.id}`);
     assert.ok(card.imageWidth > 0 && card.imageHeight > 0, `Dimensioni mancanti: ${card.id}`);
+    assert.ok(!('assetPath' in card), `Percorso temporaneo nel catalogo: ${card.id}`);
     assert.ok(!('thumbnail' in card), `Miniatura duplicata: ${card.id}`);
+    if (card.imageVersions?.length) {
+      const languages = card.imageVersions.map(image => image.language);
+      assert.equal(new Set(languages).size, languages.length, `Lingua duplicata: ${card.id}`);
+      assert.ok(card.imageVersions.some(image => image.image === card.image), `Immagine principale fuori dalle versioni: ${card.id}`);
+    }
     for (const version of [card, ...(card.imageVersions || [])]) {
-      const set = sets.get(`${card.game}:${card.setId}`);
-      assert.ok(version.image.startsWith(`cards/${card.game}/${set.folder}/`), `Cartella gioco/set errata: ${version.image}`);
+      assert.ok(version.image.startsWith(`cards/${card.game}/`), `Cartella gioco errata: ${version.image}`);
       const language = String(version.language || card.imageLanguage || 'und').toLowerCase();
       const languageSuffix = ['en', 'eng'].includes(language) ? '' : ['ja', 'jp', 'jap'].includes(language) ? '_JAP' : ['it', 'ita'].includes(language) ? '_ITA' : '_UND';
-      const code = card.game === 'pokemon' ? String(card.number).padStart(3, '0') : card.code === 'DON!!' ? 'DON' : card.code.replaceAll('-', '_');
-      assert.match(path.basename(version.image), new RegExp(`^${code}${card.isAlternative ? '_A[0-9]{2,}' : ''}${languageSuffix}\\.webp$`), `Nome immagine non conforme: ${version.image}`);
+      // A verified translation may come from a regional set with different numbering.
+      // Exact reused scans are shared, including distinct holo/non-holo card codes.
+      assert.match(path.basename(version.image), /^[A-Z0-9]+(?:_[A-Z0-9]+)*\.webp$/, `Nome immagine non conforme: ${version.image}`);
+      assert.ok(languageSuffix ? path.basename(version.image).endsWith(languageSuffix + '.webp') : !/_(JAP|ITA|UND)\.webp$/.test(version.image), `Lingua e file non corrispondono: ${version.image}`);
       images.add(version.image);
     }
   }
@@ -43,7 +50,18 @@ async function check() {
     assert.match(set.folder, /^[A-Z0-9]+(?:_[A-Z0-9]+)*$/);
     images.add(set.image);
     const members = catalog.cards.filter(card => card.game === set.game && (card.setIds || [card.setId]).includes(set.id));
-    if (set.expectedCodes) assert.equal(new Set(members.flatMap(card => card.codes || [card.code])).size, set.expectedCodes, `Set incompleto: ${set.id}`);
+    const codes = new Set(members.filter(card => card.category !== 'DON!!').flatMap(card => card.codes || [card.code]));
+    if (set.expectedCodeList) for (const code of set.expectedCodeList) assert.ok(codes.has(code), `Codice mancante in ${set.id}: ${code}`);
+    else if (set.expectedCodes) assert.equal(codes.size, set.expectedCodes, `Set incompleto: ${set.id}`);
+  }
+  for (const [alias, target] of Object.entries(catalog.aliases || {})) {
+    assert.ok(!ids.has(alias), `Alias ancora presente come carta: ${alias}`);
+    const visited = new Set([alias]); let resolved = target;
+    while (catalog.aliases[resolved]) { assert.ok(!visited.has(resolved), `Ciclo alias: ${alias}`); visited.add(resolved); resolved = catalog.aliases[resolved]; }
+    assert.ok(ids.has(resolved), `Destinazione alias mancante: ${alias}`);
+  }
+  for (const card of catalog.cards.filter(card => card.game === 'onepiece')) {
+    if (card.artworkOrigin?.status === 'unverified') assert.ok(card.reviewNote, `NOTE mancanti: ${card.id}`);
   }
   let imageBytes = 0;
   for (const image of images) {
@@ -80,23 +98,42 @@ async function test() {
   const { catalog, app } = await check();
   const context = createContext({ URL, Intl });
   new Script(app).runInContext(context);
-  const { filterCards, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  const { filterCards, groupCardResults, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
   const cards = catalog.cards.map(card => ({ ...card, setName: catalog.sets.find(set => set.game === card.game && set.id === card.setId).name }));
   const defaults = { game: 'all', art: 'all', query: '' };
   assert.equal(filterCards(cards, { ...defaults, query: 'MITSUHIRO charizard' })[0].id, 'pk-base1-4');
   assert.equal(filterCards(cards, { ...defaults, query: 'base2-17' }).length, 1);
-  assert.equal(filterCards(cards, { ...defaults, game: 'pokemon' }).length, 197);
+  assert.ok(filterCards(cards, { ...defaults, game: 'pokemon' }).length >= 228);
+  assert.ok(catalog.sets.filter(set => set.game === 'pokemon' && set.language === 'en').length >= 13);
+  assert.ok(catalog.sets.filter(set => set.game === 'pokemon' && set.language === 'ja').length >= 13);
+  assert.ok(filterCards(cards, { ...defaults, game: 'pokemon' }).filter(card => languageImages(card).some(v => v.language === 'ja')).length > 1000);
   assert.equal(filterCards(cards, { ...defaults, game: 'all', illustrator: 'Ken Sugimori' }).some(card => card.illustrator !== 'Ken Sugimori'), false);
   const filtered = filterCards(cards, { ...defaults, game: 'onepiece', sets: ['onepiece:OP01'], art: 'standard' });
-  assert.ok(filtered.length > 0 && filtered.every(card => !card.isAlternative));
+  assert.ok(filtered.length > 0 && filtered.every(card => !card.isAlternative || !cards.some(other => other.game === card.game && other.code === card.code && !other.isAlternative)));
+  assert.equal(catalog.sets.filter(set => set.game === 'onepiece').length, 13);
+  for (const set of catalog.sets.filter(set => set.game === 'onepiece')) {
+    for (const language of ['en','ja']) {
+      const expected = set.expectedCodesByLanguage[language];
+      assert.ok(expected.length >= 120, `Inventario regionale incompleto: ${set.id}/${language}`);
+      const available = new Set(cards.filter(card => card.game === 'onepiece' && (card.setIds || [card.setId]).includes(set.id) && languageImages(card).some(image => image.language === language)).map(card => card.code));
+      for (const code of expected) assert.ok(available.has(code), `Immagine regionale mancante: ${set.id}/${language}/${code}`);
+    }
+  }
+  const alternativeOnly = [{id:'special',game:'onepiece',code:'ST99-001',setId:'OP13',isAlternative:true}];
+  assert.equal(filterCards(alternativeOnly, {game:'onepiece',art:'standard'}).length, 1);
   const favorites = ['op-OP01-001AA'];
   assert.equal(filterCards(cards, { ...defaults, onlyFavorites: true }, favorites)[0].id, favorites[0]);
-  for (const id of ['op-OP01-051AA2', 'op-ST01-012AA5', 'op-ST03-009AA', 'op-ST04-003AA6']) assert.ok(filterCards(cards, { ...defaults, sets: ['onepiece:OP03'] }).some(card => card.id === id));
+  for (const id of ['op-OP01-051AA2', 'op-ST01-012AA5', 'op-ST03-009AA', 'op-ST04-003AA6']) assert.ok(filterCards(cards, { ...defaults, sets: ['onepiece:OP03'] }).some(card => card.id === resolveAlias(id, catalog.aliases)));
   const dons = filterCards(cards, { ...defaults, game: 'onepiece', categories: ['DON!!'], traits: ['Blue'] });
-  assert.equal(dons.length, 4);
+  assert.equal(dons.length, 14);
+  for (const language of ['en','ja']) {
+    const designs = dons.map(card => languageImages(card).find(image => image.language === language));
+    assert.ok(designs.every(Boolean), `Lingua DON!! mancante: ${language}`);
+    assert.equal(new Set(designs.map(image => image.image)).size, 14, `Disegno DON!! duplicato: ${language}`);
+  }
   assert.ok(dons.every(card => card.category === 'DON!!'));
-  assert.equal(languageImages(cards.find(card => card.id === 'op-OP03-007')).map(version => version.language).join(','), 'en,ja');
-  assert.equal(languageImages(cards.find(card => card.id === 'pk-base1-4')).length, 1);
+  assert.ok(['en', 'ja'].every(language => languageImages(cards.find(card => card.id === 'op-OP03-007')).some(v => v.language === language)));
+  assert.ok(['en', 'ja'].every(language => languageImages(cards.find(card => card.id === 'pk-base1-4')).some(v => v.language === language)));
   assert.equal(languageImages({ imageLanguage: 'ITA', image: '001_ITA.webp' })[0].language, 'it');
   assert.equal(languageImages({ imageLanguage: 'JAP', image: '001_JAP.webp' })[0].language, 'ja');
   const backup = validateCollection({ schemaVersion: 1, favorites: ['legacy', 'legacy'], notes: { legacy: 'Conservare' } });
@@ -114,6 +151,10 @@ async function test() {
   saved.set(STORAGE_KEY, JSON.stringify({ schemaVersion: 1, favorites: ['current'], notes: {} }));
   const current = loadCollection(storage);
   assert.ok(!current.needsMigration && current.collection.favorites.includes('current'));
+  const grouped = groupCardResults([{id:'a',game:'onepiece',code:'OP01-003',isAlternative:true},{id:'b',game:'onepiece',code:'OP01-003',isAlternative:false},{id:'c',game:'onepiece',code:'OP01-004',isAlternative:false}]);
+  assert.equal(grouped.length, 2);
+  assert.equal(grouped[0].id, 'b');
+  assert.equal(resolveAlias('legacy', {legacy:'duplicate', duplicate:'canonical'}), 'canonical');
   console.log('Test funzionali superati: ricerca, set, filtri, artwork, lingue, backup e migrazione dei preferiti.');
 }
 
