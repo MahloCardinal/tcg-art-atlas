@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'tcg-art-atlas.collection.v1';
 const LEGACY_STORAGE_KEYS = ['tcg-art-collector.collection.v1', 'clist.collection.v1'];
 const emptyCollection = () => ({ schemaVersion: 1, favorites: [], notes: {} });
+const emptyLibrary = () => ({ schemaVersion: 2, lists: [{ id: 'preferiti', name: 'Preferiti', favorites: [], notes: {} }], defaultListId: null });
 const normalize = (text) => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 const traitNames = { Grass: 'Erba', Fire: 'Fuoco', Water: 'Acqua', Lightning: 'Elettro', Psychic: 'Psico', Fighting: 'Lotta', Darkness: 'Buio', Metal: 'Acciaio', Dragon: 'Drago', Fairy: 'Folletto', Colorless: 'Incolore', Trainer: 'Allenatore', Energy: 'Energia', Red: 'Rosso', Green: 'Verde', Blue: 'Blu', Purple: 'Viola', Black: 'Nero', Yellow: 'Giallo' };
@@ -39,7 +40,11 @@ function filterCards(cards, filters, favorites = []) {
     (!filters.onlyFavorites || favoriteSet.has(card.id)) &&
     query.every(word => normalize([card.name, card.code, ...(card.codes || []), ...(card.numbers || []), card.setName, card.setId, card.illustrator, card.artwork, card.variantLabel].join(' ')).includes(word))
   );
-  if (filters.sort === 'index' && filters.game === 'onepiece' && filters.sets?.length === 1) result.sort((a, b) => a.code.localeCompare(b.code, 'en', {numeric:true}) || Number(a.isAlternative) - Number(b.isAlternative));
+  if (filters.sort === 'index' && filters.game === 'onepiece' && filters.sets?.length === 1) {
+    const direction = filters.sets[0] === 'onepiece:P' ? -1 : 1;
+    result.sort((a, b) => direction * a.code.localeCompare(b.code, 'en', {numeric:true}) ||
+      (direction < 0 ? (b.releaseDate || '').localeCompare(a.releaseDate || '') : 0) || Number(a.isAlternative) - Number(b.isAlternative));
+  }
   if (filters.sort === 'name') result.sort((a, b) => a.name.localeCompare(b.name, 'it') || a.id.localeCompare(b.id));
   if (filters.sort === 'recent') result.sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || ''));
   if (filters.sort === 'oldest') result.sort((a, b) => (a.releaseDate || '').localeCompare(b.releaseDate || ''));
@@ -57,6 +62,9 @@ function groupCardResults(cards) {
     if (!previous || (previous.isAlternative && !card.isAlternative)) groups.set(key, card);
   }
   return [...groups.values()];
+}
+function visibleCardResults(cards, art = 'standard') {
+  return art === 'standard' ? groupCardResults(cards) : cards;
 }
 function cardVariants(cards, card) {
   return cards.filter(other => other.game === card.game && other.code === card.code)
@@ -197,7 +205,7 @@ function filterIllustrators(artists, query, game = 'all') {
 }
 function groupExpansionSets(sets) {
   const groups = new Map();
-  for (const set of sets) {
+  for (const set of [...sets].sort((a, b) => (a.groupOrder ?? 999) - (b.groupOrder ?? 999) || compareExpansionDates(a, b))) {
     const name = set.group || set.seriesName || 'Altre espansioni';
     if (!groups.has(name)) groups.set(name, []);
     groups.get(name).push(set);
@@ -222,10 +230,49 @@ function validateCollection(value, knownIds) {
 function mergeCollections(current, incoming) {
   return { schemaVersion: 1, favorites: [...new Set([...current.favorites, ...incoming.favorites])], notes: { ...current.notes, ...incoming.notes } };
 }
+function validateLibrary(value) {
+  if (value?.schemaVersion === 1) {
+    const content = validateCollection(value);
+    const library = emptyLibrary();
+    Object.assign(library.lists[0], { favorites: content.favorites, notes: content.notes });
+    return library;
+  }
+  if (value?.schemaVersion !== 2 || !Array.isArray(value.lists) || !value.lists.length) throw new Error('Liste preferiti non valide.');
+  const ids = new Set();
+  const lists = value.lists.map(list => {
+    if (!list || typeof list.id !== 'string' || !list.id || ids.has(list.id) || typeof list.name !== 'string' || !list.name.trim() || list.name.trim().length > 80) throw new Error('Lista preferiti non valida.');
+    ids.add(list.id);
+    const content = validateCollection({ schemaVersion: 1, favorites: list.favorites, notes: list.notes });
+    return { id: list.id, name: list.name.trim(), favorites: content.favorites, notes: content.notes };
+  });
+  return { schemaVersion: 2, lists, defaultListId: ids.has(value.defaultListId) ? value.defaultListId : null };
+}
+function listContent(list) {
+  return validateCollection({ schemaVersion: 1, favorites: list.favorites, notes: list.notes });
+}
+function importListContent(library, listId, value) {
+  const incoming = validateCollection(value);
+  if (!library.lists.some(list => list.id === listId)) throw new Error('La lista scelta non è più disponibile.');
+  return { ...library, lists: library.lists.map(list => {
+    if (list.id !== listId) return list;
+    const merged = mergeCollections(list, incoming);
+    return { ...list, favorites: merged.favorites, notes: merged.notes };
+  }) };
+}
+function assignFavoriteLists(library, cardId, listIds, aliases = {}) {
+  const selected = new Set(listIds);
+  const id = resolveAlias(cardId, aliases);
+  return { ...library, lists: library.lists.map(list => {
+    const exists = list.favorites.some(value => resolveAlias(value, aliases) === id);
+    const favorites = selected.has(list.id) ? exists ? list.favorites : [...list.favorites, id] : list.favorites.filter(value => resolveAlias(value, aliases) !== id);
+    return { ...list, favorites };
+  }) };
+}
 function loadCollection(storage) {
   const current = storage.getItem(STORAGE_KEY);
   const legacy = current ? null : LEGACY_STORAGE_KEYS.map(key => storage.getItem(key)).find(Boolean);
-  return { collection: current || legacy ? validateCollection(JSON.parse(current || legacy)) : emptyCollection(), needsMigration: !current && !!legacy };
+  const value = current || legacy ? JSON.parse(current || legacy) : null;
+  return { collection: value ? validateLibrary(value) : emptyLibrary(), needsMigration: !!value && (!current || value.schemaVersion === 1) };
 }
 
 
@@ -253,7 +300,10 @@ $$('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); });
 
 const state = { game: 'pokemon', view: 'catalog', illustrator: '', artistGame: 'all', artistQuery: '', artistFilter: 'all', expansionQuery: '', expansionLanguage: 'all', expansionCategory: 'expansion', query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1, pageSize: 200, size: 'medium' };
 let catalog;
-let collection = emptyCollection();
+let collection = emptyLibrary();
+let activeListId = collection.lists[0].id;
+let pendingFavoriteId;
+let pendingListAction;
 let favoriteIndex = { ids: new Set(), known: [] };
 let setLabels = new Map();
 let illustratorIndex = [];
@@ -332,7 +382,7 @@ function persist() {
   catch { storageAvailable = false; toast('Salvataggio non disponibile. Esporta un backup prima di chiudere.'); }
 }
 function populateFilters() {
-  const sets = catalog.sets.filter(set => set.game === state.game).sort(compareExpansionDates);
+  const sets = groupExpansionSets(catalog.sets.filter(set => set.game === state.game)).flatMap(group => group.sets);
   const cards = catalog.cards.filter(card => card.game === state.game);
   const rarities = orderedRarities(cards.flatMap(card => card.rarities || [card.rarity]), state.game);
   const traits = [...new Set(cards.flatMap(cardTraits))].sort((a, b) => (traitNames[a] || a).localeCompare(traitNames[b] || b, 'it'));
@@ -464,7 +514,9 @@ function readRoute() {
 }
 function favoriteMarkup(card, detail = false) {
   const on = favoriteIds().has(card.id);
-  return `<button class="${detail ? 'detail-favorite primary-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${on ? 'Rimuovi dai' : 'Aggiungi ai'} preferiti: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}${detail ? `<span>${on ? 'Nei preferiti' : 'Aggiungi ai preferiti'}</span>` : ''}</button>`;
+  const remove = state.view === 'favorites' && on;
+  const label = remove ? `Rimuovi da ${activeList().name}` : on ? 'Gestisci liste' : 'Aggiungi ai preferiti';
+  return `<button class="${detail ? 'detail-favorite primary-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${esc(label)}: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}${detail ? `<span>${esc(remove ? `Rimuovi da ${activeList().name}` : on ? 'Gestisci liste' : 'Aggiungi ai preferiti')}</span>` : ''}</button>`;
 }
 function tile(card, index) {
   const images = cardProductImages(card, cardDisplaySet(card, state.sets, catalog.sets).id);
@@ -473,12 +525,13 @@ function tile(card, index) {
 }
 function render() {
   if (!catalog) return;
-  favoriteIndex = indexFavorites(catalog.cards, collection.favorites, catalog.aliases);
+  const allFavorites = indexFavorites(catalog.cards, collection.lists.flatMap(list => list.favorites), catalog.aliases);
+  favoriteIndex = state.view === 'favorites' ? indexFavorites(catalog.cards, activeList().favorites, catalog.aliases) : allFavorites;
   $$('[data-game]').forEach(button => { const active = button.dataset.game === state.game; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
   $$('[data-view]').forEach(button => { const active = button.dataset.view === state.view || (state.view === 'illustrator' && button.dataset.view === 'illustrators'); button.classList.toggle('active', active); if (active) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); });
-  $('#favorite-count').textContent = knownFavorites().length;
-  $('#home-link').href = `#catalogo/${state.game}`;
-  $('#home-link').setAttribute('aria-label', `TCG Art Atlas — Catalogo ${gameName(state.game)}`);
+  $('#favorite-count').textContent = allFavorites.known.length;
+  $('#home-link').href = `#espansioni/${state.game}`;
+  $('#home-link').setAttribute('aria-label', `TCG Art Atlas — Espansioni ${gameName(state.game)}`);
   $('#current-game-logo').src = new URL(`logos/${state.game}_logo.webp`, assetBase).href;
   $('#current-game-logo').alt = state.game === 'pokemon' ? 'Pokémon Trading Card Game' : 'One Piece Card Game';
   const expansions = state.view === 'expansions';
@@ -490,9 +543,11 @@ function render() {
   $('#filters').hidden = expansions || artist || directory;
   $('.layout').classList.toggle('show-expansions', expansions || artist || directory);
   $('#illustrator-heading').hidden = !artist;
+  $('#favorites-heading').hidden = state.view !== 'favorites';
+  if (state.view === 'favorites') renderFavoriteLists();
   if (directory) { renderIllustrators(); syncBackToTop(); return; }
   if (expansions) { renderExpansions(); syncBackToTop(); return; }
-  results = groupCardResults(filterCards(catalog.cards, { ...state, game: artist ? state.artistGame : state.game, illustrator: artist ? state.illustrator : '', onlyFavorites: state.view === 'favorites' }, favoriteIds()));
+  results = visibleCardResults(filterCards(catalog.cards, { ...state, game: artist ? state.artistGame : state.game, illustrator: artist ? state.illustrator : '', onlyFavorites: state.view === 'favorites' }, favoriteIds()), state.art);
   if (artist && state.artistGame === 'all') results.sort((a, b) => Number(a.game === 'onepiece') - Number(b.game === 'onepiece'));
   if (artist) {
     $('#illustrator-title').textContent = state.illustrator || 'Illustratore';
@@ -511,7 +566,7 @@ function render() {
   $$('[data-page]').forEach(button => { button.disabled = Number(button.dataset.page) < 0 ? state.page <= 1 : state.page >= pages; });
   $('#page-bottom').hidden = pages < 2;
   $('#empty-state').hidden = !!results.length;
-  if (!results.length) $('#empty-state').innerHTML = `<p>${state.view === 'favorites' && !knownFavorites().length ? 'Nessun preferito nei set attuali.' : 'Nessuna carta trovata.'}</p><button class="secondary-button" data-action="reset">Azzera filtri</button>`;
+  if (!results.length) $('#empty-state').innerHTML = `<p>${state.view === 'favorites' && !knownFavorites().length ? 'Nessuna carta di questa lista nel gioco selezionato.' : 'Nessuna carta trovata.'}</p><button class="secondary-button" data-action="reset">Azzera filtri</button>`;
   renderFilterChips();
   syncBackToTop();
 }
@@ -536,12 +591,55 @@ function resetFilters() {
   Object.assign(state, { query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1 });
   populateFilters(); render();
 }
-function toggleFavorite(id) {
-  const on = favoriteIds().has(id);
-  collection.favorites = on ? collection.favorites.filter(value => resolveAlias(value, catalog.aliases) !== id) : [...collection.favorites, id];
+function activeList() {
+  return collection.lists.find(list => list.id === activeListId) || collection.lists[0];
+}
+function memberLists(id) {
+  return collection.lists.filter(list => list.favorites.some(value => resolveAlias(value, catalog.aliases) === id)).map(list => list.id);
+}
+function renderFavoriteLists() {
+  activeListId = activeList().id;
+  const options = collection.lists.map(list => `<option value="${esc(list.id)}">${esc(list.name)} (${indexFavorites(catalog.cards, list.favorites, catalog.aliases).ids.size})</option>`).join('');
+  $('#favorite-list').innerHTML = $('#default-favorite-list').innerHTML = options;
+  $('#favorite-list').value = activeListId;
+  $('#default-favorite-list').value = collection.defaultListId || activeListId;
+  $('#auto-save-list').checked = !!collection.defaultListId;
+  const list = activeList();
+  const index = indexFavorites(catalog.cards, list.favorites, catalog.aliases);
+  const unavailable = index.ids.size - index.known.length;
+  $('#favorite-list-summary').textContent = `${index.ids.size} artwork nella lista.${unavailable ? ` ${unavailable} fuori dal catalogo attuale, conservati nell’export.` : ''}`;
+  $('#delete-list').disabled = collection.lists.length === 1;
+}
+function refreshFavorites(message) {
   persist(); render();
   if ($('#card-dialog').open) $('.detail-favorite').outerHTML = favoriteMarkup(catalog.cards.find(card => card.id === currentCardId), true);
-  if (storageAvailable) toast(on ? 'Rimosso dai preferiti' : 'Aggiunto ai preferiti');
+  if (storageAvailable && message) toast(message);
+}
+function renderFavoriteChoices(selected = memberLists(pendingFavoriteId)) {
+  $('#favorite-list-choices').innerHTML = collection.lists.map(list => `<label class="check-option"><input type="checkbox" name="favorite-list-choice" value="${esc(list.id)}" ${selected.includes(list.id) ? 'checked' : ''}/><span>${esc(list.name)}</span></label>`).join('');
+}
+function toggleFavorite(id) {
+  const memberships = memberLists(id);
+  const target = state.view === 'favorites' && memberships.includes(activeList().id) ? activeList().id : collection.defaultListId;
+  if (target) {
+    const on = memberships.includes(target);
+    collection = assignFavoriteLists(collection, id, on ? memberships.filter(value => value !== target) : [...memberships, target], catalog.aliases);
+    refreshFavorites(`${on ? 'Rimosso da' : 'Aggiunto a'} ${collection.lists.find(list => list.id === target).name}`);
+    return;
+  }
+  pendingFavoriteId = id;
+  const card = catalog.cards.find(card => card.id === id);
+  $('#favorite-card-label').textContent = `${card.name} · ${card.code}`;
+  renderFavoriteChoices();
+  $('#favorite-dialog').showModal();
+}
+function openListName(action) {
+  pendingListAction = action;
+  $('#list-name-title').textContent = action === 'rename' ? 'Rinomina lista' : 'Nuova lista';
+  $('#list-name').value = action === 'rename' ? activeList().name : '';
+  $('#list-name-error').textContent = '';
+  $('#list-name-dialog').showModal();
+  $('#list-name').focus();
 }
 function openCard(id, mode = 'card', productSetId) {
   id = resolveAlias(id, catalog.aliases);
@@ -600,12 +698,6 @@ function stepCard(delta) {
   filteredCardIndex = (filteredCardIndex + delta + filteredCardIds.length) % filteredCardIds.length;
   openCard(filteredCardIds[filteredCardIndex], 'step');
 }
-function openBackup() {
-  const extra = favoriteIds().size - knownFavorites().length;
-  $('#backup-summary').textContent = `${favoriteIds().size} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
-  $('#backup-dialog').showModal();
-}
-
 document.addEventListener('click', event => {
   const enlarge = event.target.closest('[data-enlarge-image]');
   if (enlarge && window.matchMedia('(max-width: 700px)').matches) {
@@ -654,10 +746,27 @@ document.addEventListener('click', event => {
   if (button.dataset.page) { state.page += Number(button.dataset.page); render(); $('.catalog-toolbar').scrollIntoView({ block: 'start' }); return; }
   if (button.dataset.step) return stepCard(Number(button.dataset.step));
   if (button.id === 'reset-filters' || button.dataset.action === 'reset') return resetFilters();
-  if (button.id === 'backup-open') return openBackup();
-  if (button.id === 'export-backup') {
-    const blob = new Blob([JSON.stringify({ ...collection, exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `tcg-art-atlas-preferiti-${new Date().toISOString().slice(0, 10)}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); toast('Backup esportato');
+  if (button.hasAttribute('data-new-list')) return openListName('create');
+  if (button.id === 'rename-list') return openListName('rename');
+  if (button.id === 'delete-list' && collection.lists.length > 1) {
+    pendingListAction = activeList().id;
+    $('#delete-list-message').textContent = `Eliminare “${activeList().name}”? Le carte salvate nelle altre liste rimangono disponibili.`;
+    $('#delete-list-dialog').showModal();
+    return;
+  }
+  if (button.id === 'confirm-delete-list') {
+    if (collection.lists.length > 1) {
+      collection.lists = collection.lists.filter(list => list.id !== pendingListAction);
+      if (collection.defaultListId === pendingListAction) collection.defaultListId = null;
+      activeListId = activeList().id;
+      state.page = 1;
+      refreshFavorites('Lista eliminata');
+    }
+    $('#delete-list-dialog').close();
+  }
+  if (button.id === 'export-list') {
+    const blob = new Blob([JSON.stringify({ ...listContent(activeList()), exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `tcg-art-atlas-carte-${new Date().toISOString().slice(0, 10)}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); toast('Contenuto della lista esportato');
   }
 });
 $('#illustrator-search').addEventListener('input', event => { state.artistQuery = event.target.value; renderIllustrators(); });
@@ -666,7 +775,7 @@ $('#expansion-language').addEventListener('change', event => { state.expansionLa
 $('#expansion-category').addEventListener('change', event => { state.expansionCategory = event.target.value; renderExpansions(); });
 $('#reset-expansion-filters').addEventListener('click', () => { state.expansionQuery = ''; state.expansionLanguage = 'all'; state.expansionCategory = 'all'; renderExpansions(); });
 $('#search').addEventListener('input', event => { state.query = event.target.value; state.page = 1; render(); });
-$('#home-link').addEventListener('click', event => { event.preventDefault(); navigate('catalog'); });
+$('#home-link').addEventListener('click', event => { event.preventDefault(); navigate($('[data-view]').dataset.view); });
 $('#page-size').addEventListener('change', event => {
   const size = Number(event.target.value);
   if ([100, 200, 300].includes(size)) { state.pageSize = size; state.page = 1; render(); }
@@ -692,25 +801,57 @@ document.addEventListener('change', event => {
     $$('[data-enlarge-image]').forEach(link => { link.href = version.image; });
   }
 });
-$('#import-backup').addEventListener('change', async event => {
+$('#favorite-list').addEventListener('change', event => {
+  activeListId = event.target.value; state.page = 1; render();
+});
+$('#auto-save-list').addEventListener('change', event => {
+  collection.defaultListId = event.target.checked ? $('#default-favorite-list').value : null;
+  persist();
+});
+$('#default-favorite-list').addEventListener('change', event => {
+  if ($('#auto-save-list').checked) { collection.defaultListId = event.target.value; persist(); }
+});
+$('#favorite-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const selected = $$('#favorite-list-choices input:checked').map(input => input.value);
+  collection = assignFavoriteLists(collection, pendingFavoriteId, selected, catalog.aliases);
+  $('#favorite-dialog').close();
+  refreshFavorites(selected.length ? 'Liste aggiornate' : 'Carta rimossa dalle liste');
+});
+$('#list-name-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const name = $('#list-name').value.trim();
+  if (!name) { $('#list-name-error').textContent = 'Inserisci un nome per la lista.'; return; }
+  const current = pendingListAction === 'rename' ? activeList() : null;
+  if (collection.lists.some(list => list.id !== current?.id && normalize(list.name) === normalize(name))) {
+    $('#list-name-error').textContent = 'Esiste già una lista con questo nome.'; return;
+  }
+  if (current) current.name = name;
+  else {
+    const id = crypto.randomUUID();
+    collection.lists.push({ id, name, favorites: [], notes: {} });
+    activeListId = id;
+    state.page = 1;
+    if ($('#favorite-dialog').open) renderFavoriteChoices([...$$('#favorite-list-choices input:checked').map(input => input.value), id]);
+  }
+  $('#list-name-dialog').close();
+  refreshFavorites(current ? 'Lista rinominata' : 'Lista creata');
+});
+$('#import-list').addEventListener('change', async event => {
   const file = event.target.files[0]; if (!file || !catalog) return;
+  const targetId = activeList().id;
   try {
     if (file.size > 2_000_000) throw new Error('Il backup supera i 2 MB.');
-    const incoming = validateCollection(JSON.parse(await file.text()));
-    collection = mergeCollections(collection, incoming); persist(); render();
-    if (storageAvailable) { openBackupSummary(); toast('Backup importato'); }
+    collection = importListContent(collection, targetId, JSON.parse(await file.text()));
+    refreshFavorites(`Contenuto importato in ${collection.lists.find(list => list.id === targetId).name}`);
   } catch (error) { toast(error instanceof SyntaxError ? 'JSON non valido.' : error.message); }
   event.target.value = '';
 });
-function openBackupSummary() {
-  const extra = favoriteIds().size - knownFavorites().length;
-  $('#backup-summary').textContent = `${favoriteIds().size} preferiti.${extra ? ` ${extra} fuori dai set attuali restano nel backup.` : ''}`;
-}
 $$('dialog').forEach(dialog => {
   dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });
 });
 document.addEventListener('keydown', event => {
-  if ($('#image-dialog').open) return;
+  if ($$('dialog[open]').some(dialog => dialog.id !== 'card-dialog')) return;
   const editing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
   if (event.key === '/' && ['catalog', 'favorites'].includes(state.view) && !editing && !$$('dialog[open]').length) { event.preventDefault(); $('#search').focus(); }
   if ($('#card-dialog').open && !editing && !document.activeElement.closest('.variant-list') && ['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); stepCard(event.key === 'ArrowRight' ? 1 : -1); }
@@ -722,7 +863,12 @@ document.addEventListener('keydown', event => {
 });
 window.addEventListener('storage', event => {
   if (event.key !== STORAGE_KEY || !catalog) return;
-  try { collection = event.newValue ? validateCollection(JSON.parse(event.newValue)) : emptyCollection(); render(); if ($('#card-dialog').open) openCard(currentCardId, 'refresh'); }
+  try {
+    collection = event.newValue ? validateLibrary(JSON.parse(event.newValue)) : emptyLibrary();
+    render();
+    if ($('#favorite-dialog').open) renderFavoriteChoices();
+    if ($('#card-dialog').open) openCard(currentCardId, 'refresh');
+  }
   catch { toast('Impossibile leggere la selezione aggiornata.'); }
 });
 window.addEventListener('hashchange', () => { if (catalog && location.hash !== '#gallery') readRoute(); });
