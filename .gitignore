@@ -4,3 +4,6 @@ node_modules/
 !.env.example
 .DS_Store
 Thumbs.db
+
+# Materiali di confronto conservati in locale
+temp/

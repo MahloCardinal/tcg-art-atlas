@@ -31,11 +31,27 @@ async function check() {
     assert.ok(card.imageWidth > 0 && card.imageHeight > 0, `Dimensioni mancanti: ${card.id}`);
     assert.ok(!('assetPath' in card), `Percorso temporaneo nel catalogo: ${card.id}`);
     assert.ok(!('thumbnail' in card), `Miniatura duplicata: ${card.id}`);
-    for (const key of ['reviewNote', 'artworkOrigin', 'imageHasSample', 'sourceUrl', 'sourceImageUrl', 'printSources', 'catalogReference']) assert.ok(!(key in card), `Metadato interno nel frontend: ${card.id}/${key}`);
+    for (const key of ['reviewNote', 'artworkOrigin', 'imageHasSample', 'sourceUrl', 'sourceImageUrl', 'printSources', 'catalogReference', 'illustratorAttribution']) assert.ok(!(key in card), `Metadato interno nel frontend: ${card.id}/${key}`);
     if (card.imageVersions?.length) {
       const languages = card.imageVersions.map(image => image.language);
       assert.equal(new Set(languages).size, languages.length, `Lingua duplicata: ${card.id}`);
       assert.ok(card.imageVersions.some(image => image.image === card.image), `Immagine principale fuori dalle versioni: ${card.id}`);
+    }
+    if (card.productVersions) {
+      assert.equal(card.game, 'onepiece');
+      const products = new Set();
+      for (const version of card.productVersions) {
+        assert.ok(!products.has(version.setId), `Prodotto duplicato: ${card.id}/${version.setId}`);
+        products.add(version.setId);
+        assert.ok((card.setIds || [card.setId]).includes(version.setId), `Edizione senza appartenenza: ${card.id}/${version.setId}`);
+        assert.ok(!sets.get(`${card.game}:${version.setId}`).collection, `Raccolta trattata come edizione fisica: ${card.id}`);
+        assert.ok(version.languages.length && new Set(version.languages).size === version.languages.length);
+        const sources = audit.cards[card.id].metadata.printSources;
+        for (const language of version.languages) {
+          assert.ok((card.imageVersions || [{language:card.imageLanguage}]).some(image => image.language === language), `Lingua immagine mancante: ${card.id}`);
+          assert.ok(sources.some(source => source.setId === version.setId && source.region === language), `Lingua prodotto non verificata: ${card.id}/${version.setId}/${language}`);
+        }
+      }
     }
     for (const version of [card, ...(card.imageVersions || [])]) {
       assert.ok(version.image.startsWith(`cards/${card.game}/`), `Cartella gioco errata: ${version.image}`);
@@ -72,6 +88,10 @@ async function check() {
     while (catalog.aliases[resolved]) { assert.ok(!visited.has(resolved), `Ciclo alias: ${alias}`); visited.add(resolved); resolved = catalog.aliases[resolved]; }
     assert.ok(ids.has(resolved), `Destinazione alias mancante: ${alias}`);
   }
+  for (const [alias, target] of Object.entries(catalog.setAliases || {})) {
+    assert.ok(!setKeys.has(alias), `Alias set ancora pubblicato: ${alias}`);
+    assert.ok(setKeys.has(target), `Destinazione alias set mancante: ${alias}`);
+  }
   let imageBytes = 0;
   for (const image of images) {
     assert.match(image, /^(?:cards\/(?:pokemon|onepiece)\/[A-Z0-9]+(?:_[A-Z0-9]+)*\/[A-Z0-9]+(?:_[A-Z0-9]+)*|logos\/[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*)\.webp$/);
@@ -107,8 +127,154 @@ async function test() {
   const { catalog, app, audit } = await check();
   const context = createContext({ URL, Intl });
   new Script(app).runInContext(context);
-  const { filterCards, groupCardResults, groupExpansionSets, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,groupExpansionSets,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  const { filterCards, groupCardResults, cardVariants, cardProductImages, cardPopupVersions, selectPopupVersion, cardDisplaySet, groupExpansionSets, formatSetName, setFilterLabel, setPreviewTitle, setFullLabel, releaseDateRows, popupReleaseDateRows, factValue, compareExpansionDates, filterExpansionSets, expansionCategoryMap, indexIllustrators, filterIllustrators, indexFavorites, setDisplayLabels, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,cardVariants,cardProductImages,cardPopupVersions,selectPopupVersion,cardDisplaySet,groupExpansionSets,formatSetName,setFilterLabel,setPreviewTitle,setFullLabel,releaseDateRows,popupReleaseDateRows,factValue,compareExpansionDates,filterExpansionSets,expansionCategoryMap,indexIllustrators,filterIllustrators,indexFavorites,setDisplayLabels,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
   const cards = catalog.cards.map(card => ({ ...card, setName: catalog.sets.find(set => set.game === card.game && set.id === card.setId).name }));
+  const labels = setDisplayLabels(catalog.sets);
+  for (const game of ['pokemon','onepiece']) {
+    const gameLabels = catalog.sets.filter(set => set.game === game).map(set => labels.get(`${game}:${set.id}`));
+    assert.equal(new Set(gameLabels).size, gameLabels.length, `Espansioni indistinguibili: ${game}`);
+  }
+  assert.equal(labels.get('pokemon:cc_shining-legends'), 'Shining Legends · Internazionale');
+  assert.equal(labels.get('pokemon:jp_shining-legends'), 'Shining Legends · Giappone');
+  for (const deck of ['blastoise','charizard','venusaur']) {
+    assert.ok(labels.get(`pokemon:cc_pokemon-tcg-classic-${deck}`).toLowerCase().includes(`(${deck})`));
+  }
+  assert.equal(formatSetName('THE TIME OF BATTLE'), 'The Time Of Battle');
+  assert.equal(formatSetName('Anime 25th Collection'), 'Anime 25th Collection');
+  assert.equal(formatSetName('1ST ANNIVERSARY'), '1st Anniversary');
+  assert.equal(groupExpansionSets(catalog.sets.filter(set => set.game === 'pokemon'))[0].name, 'Mega Evolution');
+  assert.equal(formatSetName('RED/BLACK SABO', 'onepiece'), 'RED/BLACK Sabo');
+  assert.equal(formatSetName('Yellow Charlotte Katakuri', 'onepiece'), 'YELLOW Charlotte Katakuri');
+  assert.equal(formatSetName('Black & White', 'pokemon'), 'Black & White');
+  assert.equal(formatSetName('Pokémon TCG Classic (Blastoise)'), 'Pokémon TCG Classic (Blastoise)');
+  assert.equal(formatSetName('HeartGold & SoulSilver'), 'HeartGold & SoulSilver');
+  for (const set of catalog.sets) assert.equal(set.name, formatSetName(set.name, set.game), `Maiuscole non uniformi: ${set.id}`);
+  const opSet = catalog.sets.find(set => set.game === 'onepiece' && set.id === 'OP18');
+  assert.equal(setFilterLabel(opSet), '[OP18] The Dominance Of God');
+  const previewDeck = {game:'onepiece',id:'ST35',name:'RED/BLACK Sabo'};
+  assert.equal(setPreviewTitle(previewDeck), '[ST35] Sabo');
+  assert.equal(setFullLabel(previewDeck), '[ST35] RED/BLACK Sabo');
+  assert.equal(setPreviewTitle({game:'onepiece',id:'EB03',name:'Extra Booster One Piece Heroines Edition'}), '[EB03] One Piece Heroines Edition');
+  assert.equal(setPreviewTitle({game:'onepiece',id:'FAMILY_DECK_JP',name:'Family Deck Set'}), 'Family Deck Set');
+  assert.equal(setFilterLabel(previewDeck), setPreviewTitle(previewDeck));
+  assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:'2022-07-08',en:'2022-12-02'}})), JSON.stringify([{region:'JAP',date:'2022-07-08'},{region:'INT',date:'2022-12-02'}]));
+  assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:'2026-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'',date:'2026-01-01'}]));
+  assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:null,en:'2026-01-01'}})), JSON.stringify([{region:'JAP',date:''},{region:'INT',date:'2026-01-01'}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDate:'2026-01-01'})), JSON.stringify([{region:'',date:'2026-01-01'},{empty:true}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDates:{ja:'2026-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'',date:'2026-01-01'},{empty:true}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({})), JSON.stringify([{region:'',date:''},{empty:true}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDates:{ja:'2025-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'JAP',date:'2025-01-01'},{region:'INT',date:'2026-01-01'}]));
+  assert.equal(formatSetName('CARTE DA PRODOTTI SPECIALI','onepiece'), 'Carte da prodotti speciali');
+  assert.equal(formatSetName('CARTE DA EVENTI E CAMPAGNE','onepiece'), 'Carte da eventi e campagne');
+  const productCollection = catalog.sets.find(set => set.game === 'onepiece' && set.id === 'OTHER');
+  assert.equal(productCollection.name, 'Carte da prodotti speciali');
+  assert.equal(resolveAlias('onepiece:OTHER_JP', catalog.setAliases), 'onepiece:OTHER');
+  assert.ok(!catalog.sets.some(set => set.game === 'onepiece' && set.id === 'OTHER_JP'));
+  const mergedYamato = catalog.cards.find(card => card.id === 'op-OTHER-preview-EB01-007_p1');
+  assert.equal(resolveAlias('op-OTHER_JP-preview-EB01-007_p1', catalog.aliases), mergedYamato.id);
+  assert.equal(JSON.stringify(languageImages(mergedYamato).map(image => image.language).sort()), JSON.stringify(['en','ja']));
+  const promoCollection = catalog.sets.find(set => set.game === 'onepiece' && set.id === 'P');
+  assert.equal(promoCollection.group, 'Promo');
+  const promoCards = catalog.cards.filter(card => card.game === 'onepiece' && (card.setIds || [card.setId]).includes('P'));
+  assert.ok(promoCards.length > 1 && promoCards.every(card => /^P-\d+$/.test(card.code)));
+  for (const card of catalog.cards.filter(card => card.game === 'onepiece' && /^P-\d+$/.test(card.code))) assert.ok(promoCards.includes(card));
+  const deckPromo = promoCards.find(card => card.code === 'P-085' && card.setId === 'ST36');
+  assert.ok(deckPromo, 'La raccolta Promo deve includere le carte P dei mazzi mantenendo il prodotto originale');
+  assert.equal(cardDisplaySet(deckPromo, ['onepiece:P'], catalog.sets).id, 'ST36');
+  assert.equal(cardDisplaySet(deckPromo, ['onepiece:ST36','onepiece:P'], catalog.sets).id, 'ST36');
+  const campaignCollection = catalog.sets.find(set => set.game === 'onepiece' && set.id === 'PROMO_JP');
+  assert.equal(campaignCollection.name, 'Carte da eventi e campagne');
+  assert.equal(campaignCollection.group, 'Altri prodotti');
+  assert.equal(factValue(undefined), 'N.D.');
+  assert.equal(factValue('Unknown'), 'N.D.');
+  assert.equal(factValue(''), 'N.D.');
+  assert.equal(factValue('Common'), 'Common');
+  const sameDay = ['ST09','ST36','ST31'].map(id => ({game:'onepiece',id,releaseDate:'2026-07-31'}));
+  assert.deepEqual(sameDay.sort(compareExpansionDates).map(set => set.id), ['ST36','ST31','ST09']);
+  const pokemonSets = catalog.sets.filter(set => set.game === 'pokemon');
+  const categoryMap = expansionCategoryMap(pokemonSets);
+  for (const set of pokemonSets) {
+    assert.ok(['expansion','special','deck','world-deck','trainer-kit','box','promo','collaboration','energy','other'].includes(set.category), `Categoria non valida: ${set.id}`);
+    assert.ok(set.languages.length && set.languages.every(language => ['en','ja'].includes(language)), `Lingue non valide: ${set.id}`);
+  }
+  const normalSets = filterExpansionSets(catalog.sets, {game:'pokemon',category:'expansion',language:'all'}, categoryMap);
+  assert.equal(normalSets.length, 273);
+  assert.ok(normalSets.every(set => set.category === 'expansion'));
+  const japaneseBase = filterExpansionSets(catalog.sets, {game:'pokemon',query:'base set',language:'ja',category:'expansion'}, categoryMap);
+  assert.ok(japaneseBase.some(set => set.id === 'base1'), 'Il Base Set equivalente EN/JP deve comparire anche in giapponese');
+  const kits = filterExpansionSets(catalog.sets, {game:'pokemon',category:'trainer-kit',language:'en',query:'latias'}, categoryMap);
+  assert.ok(kits.length >= 2 && kits.every(set => set.language === 'en' && set.category === 'trainer-kit'));
+  assert.equal(filterExpansionSets(catalog.sets, {game:'pokemon',query:'zz-no-such-set'}).length, 0);
+  const rareCategories = expansionCategoryMap([{game:'pokemon',id:'a',category:'one-off'},{game:'pokemon',id:'b',category:'one-off'}]);
+  assert.equal(rareCategories.get('pokemon:a'), 'other');
+  const artistSamples = [
+    {game:'pokemon',code:'A',illustrator:'Ken Sugimori'},
+    {game:'pokemon',code:'A',illustrator:' KEN SUGIMORI '},
+    {game:'pokemon',code:'B',illustrator:'Ken Sugimori'},
+    {game:'onepiece',code:'OP01-001',illustrator:'Ken Sugimori'},
+    {game:'onepiece',code:'OP01-001',illustrator:'Ken Sugimori'},
+    {game:'pokemon',code:'C'},
+    {game:'pokemon',code:'D',illustrator:'Élodie Test'},
+  ];
+  const sampleIndex = indexIllustrators(artistSamples);
+  const ken = sampleIndex.find(artist => artist.name === 'Ken Sugimori');
+  assert.equal(ken.games.pokemon, 2);
+  assert.equal(ken.games.onepiece, 1);
+  assert.equal(filterIllustrators(sampleIndex, 'ELODIE').length, 1);
+  assert.equal(filterIllustrators(sampleIndex, 'sugimori ken')[0].name, 'Ken Sugimori');
+  assert.equal(filterIllustrators(sampleIndex, 'not an illustrator').length, 0);
+  assert.equal(filterIllustrators(sampleIndex, '', 'onepiece').length, 1);
+  assert.equal(filterIllustrators(sampleIndex, 'ELODIE', 'onepiece').length, 0);
+  assert.equal(filterIllustrators(sampleIndex, 'ELODIE', 'pokemon').length, 1);
+  assert.equal(filterIllustrators(sampleIndex, '', 'pokemon').length, 2);
+  const resourceOrder = [
+    {id:'don-old',game:'onepiece',category:'DON!!',code:'DON!!',name:'A',releaseDate:'2020-01-01'},
+    {id:'op-card',game:'onepiece',category:'CHARACTER',code:'OP01-001',name:'Z',releaseDate:'2025-01-01'},
+    {id:'pk-card',game:'pokemon',category:'Energy',code:'0',name:'B',releaseDate:'2024-01-01'},
+    {id:'don-new',game:'onepiece',category:'DON!!',code:'DON!!',name:'C',releaseDate:'2026-01-01'},
+  ];
+  for (const sort of ['index','name','recent','oldest']) {
+    const sorted = filterCards(resourceOrder, {game:'all',sort});
+    assert.ok(sorted.slice(0,2).every(card => card.category !== 'DON!!'), `DON!! prima delle altre carte: ${sort}`);
+    assert.ok(sorted.slice(2).every(card => card.category === 'DON!!'));
+    const onlyDon = filterCards(resourceOrder, {game:'onepiece',categories:['DON!!'],sort});
+    assert.equal(onlyDon.length, 2);
+  }
+  const onepieceGroups = groupExpansionSets(catalog.sets.filter(set => set.game === 'onepiece'));
+  assert.ok(!onepieceGroups.some(group => ['Set di mazzi','Mazzi dimostrativi'].includes(group.name)));
+  const otherProducts = onepieceGroups.find(group => group.name === 'Altri prodotti').sets;
+  for (const id of ['OPDD','FAMILY_DECK_JP','LD01','SD01','ST01_PRE','ST02_PRE','ST03_PRE','ST04_PRE']) assert.ok(otherProducts.some(set => set.id === id), `Prodotto fuori dal gruppo Altri prodotti: ${id}`);
+  assert.ok(onepieceGroups.find(group => group.name === 'Mazzi Starter').sets.every(set => /^ST\d{2}$/.test(set.id)));
+  const kenCatalog = indexIllustrators(cards).find(artist => artist.name === 'Ken Sugimori');
+  assert.equal(kenCatalog.games.pokemon, groupCardResults(filterCards(cards, {game:'pokemon',illustrator:'Ken Sugimori',art:'all'})).length);
+  const creditedOnePiece = cards.filter(card => card.game === 'onepiece' && card.illustrator);
+  assert.ok(creditedOnePiece.length >= 3000, 'Attribuzioni One Piece mancanti');
+  for (const card of creditedOnePiece) {
+    const attribution = audit.cards[card.id].metadata.illustratorAttribution;
+    assert.equal(attribution.name, card.illustrator);
+    assert.ok(attribution.evidence.length);
+    assert.ok(attribution.evidence.every(source => source.sourceUrl.startsWith('https://onepiece.limitlesstcg.com/cards/') && source.sourceImageUrl.includes('/' + card.code)));
+  }
+  assert.equal(cards.find(card => card.id === 'op-OP01-025AA1').illustrator, 'AKIRA EGAWA');
+  assert.notEqual(cards.find(card => card.id === 'op-OP01-025AA').illustrator, cards.find(card => card.id === 'op-OP01-025AA1').illustrator, 'Gli artwork dello stesso codice non devono ereditare lo stesso illustratore');
+  for (const id of ['op-OP02-096','op-OP02-099','op-OP03-102AA']) assert.ok(!cards.find(card => card.id === id).illustrator, `Attribuzione discordante non sospesa: ${id}`);
+  const egawa = indexIllustrators(cards).find(artist => artist.name === 'AKIRA EGAWA');
+  assert.ok(egawa.games.pokemon && egawa.games.onepiece, 'Artista comune ai due giochi non riunito');
+  const rawFavorites = Object.freeze(['old','canonical','unavailable']);
+  const indexed = indexFavorites([{id:'canonical'},{id:'other'}], rawFavorites, {old:'intermediate',intermediate:'canonical'});
+  assert.deepEqual([...indexed.ids], ['canonical','unavailable']);
+  assert.deepEqual(indexed.known.map(card => card.id), ['canonical']);
+  assert.equal(rawFavorites.length, 3, 'Gli ID originali del backup non devono cambiare');
+  assert.equal(indexFavorites([{id:'canonical'}], [], {}).ids.size, 0);
+  let aliasLookups = 0;
+  const favoriteAliases = new Proxy({}, { get() { aliasLookups++; } });
+  const manyCards = Array.from({length:5000}, (_,index) => ({id:`card-${index}`}));
+  const manyFavorites = manyCards.slice(0,2000).map(card => card.id);
+  const largeIndex = indexFavorites(manyCards, manyFavorites, favoriteAliases);
+  assert.equal(largeIndex.known.length, 2000);
+  assert.equal(aliasLookups, 2000, 'Risolvere ogni preferito una volta sola');
+  for (const card of manyCards) largeIndex.ids.has(card.id);
+  assert.equal(aliasLookups, 2000, 'L’indice deve poter essere riutilizzato senza risolvere altri alias');
   const defaults = { game: 'all', art: 'all', query: '' };
   assert.equal(filterCards(cards, { ...defaults, query: 'MITSUHIRO charizard' })[0].id, 'pk-base1-4');
   assert.equal(filterCards(cards, { ...defaults, query: 'base2-17' }).length, 1);
@@ -118,27 +284,154 @@ async function test() {
   assert.ok(filterCards(cards, { ...defaults, game: 'pokemon' }).filter(card => languageImages(card).some(v => v.language === 'ja')).length > 1000);
   assert.equal(filterCards(cards, { ...defaults, game: 'all', illustrator: 'Ken Sugimori' }).some(card => card.illustrator !== 'Ken Sugimori'), false);
   const filtered = filterCards(cards, { ...defaults, game: 'onepiece', sets: ['onepiece:OP01'], art: 'standard' });
-  assert.ok(filtered.length > 0 && filtered.every(card => !card.isAlternative || !cards.some(other => other.game === card.game && other.code === card.code && !other.isAlternative)));
+  assert.ok(filtered.length > 0 && filtered.every(card => !card.isAlternative || !cards.some(other => other.game === card.game && other.code === card.code && !other.isAlternative && (other.setIds || [other.setId]).includes('OP01'))));
   assert.ok(catalog.sets.filter(set => set.game === 'onepiece').length >= 13);
   for (const set of catalog.sets.filter(set => set.game === 'onepiece' && audit.sets[`onepiece:${set.id}`].expectedCodesByLanguage)) {
     for (const language of ['en','ja']) {
       const expected = audit.sets[`onepiece:${set.id}`].expectedCodesByLanguage[language];
-      assert.ok(expected.length >= 120, `Inventario regionale incompleto: ${set.id}/${language}`);
+      assert.ok(expected.length >= (/^OP\d{2}$/.test(set.id) ? 120 : /^ST\d{2}$/.test(set.id) ? 15 : set.id === 'FAMILY_DECK_JP' && language === 'ja' ? 51 : /^EB\d{2}$/.test(set.id) && language === 'ja' ? 60 : 0), `Inventario regionale incompleto: ${set.id}/${language}`);
       const available = new Set(cards.filter(card => card.game === 'onepiece' && (card.setIds || [card.setId]).includes(set.id) && languageImages(card).some(image => image.language === language)).map(card => card.code));
       for (const code of expected) assert.ok(available.has(code), `Immagine regionale mancante: ${set.id}/${language}/${code}`);
     }
   }
+  for (const setId of ['OP14','OP15','OP16','OP17','OP18','EB01','EB02','EB03','EB04','EB05',...Array.from({length:36},(_,i) => `ST${String(i+1).padStart(2,'0')}`),'FAMILY_DECK_JP']) {
+    const inventory = audit.sets[`onepiece:${setId}`];
+    assert.ok(!inventory.preview, `Il set resta in anteprima: ${setId}`);
+    for (const language of ['en', 'ja']) {
+      const printings = inventory.officialPrintingCoverage.filter(row => row.language === language);
+      assert.equal(printings.length, inventory.officialRows[language], `Inventario stampe incompleto: ${setId}/${language}`);
+      for (const printing of printings) {
+        const card = cards.find(card => card.id === printing.cardId);
+        assert.ok(card && (card.setIds || [card.setId]).includes(setId), `Stampa senza carta/set: ${printing.key}`);
+        assert.ok(languageImages(card).some(image => image.language === language), `Lingua stampa mancante: ${printing.key}`);
+        assert.ok(audit.cards[card.id].metadata.printSources.some(source => source.referenceImageUrl === printing.sourceImageUrl && source.setId === setId), `Fonte stampa mancante: ${printing.key}`);
+      }
+    }
+  }
+  for (const [setId, count] of [['LD01',51],['SD01',30],['ST01_PRE',17],['ST02_PRE',17],['ST03_PRE',17],['ST04_PRE',17]]) {
+    const inventory = audit.sets[`onepiece:${setId}`];
+    assert.equal(inventory.expectedCodeList.length, count, `Codici mancanti: ${setId}`);
+    for (const row of inventory.sourcePrintingCoverage) {
+      const card = cards.find(card => card.id === row.cardId);
+      assert.ok(card && (card.setIds || [card.setId]).includes(setId));
+      assert.ok(languageImages(card).some(image => image.language === row.language));
+    }
+  }
+  for (const [setId, count] of [['EB01',80],['EB02',105],['EB03',90],['EB05',96]]) {
+    const inventory = audit.sets[`onepiece:${setId}`];
+    for (const language of ['en','ja']) assert.equal(inventory.officialRows[language], count, `Copertura Extra Booster incompleta: ${setId}/${language}`);
+  }
+  const orderedStarter = groupCardResults(filterCards(cards, {...defaults,game:'onepiece',sets:['onepiece:ST36'],sort:'index',art:'standard'}));
+  assert.equal(orderedStarter.length, 15);
+  assert.equal(orderedStarter[0].code, 'OP10-099', 'Le ristampe del mazzo devono rispettare l’ordine per codice');
+  const namiSpecials = groupCardResults(filterCards(cards, {game:'onepiece',sets:['onepiece:OP05'],query:'OP01-016',art:'standard'}));
+  assert.equal(namiSpecials.length, 1);
+  assert.equal(namiSpecials[0].rarity, 'SP CARD');
+  assert.ok(cardVariants(cards, namiSpecials[0]).some(card => card.setId === 'OP01' && !card.isAlternative));
+  assert.ok(cardVariants(cards, namiSpecials[0]).some(card => (card.setIds || [card.setId]).includes('EB05')));
+  const law = cards.find(card => card.id === 'op-ST02-009');
+  const lawVersions = cardPopupVersions(cards, law, catalog.sets);
+  assert.equal(lawVersions.length, 3, 'ST02-009 deve avere le tre edizioni nello stesso popup');
+  assert.deepEqual(Array.from(lawVersions, version => version.setId).sort(), ['FAMILY_DECK_JP','ST02','ST02_PRE']);
+  for (const setId of ['ST02','FAMILY_DECK_JP','ST02_PRE']) {
+    const entry = groupCardResults(filterCards(cards, {game:'onepiece',sets:[`onepiece:${setId}`],query:'ST02-009',art:'standard'}))[0];
+    assert.ok(entry);
+    assert.equal(JSON.stringify(cardPopupVersions(cards, entry, catalog.sets).map(version => version.versionKey)), JSON.stringify(lawVersions.map(version => version.versionKey)), `Popup diverso entrando da ${setId}`);
+    assert.equal(selectPopupVersion(lawVersions, entry.id, setId).setId, setId);
+  }
+  assert.equal(JSON.stringify(cardProductImages(law, 'FAMILY_DECK_JP').map(image => image.language)), JSON.stringify(['ja']));
+  assert.equal(JSON.stringify(cardProductImages(law, 'ST02').map(image => image.language)), JSON.stringify(['en','ja']));
+  assert.equal(JSON.stringify(selectPopupVersion(lawVersions, 'op-TCG415805', 'ST02_PRE').imageVersions.map(image => image.language)), JSON.stringify(['en']));
+  const opFamilies = new Map();
+  for (const card of cards.filter(card => card.game === 'onepiece')) {
+    if (!opFamilies.has(card.code)) opFamilies.set(card.code, []);
+    opFamilies.get(card.code).push(card);
+  }
+  for (const [code, family] of opFamilies) {
+    const versions = cardPopupVersions(family, family[0], catalog.sets);
+    const expected = JSON.stringify(versions.map(version => version.versionKey));
+    assert.equal(new Set(versions.map(version => version.versionKey)).size, versions.length, `Edizione duplicata nel popup: ${code}`);
+    for (const card of family) {
+      assert.equal(JSON.stringify(cardPopupVersions(family, card, catalog.sets).map(version => version.versionKey)), expected, `Famiglia popup incompleta: ${card.id}`);
+      for (const product of card.productVersions || [{setId:card.setId}]) assert.ok(versions.some(version => version.id === card.id && version.setId === product.setId), `Prodotto nascosto nel popup: ${card.id}/${product.setId}`);
+    }
+  }
+  for (const set of catalog.sets.filter(set => /_PRE$/.test(set.id))) {
+    assert.ok(set.name.includes('Super Prerelease'));
+    assert.ok(!/pre[- ]release/i.test(set.name));
+  }
+  assert.equal(formatSetName('Worst Generation (Super Pre-Release)', 'onepiece'), 'Worst Generation (Super Prerelease)');
+
+  // Exercise the real popup renderer: switch editions of the same artwork,
+  // retaining the family, navigation snapshot, language choices and scroll.
+  const popupDialog = {open:false, innerHTML:'', dataset:{}, classList:{toggle(){}}, showModal(){this.open=true;}};
+  const variantList = {scrollLeft:0};
+  const popupNodes = {'#card-dialog':popupDialog,'.variant-list':variantList,'.detail-info-content':{},'.variant-thumb.selected':{focus(){}},'.detail-close':{focus(){}}};
+  const popupContext = createContext({
+    catalog:{...catalog,cards}, state:{sets:['onepiece:FAMILY_DECK_JP']}, results:[law],
+    currentCardId:undefined, currentCardSetId:undefined, filteredCardIds:[], filteredCardIndex:0,
+    imageLanguages:new Map(), resolveAlias, cardPopupVersions, selectPopupVersion, cardDisplaySet,
+    languageImages, popupReleaseDateRows, factValue, setFullLabel,
+    $:selector => popupNodes[selector],
+    esc:value => String(value ?? '').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'),
+    icon:() => '', numbersLabel:card => card.code, dateLabel:date => date,
+    languageName:code => ({en:'Inglese',ja:'Giapponese'}[code] || code),
+    favoriteMarkup:() => '<button>Aggiungi ai preferiti</button>',
+  });
+  new Script(app.slice(app.indexOf('function openCard('), app.indexOf('function stepCard('))).runInContext(popupContext);
+  runInContext("openCard('op-ST02-009')", popupContext);
+  assert.equal((popupDialog.innerHTML.match(/data-variant=/g) || []).length, 3);
+  assert.equal((popupDialog.innerHTML.match(/aria-pressed="true"/g) || []).length, 1);
+  assert.equal(runInContext('currentCardSetId', popupContext), 'FAMILY_DECK_JP');
+  assert.match(popupDialog.innerHTML, /ST02_009_JAP.webp/);
+  assert.ok(!popupDialog.innerHTML.includes('id="image-language"'), 'Il Family Deck non deve offrire una lingua inglese inesistente');
+  variantList.scrollLeft = 137;
+  runInContext("openCard('op-ST02-009', 'variant', 'ST02')", popupContext);
+  assert.equal(runInContext('currentCardSetId', popupContext), 'ST02', 'Il click su ST02 deve prevalere sul filtro Family Deck');
+  assert.match(popupDialog.innerHTML, /id="image-language"/);
+  assert.match(popupDialog.innerHTML, /ST02_009.webp/);
+  assert.equal(variantList.scrollLeft, 137);
+  assert.equal((popupDialog.innerHTML.match(/aria-pressed="true"/g) || []).length, 1);
+  runInContext("openCard('op-TCG415805', 'variant', 'ST02_PRE')", popupContext);
+  assert.equal(runInContext('currentCardSetId', popupContext), 'ST02_PRE');
+  assert.match(popupDialog.innerHTML, /Super Prerelease/);
+  assert.match(popupDialog.innerHTML, /2022-09-30/);
+  assert.ok(!popupDialog.innerHTML.includes('id="image-language"'));
+  assert.equal(variantList.scrollLeft, 137);
+  assert.equal(JSON.stringify(runInContext('filteredCardIds', popupContext)), JSON.stringify(['op-ST02-009']));
+  runInContext("openCard('op-TCG415805', 'refresh')", popupContext);
+  assert.equal(runInContext('currentCardSetId', popupContext), 'ST02_PRE');
+  const crossSetCards = [
+    {id:'original',game:'onepiece',code:'OP01-016',setId:'OP01',isAlternative:false},
+    {id:'special',game:'onepiece',code:'OP01-016',setId:'OP05',rarity:'SP CARD',isAlternative:true},
+    {id:'unrelated',game:'onepiece',code:'OP01-017',setId:'OP05',isAlternative:false},
+    {id:'other-game',game:'pokemon',code:'OP01-016',setId:'base1',isAlternative:false},
+  ];
+  const setSpecial = groupCardResults(filterCards(crossSetCards, {game:'onepiece',sets:['onepiece:OP05'],art:'standard'}));
+  assert.deepEqual(Array.from(setSpecial, card => card.id), ['special','unrelated']);
+  assert.deepEqual(Array.from(cardVariants(crossSetCards, setSpecial[0]), card => card.id), ['original','special']);
+  assert.deepEqual(Array.from(groupCardResults(filterCards(crossSetCards, {game:'onepiece',sets:['onepiece:OP01'],art:'standard'})), card => card.id), ['original']);
+  assert.equal(cardDisplaySet({...crossSetCards[1],setIds:['OP01','OP05']}, ['onepiece:OP05'], catalog.sets).id, 'OP05');
+  assert.equal(cardDisplaySet(crossSetCards[0], ['onepiece:OP05'], catalog.sets).id, 'OP01');
   const alternativeOnly = [{id:'special',game:'onepiece',code:'ST99-001',setId:'OP13',isAlternative:true}];
   assert.equal(filterCards(alternativeOnly, {game:'onepiece',art:'standard'}).length, 1);
   const favorites = ['op-OP01-001AA'];
   assert.equal(filterCards(cards, { ...defaults, onlyFavorites: true }, favorites)[0].id, favorites[0]);
+  assert.equal(filterCards(cards, { ...defaults, onlyFavorites: true }, new Set(favorites))[0].id, favorites[0]);
   for (const id of ['op-OP01-051AA2', 'op-ST01-012AA5', 'op-ST03-009AA', 'op-ST04-003AA6']) assert.ok(filterCards(cards, { ...defaults, sets: ['onepiece:OP03'] }).some(card => card.id === resolveAlias(id, catalog.aliases)));
   const dons = filterCards(cards, { ...defaults, game: 'onepiece', categories: ['DON!!'], traits: ['Blue'] });
-  assert.equal(dons.length, 14);
+  assert.equal(dons.length, 31);
+  const previousDons = dons.filter(card => /^OP(?:0[1-9]|1[0-3])$/.test(card.setId));
+  assert.equal(previousDons.length, 14);
   for (const language of ['en','ja']) {
     const designs = dons.map(card => languageImages(card).find(image => image.language === language));
-    assert.ok(designs.every(Boolean), `Lingua DON!! mancante: ${language}`);
-    assert.equal(new Set(designs.map(image => image.image)).size, 14, `Disegno DON!! duplicato: ${language}`);
+    assert.equal(designs.filter(Boolean).length, 30, `Lingua DON!! mancante: ${language}`);
+    assert.equal(new Set(designs.filter(Boolean).map(image => image.image)).size, 30, `Disegno DON!! duplicato: ${language}`);
+  }
+  for (const card of dons) {
+    const versions = languageImages(card);
+    if (!versions.some(image => image.language === 'en')) assert.ok(audit.cards[card.id].issues.includes('MISSING_ENGLISH_SCAN'), `Scansione DON!! inglese non documentata: ${card.id}`);
+    assert.ok(versions.some(image => image.language === 'ja') || audit.cards[card.id].issues.includes('NO_JAPANESE_PRODUCT'), `Lingua DON!! mancante: ${card.id}/ja`);
   }
   assert.ok(dons.every(card => card.category === 'DON!!'));
   assert.ok(['en', 'ja'].every(language => languageImages(cards.find(card => card.id === 'op-OP03-007')).some(v => v.language === language)));
