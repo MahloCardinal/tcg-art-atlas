@@ -1,9 +1,10 @@
 import http from 'node:http';
 import path from 'node:path';
-import { readFile, readdir, stat } from 'node:fs/promises';
+import { readFile, readdir, stat, mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { Script, createContext, runInContext } from 'node:vm';
 import assert from 'node:assert/strict';
+import {handleObservationRequest,saveObservation} from './review-notes.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const site = path.join(root, 'public');
@@ -127,7 +128,99 @@ async function test() {
   const { catalog, app, audit } = await check();
   const context = createContext({ URL, Intl });
   new Script(app).runInContext(context);
-  const { filterCards, groupCardResults, cardVariants, cardProductImages, cardPopupVersions, selectPopupVersion, cardDisplaySet, groupExpansionSets, formatSetName, setFilterLabel, setPreviewTitle, setFullLabel, releaseDateRows, popupReleaseDateRows, factValue, compareExpansionDates, filterExpansionSets, expansionCategoryMap, indexIllustrators, filterIllustrators, indexFavorites, setDisplayLabels, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, validateLibrary, emptyLibrary, listContent, importListContent, assignFavoriteLists, visibleCardResults, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({filterCards,groupCardResults,cardVariants,cardProductImages,cardPopupVersions,selectPopupVersion,cardDisplaySet,groupExpansionSets,formatSetName,setFilterLabel,setPreviewTitle,setFullLabel,releaseDateRows,popupReleaseDateRows,factValue,compareExpansionDates,filterExpansionSets,expansionCategoryMap,indexIllustrators,filterIllustrators,indexFavorites,setDisplayLabels,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,validateLibrary,emptyLibrary,listContent,importListContent,assignFavoriteLists,visibleCardResults,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  const { canonicalRarity, cardRarities, orderedTraits, hasCatalogFilters, hasExpansionFilters, validListName, portableList, pageNumber, listExportFilename, filterCards, groupCardResults, cardVariants, cardProductImages, cardPopupVersions, selectPopupVersion, cardDisplaySet, groupExpansionSets, formatSetName, setFilterLabel, setPreviewTitle, setFullLabel, releaseDateRows, popupReleaseDateRows, factValue, compareExpansionDates, filterExpansionSets, expansionTiles, catalogSetSelections, prereleaseSetCode, expansionCategoryMap, indexIllustrators, filterIllustrators, indexFavorites, setDisplayLabels, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, validateLibrary, emptyLibrary, listContent, importListContent, assignFavoriteLists, visibleCardResults, orderedRarities, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({canonicalRarity,cardRarities,orderedTraits,hasCatalogFilters,hasExpansionFilters,validListName,portableList,pageNumber,listExportFilename,filterCards,groupCardResults,cardVariants,cardProductImages,cardPopupVersions,selectPopupVersion,cardDisplaySet,groupExpansionSets,formatSetName,setFilterLabel,setPreviewTitle,setFullLabel,releaseDateRows,popupReleaseDateRows,factValue,compareExpansionDates,filterExpansionSets,expansionTiles,catalogSetSelections,prereleaseSetCode,expansionCategoryMap,indexIllustrators,filterIllustrators,indexFavorites,setDisplayLabels,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,validateLibrary,emptyLibrary,listContent,importListContent,assignFavoriteLists,visibleCardResults,orderedRarities,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  // Compact lists keep exact artworks in portable JSON and validate names only on edit.
+  for (const name of ['Preferiti','Pokemon-1','A_B.C,D','Pokémon']) assert.ok(validListName(name));
+  for (const name of ['', 'Due parole','1234567890123456','A/B','A!']) assert.ok(!validListName(name));
+  const portableCards=[{id:'pk-a',game:'pokemon',code:'A-1'},{id:'pk-b',game:'pokemon',code:'A-1',isAlternative:true}];
+  const portable=portableList({name:'Belle',favorites:['pk-b','old-b','pending'],notes:{}},portableCards,{'old-b':'pk-b'});
+  assert.deepEqual(JSON.parse(JSON.stringify(portable)),{name:'Belle',cards:[{code:'A-1',variant:'pk-b'},{code:null,variant:'pending'}]});
+  const portableLibrary={schemaVersion:2,lists:[{id:'target',name:'Target',favorites:[],notes:{keep:'original'}}],defaultListId:null};
+  const restoredPortable=importListContent(portableLibrary,'target',portable,portableCards,{'old-b':'pk-b'});
+  assert.deepEqual(Array.from(restoredPortable.lists[0].favorites),['pk-b','pending']);
+  assert.equal(restoredPortable.lists[0].name,'Target');
+  assert.equal(restoredPortable.lists[0].notes.keep,'original');
+  assert.equal(importListContent(restoredPortable,'target',portable,portableCards).lists[0].favorites.length,2);
+  assert.throws(()=>importListContent(portableLibrary,'target',{name:'X',cards:[{code:'wrong',variant:'pk-a'}]},portableCards));
+  assert.deepEqual(Array.from(orderedRarities(['Common','Common (C)','Uncommon (U)','Uncommon','Double Rare (RR)','Double Rare'],'pokemon')),['Common','Uncommon','Double Rare']);
+  assert.equal(filterCards([{id:'x',game:'pokemon',rarity:'Common (C)'}],{game:'pokemon',rarities:['Common']}).length,1);
+  assert.deepEqual(Array.from(orderedTraits(['Energy','Unknown','Trainer','Fire','Stadium','Water'],'pokemon')),['Water','Fire','Trainer','Stadium','Energy','Unknown']);
+  assert.equal(hasCatalogFilters({query:' ',art:'standard',sets:[],sort:'name'}),false);
+  for (const filter of [{query:'x'},{art:'all'},{sets:['x']},{rarities:['Common']}]) assert.equal(hasCatalogFilters(filter),true);
+  assert.equal(hasExpansionFilters({expansionQuery:' ',expansionLanguage:'en',expansionCategory:'expansion'}),false);
+  assert.equal(hasExpansionFilters({expansionQuery:'',expansionLanguage:'ja',expansionCategory:'expansion'}),true);
+  const resetState={query:'',sets:[],categories:[],rarities:[],traits:[],art:'standard',sort:'name',page:3};
+  const resetContext=createContext({state:resetState,hasCatalogFilters,populateFilters(){throw new Error('Reset senza modifiche');},render(){throw new Error('Render non necessario');}});
+  new Script(app.slice(app.indexOf('function resetFilters()'),app.indexOf('function activeList()'))).runInContext(resetContext);
+  runInContext('resetFilters()',resetContext);assert.equal(resetState.page,3);assert.equal(resetState.sort,'name');
+  // Favorites render independently of hidden catalog filters, including alternate art.
+  const favoriteSamples=[
+    {id:'base',game:'pokemon',code:'T-1',name:'Base',setId:'T'},
+    {id:'alt',game:'pokemon',code:'T-1',name:'Alternative',setId:'T',isAlternative:true},
+    {id:'op',game:'onepiece',code:'OP01-001',name:'One Piece',setId:'OP01'},
+  ];
+  const selectedList={id:'test',favorites:favoriteSamples.map(card=>card.id)};
+  const viewNodes=new Map();
+  const viewNode=selector=>{
+    if(!viewNodes.has(selector)) viewNodes.set(selector,{classList:{toggle(){}},setAttribute(){},dataset:{}});
+    return viewNodes.get(selector);
+  };
+  const favoriteView=createContext({
+    catalog:{cards:favoriteSamples,aliases:{}},collection:{lists:[selectedList]},activeList:()=>selectedList,
+    state:{view:'favorites',game:'pokemon',query:'must not match',sets:['pokemon:missing'],rarities:['missing'],traits:['missing'],categories:['missing'],art:'standard',sort:'name',page:1,pageSize:200},
+    favoriteIndex:{},indexFavorites,filterCards,visibleCardResults,
+    $:viewNode,$$:()=>[],gameName:game=>game,assetBase:'http://localhost/',URL,
+    syncMobileFilters(){},renderFavoriteLists(){},renderFilterChips(){},syncBackToTop(){},
+    tile:card=>card.id,icon:()=>'',results:[],
+  });
+  favoriteView.favoriteIds=()=>favoriteView.favoriteIndex.ids;
+  favoriteView.knownFavorites=()=>favoriteView.favoriteIndex.known;
+  new Script(app.slice(app.indexOf('function render()'),app.indexOf('function renderFilterChips()'))).runInContext(favoriteView);
+  runInContext('render()',favoriteView);
+  assert.deepEqual(Array.from(favoriteView.results,card=>card.id),['base','alt']);
+  assert.equal(viewNode('#filters').hidden,true);
+  favoriteView.state.game='onepiece';runInContext('render()',favoriteView);
+  assert.deepEqual(Array.from(favoriteView.results,card=>card.id),['op']);
+  selectedList.favorites=[];runInContext('render()',favoriteView);
+  assert.equal(favoriteView.results.length,0);
+  assert.ok(!viewNode('#empty-state').innerHTML.includes('Azzera filtri'));
+  // End favorites render regression.
+  // Numeric page entry keeps a valid page even for pasted or out-of-range values.
+  assert.equal(pageNumber('12',49,3),12);
+  assert.equal(pageNumber('999',49,3),49);
+  assert.equal(pageNumber('0',49,3),1);
+  for (const value of ['', 'abc', '1.5', '-2', '1e2']) assert.equal(pageNumber(value,49,3),3);
+  assert.equal(pageNumber('2',0,1),1);
+  assert.equal(listExportFilename('Carte preferite'), 'Carte preferite_TCGArtAtlas.json');
+  assert.equal(listExportFilename('Mie / Carte'), 'Mie _ Carte_TCGArtAtlas.json');
+  assert.deepEqual(Array.from(orderedRarities(['','C',null,'  ','R',undefined,'C'],'onepiece')),['C','R']);
+  for (const game of ['pokemon','onepiece']) {
+    const samples=[2,10,1].map(number=>({id:String(number),game,code:`X-${number}`,number:String(number),name:({1:'Alpha',2:'Beta',10:'Omega'})[number]}));
+    assert.deepEqual(Array.from(filterCards(samples,{game,sort:'index-desc'}),card=>card.number),['10','2','1']);
+    assert.deepEqual(Array.from(filterCards(samples,{game,sort:'name-desc'}),card=>card.name),['Omega','Beta','Alpha']);
+  }
+  // A touch opens the drawer before the synthetic click, including during momentum scrolling.
+  const mobileHandlers={};let stoppedMomentum=0,focusedSearch=0,preventedTouch=0;
+  const mobileToggleNode={addEventListener:(type,handler)=>{mobileHandlers[type]=handler;}};
+  const mobileContext=createContext({
+    mobileFiltersOpen:false,
+    window:{scrollY:600,scrollTo:options=>{assert.equal(options.top,600);assert.equal(options.behavior,'instant');stoppedMomentum++;}},
+    currentFilterPanel:()=>({id:'filters'}),closeFilterPanels(){},syncMobileFilters(){},
+    $:selector=>selector==='#mobile-filter-toggle'?mobileToggleNode:{focus(){focusedSearch++;}},
+  });
+  new Script(app.slice(app.indexOf('function setMobileFiltersOpen('),app.indexOf("$('#mobile-filter-backdrop').addEventListener"))).runInContext(mobileContext);
+  const touch=()=>({isPrimary:true,button:0,pointerType:'touch',preventDefault(){preventedTouch++;}});
+  mobileHandlers.pointerdown(touch());
+  assert.equal(mobileContext.mobileFiltersOpen,true,'Il primo tocco deve aprire, anche senza click successivo');
+  assert.equal(stoppedMomentum,1);
+  mobileHandlers.click({detail:1});
+  assert.equal(mobileContext.mobileFiltersOpen,true,'Il click sintetico non deve richiudere il pannello');
+  mobileHandlers.pointerdown(touch());mobileHandlers.click({detail:1});
+  assert.equal(mobileContext.mobileFiltersOpen,false);
+  mobileHandlers.click({detail:0});
+  assert.equal(mobileContext.mobileFiltersOpen,true);
+  assert.equal(focusedSearch,1,'Solo attivazione da tastiera porta il focus alla ricerca');
+  assert.equal(preventedTouch,2);
   const cards = catalog.cards.map(card => ({ ...card, setName: catalog.sets.find(set => set.game === card.game && set.id === card.setId).name }));
   const labels = setDisplayLabels(catalog.sets);
   for (const game of ['pokemon','onepiece']) {
@@ -160,9 +253,9 @@ async function test() {
   assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:'2022-07-08',en:'2022-12-02'}})), JSON.stringify([{region:'JAP',date:'2022-07-08'},{region:'INT',date:'2022-12-02'}]));
   assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:'2026-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'',date:'2026-01-01'}]));
   assert.equal(JSON.stringify(releaseDateRows({releaseDates:{ja:null,en:'2026-01-01'}})), JSON.stringify([{region:'JAP',date:''},{region:'INT',date:'2026-01-01'}]));
-  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDate:'2026-01-01'})), JSON.stringify([{region:'',date:'2026-01-01'},{empty:true}]));
-  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDates:{ja:'2026-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'',date:'2026-01-01'},{empty:true}]));
-  assert.equal(JSON.stringify(popupReleaseDateRows({})), JSON.stringify([{region:'',date:''},{empty:true}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDate:'2026-01-01'})), JSON.stringify([{region:'',date:'2026-01-01'}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({releaseDates:{ja:'2026-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'',date:'2026-01-01'}]));
+  assert.equal(JSON.stringify(popupReleaseDateRows({})), JSON.stringify([{region:'',date:''}]));
   assert.equal(JSON.stringify(popupReleaseDateRows({releaseDates:{ja:'2025-01-01',en:'2026-01-01'}})), JSON.stringify([{region:'JAP',date:'2025-01-01'},{region:'INT',date:'2026-01-01'}]));
   assert.equal(formatSetName('CARTE DA PRODOTTI SPECIALI','onepiece'), 'Carte da prodotti speciali');
   assert.equal(formatSetName('CARTE DA EVENTI E CAMPAGNE','onepiece'), 'Carte da eventi e campagne');
@@ -202,6 +295,145 @@ async function test() {
   const campaignCollection = catalog.sets.find(set => set.game === 'onepiece' && set.id === 'PROMO_JP');
   assert.equal(campaignCollection.name, 'Carte da eventi e campagne');
   assert.equal(campaignCollection.group, 'Altri prodotti');
+  const pokemonBatch = audit.pokemonCompletionBatches['2002-2003-next-ten'];
+  assert.equal(pokemonBatch.coverage.length, 10);
+  assert.equal(pokemonBatch.coverage.reduce((count,set) => count + set.sourceCount,0), 1009);
+  const importedPokemon = new Set();
+  for (const set of pokemonBatch.coverage) {
+    const inventory = audit.sets[`pokemon:${set.setId}`];
+    assert.equal(inventory.preview, false, `Set rimasto come test: ${set.setId}`);
+    assert.equal(set.standardCardIds.length, set.sourceCount);
+    const members = cards.filter(card => card.game === 'pokemon' && card.setId === set.setId);
+    assert.equal(new Set(members.map(card=>card.code)).size, set.sourceCount, `Inventario Pokemon incompleto: ${set.setId}`);
+    for (const [index,id] of set.standardCardIds.entries()) {
+      const card = members.find(card=>card.id === id);
+      assert.ok(card && !card.isAlternative);
+      importedPokemon.add(id);
+      const source = audit.cards[id].metadata.catalogReference;
+      assert.equal(source.set, set.sourceSet);
+      assert.equal(source.card, set.sourceCardIds[index]);
+      const languages = languageImages(card).map(image=>image.language);
+      assert.ok(languages.every(language=>['en','ja'].includes(language)));
+      if (card.category !== 'Energy' || !/^cc_ex-ruby-sapphire-10[4-9]$/.test(card.code)) assert.equal(languages.length,2, `Controparte non verificata: ${id}`);
+    }
+    for (const card of members) {
+      if (card.category === 'Pokemon') assert.ok(card.types.length && audit.cards[card.id].metadata.typeReference, `Tipo Pokemon privo di fonte: ${card.id}`);
+      if (card.isAlternative) {
+        const variantId = audit.cards[card.id].metadata.variantId;
+        const variant = audit.cards[card.id].metadata.variantInventory.find(variant=>variant.id===variantId);
+        assert.ok(variant && Object.keys(variant.differsFromStandard || {}).some(key=>['edition','stamp','painting','artwork'].includes(key)), `Variante con sola finitura duplicata: ${card.id}`);
+        assert.ok(cardVariants(members,card).some(other=>!other.isAlternative), `Variante senza carta principale: ${card.id}`);
+      }
+    }
+  }
+  assert.equal(importedPokemon.size,1009);
+  const nidoran = cards.find(card=>card.id==='pk-jp_mysterious-mountains-006');
+  assert.equal(languageImages(nidoran).length,2);
+  assert.ok(audit.cards[nidoran.id].metadata.counterpart.manualVerification.comparison.endsWith('nidoran-counterparts.jpg'));
+  const twentyBatch = audit.pokemonCompletionBatches['2003-2006-next-twenty'];
+  assert.equal(twentyBatch.coverage.length,20);
+  assert.equal(twentyBatch.coverage.reduce((count,set)=>count+set.sourceCount,0),1965);
+  const twentySetIds = new Set(twentyBatch.coverage.map(set=>set.setId));
+  const twentyCards = cards.filter(card=>card.game==='pokemon' && twentySetIds.has(card.setId));
+  assert.equal(twentyCards.length,2242);
+  let bilingualStandards = 0;
+  for (const entry of twentyBatch.coverage) {
+    const inventory = audit.sets[`pokemon:${entry.setId}`];
+    assert.equal(inventory.preview,false);
+    assert.equal(inventory.completionBatch,'2003-2006-next-twenty');
+    const members=twentyCards.filter(card=>card.setId===entry.setId);
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      assert.equal(audit.cards[id].metadata.catalogReference.card,entry.sourceCardIds[index]);
+      assert.equal(audit.cards[id].metadata.catalogReference.set,entry.sourceSet);
+      if (languageImages(card).length===2) bilingualStandards++;
+      else assert.equal(card.id,'pk-cc_ex-hidden-legends-57','Solo le immagini della stessa illustrazione vanno collegate fra lingue');
+    }
+    for (const card of members) {
+      if (card.category==='Pokemon') assert.ok(card.types.length && audit.cards[card.id].metadata.typeReference);
+      if (card.isAlternative) {
+        const metadata=audit.cards[card.id].metadata;
+        const variant=metadata.variantInventory.find(variant=>variant.id===metadata.variantId);
+        assert.ok(variant && ['edition','stamp','painting','artwork','errorState'].some(key=>Object.hasOwn(variant.differsFromStandard || {},key)),`Variante con sola finitura duplicata: ${card.id}`);
+        assert.ok(cardVariants(members,card).some(other=>!other.isAlternative));
+      }
+    }
+  }
+  assert.equal(bilingualStandards,1964);
+  assert.equal(JSON.stringify(orderedRarities(['Gold Star','Holo Rare','Unknown','Ultra Rare','Common'],'pokemon')),JSON.stringify(['Common','Holo Rare','Ultra Rare','Gold Star','Unknown']));
+  const chinchou=twentyCards.find(card=>card.id==='pk-cc_ex-hidden-legends-57');
+  assert.equal(languageImages(chinchou).length,1);
+  assert.equal(languageImages(chinchou)[0].language,'en');
+  assert.ok(audit.cards[chinchou.id].issues.includes('NO_JAPANESE_SAME_ARTWORK'));
+  assert.ok(audit.cards[chinchou.id].metadata.counterpartException.sourceUrls.length);
+  assert.equal(twentyCards.find(card=>card.id==='pk-jp_rocket-gang-strikes-back-071').types.join(','),'Grass,Darkness');
+  const nextBatch = audit.pokemonCompletionBatches['2006-2007-next-ten'];
+  assert.equal(nextBatch.coverage.length,10);
+  assert.equal(nextBatch.coverage.reduce((count,set)=>count+set.sourceCount,0),1062);
+  const nextSetIds = new Set(nextBatch.coverage.map(set=>set.setId));
+  const nextCards = cards.filter(card=>card.game==='pokemon' && nextSetIds.has(card.setId));
+  assert.equal(nextCards.length,1289);
+  for (const entry of nextBatch.coverage) {
+    const inventory=audit.sets[`pokemon:${entry.setId}`];
+    const members=nextCards.filter(card=>card.setId===entry.setId);
+    assert.equal(inventory.preview,false);
+    assert.equal(inventory.completionBatch,'2006-2007-next-ten');
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    assert.equal(members.filter(card=>!card.isAlternative).length,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      assert.equal(audit.cards[id].metadata.catalogReference.card,entry.sourceCardIds[index]);
+      assert.equal(audit.cards[id].metadata.catalogReference.set,entry.sourceSet);
+      assert.equal(languageImages(card).map(image=>image.language).sort().join(','),'en,ja',`Controparte mancante: ${id}`);
+    }
+    for (const card of members) {
+      if (card.category==='Pokemon') assert.ok(card.types.length && audit.cards[card.id].metadata.typeReference);
+      if (card.isAlternative) {
+        const metadata=audit.cards[card.id].metadata;
+        const variant=metadata.variantInventory.find(variant=>variant.id===metadata.variantId);
+        assert.ok(variant && ['edition','stamp','painting','artwork','errorState'].some(key=>Object.hasOwn(variant.differsFromStandard || {},key)));
+        assert.ok(cardVariants(members,card).some(other=>!other.isAlternative));
+      }
+    }
+  }
+  const sableye=nextCards.find(card=>card.id==='pk-jp_shining-darkness-dpbp-353-v-unlimited-non-holo');
+  assert.equal(sableye.imageWidth,500);
+  assert.equal(sableye.imageHeight,700);
+  assert.equal(audit.cards[sableye.id].metadata.sourceImageUrl,'https://cdn.poketrace.com/cards/56359b25c1a32866.webp');
+  assert.ok(audit.cards[sableye.id].versions[0].metadata.sourceImageReference.comparison.endsWith('sableye-unlimited-comparison.jpg'));
+  const thirtyBatch=audit.pokemonCompletionBatches['2007-2010-next-thirty'];
+  assert.equal(thirtyBatch.coverage.length,30);
+  assert.equal(thirtyBatch.coverage.reduce((n,set)=>n+set.sourceCount,0),2839);
+  assert.equal(thirtyBatch.coverage.reduce((n,set)=>n+set.rawSourceCount-set.sourceCount,0),16);
+  const thirtySets=new Set(thirtyBatch.coverage.map(set=>set.setId));
+  const thirtyCards=cards.filter(card=>card.game==='pokemon' && thirtySets.has(card.setId));
+  assert.equal(thirtyCards.length,3244);
+  let thirtyBilingual=0;
+  for (const entry of thirtyBatch.coverage) {
+    assert.equal(audit.sets[`pokemon:${entry.setId}`].preview,false);
+    const members=thirtyCards.filter(card=>card.setId===entry.setId);
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    assert.equal(members.filter(card=>!card.isAlternative).length,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      assert.equal(audit.cards[id].metadata.catalogReference.set,entry.sourceSet);
+      assert.equal(audit.cards[id].metadata.catalogReference.card,entry.sourceCardIds[index]);
+      if(languageImages(card).length===2) thirtyBilingual++;
+      else assert.ok(['pk-jp_temple-of-anger-porygon-z-lv-x','pk-jp_reviving-legends-071','pk-jp_reviving-legends-072'].includes(id));
+    }
+    for (const card of members) if(card.category==='Pokemon') assert.ok(card.types.length && audit.cards[card.id].metadata.typeReference);
+  }
+  assert.equal(thirtyBilingual,2836);
+  const tinyFossil=thirtyCards.find(card=>card.id==='pk-jp_cry-from-the-mysterious-root-fossil-v-unlimited-non-holo');
+  assert.ok(audit.cards[tinyFossil.id].issues.includes('LOW_RESOLUTION_SCAN'));
+  assert.equal(cards.find(card=>card.id==='op-OP18-035').illustrator,'22');
+  assert.equal(audit.cards['op-OP18-035'].metadata.illustratorAttribution.manualReview,true);
+  assert.deepEqual(Array.from(cards.find(card=>card.id==='op-FAMILY_DECK_JP-preview-ST01-001_p1').colors),['Red']);
+  assert.equal(audit.manualNotesReview.resolved.length,8);
   const completion = audit.onepieceCompletionAudit;
   const cardsById = new Map(cards.map(card => [card.id, card]));
   assert.equal(completion.officialRows, 10390, 'Snapshot ufficiale EN/JP incompleto');
@@ -290,7 +522,7 @@ async function test() {
     {id:'pk-card',game:'pokemon',category:'Energy',code:'0',name:'B',releaseDate:'2024-01-01'},
     {id:'don-new',game:'onepiece',category:'DON!!',code:'DON!!',name:'C',releaseDate:'2026-01-01'},
   ];
-  for (const sort of ['index','name','recent','oldest']) {
+  for (const sort of ['index','index-desc','name','name-desc','recent','oldest']) {
     const sorted = filterCards(resourceOrder, {game:'all',sort});
     assert.ok(sorted.slice(0,2).every(card => card.category !== 'DON!!'), `DON!! prima delle altre carte: ${sort}`);
     assert.ok(sorted.slice(2).every(card => card.category === 'DON!!'));
@@ -332,6 +564,45 @@ async function test() {
   assert.equal(aliasLookups, 2000, 'Risolvere ogni preferito una volta sola');
   for (const card of manyCards) largeIndex.ids.has(card.id);
   assert.equal(aliasLookups, 2000, 'L’indice deve poter essere riutilizzato senza risolvere altri alias');
+  for (const game of ['pokemon','onepiece']) {
+    const sample = {id:'scoped-search',game,name:'Pikachu',illustrator:'Atsuko Nishida',code:'XY-007',number:'007',codes:['XY-007','XY-008'],numbers:['007','008'],setName:'Unique Expansion Name',setId:'set-unique-id',variantLabel:'Prize edition',artwork:'Alternate art'};
+    for (const query of ['PIKACHU','Atsuko','XY-007','XY-008','008']) assert.equal(filterCards([sample], {game,query}).length, 1, `${game}: ricerca valida ${query}`);
+    for (const query of ['Unique Expansion','set-unique-id','Prize','Alternate']) assert.equal(filterCards([sample], {game,query}).length, 0, `${game}: ricerca fuori ambito ${query}`);
+  }
+  const packKeys = catalogSetSelections('onepiece', 'DOUBLE_PACKS', catalog.sets);
+  const packSets = catalog.sets.filter(set => set.game === 'onepiece' && /^DP\d+$/.test(set.id));
+  assert.equal(packKeys.length, packSets.length);
+  assert.equal(packKeys.length, 11);
+  assert.equal(catalogSetSelections('pokemon','DOUBLE_PACKS',catalog.sets).length, 0);
+  assert.equal(catalogSetSelections('onepiece','unknown-set',catalog.sets).length, 0);
+  assert.equal(JSON.stringify(catalogSetSelections('onepiece','OTHER_JP',catalog.sets,catalog.setAliases)), JSON.stringify(['onepiece:OTHER']));
+  const tiles = expansionTiles(catalog.sets);
+  assert.equal(tiles.length, catalog.sets.length - packSets.length + 1);
+  assert.equal(tiles.filter(set => set.id === 'DOUBLE_PACKS').length, 1);
+  assert.ok(!tiles.some(set => set.game === 'onepiece' && /^DP\d+$/.test(set.id)));
+  assert.equal(expansionTiles(pokemonSets).length, pokemonSets.length);
+  const allPacks = filterCards(cards, {game:'onepiece',sets:packKeys,art:'all'});
+  assert.ok(allPacks.length > 0 && allPacks.every(card => card.category === 'DON!!'));
+  for (const set of packSets) {
+    const members = filterCards(cards,{game:'onepiece',sets:[`onepiece:${set.id}`],art:'all'});
+    assert.ok(members.length && members.every(card => allPacks.some(pack => pack.id === card.id)));
+  }
+  for (const set of catalog.sets.filter(set => prereleaseSetCode(set))) {
+    const base = catalog.sets.find(base => base.game === 'onepiece' && base.id === prereleaseSetCode(set));
+    for (const [region,date] of Object.entries(set.releaseDates)) {
+      const official = base.releaseDates[region];
+      assert.equal((Date.parse(official) - Date.parse(date)) / 86400000, 14, `Data convenzionale errata: ${set.id}/${region}`);
+    }
+    assert.equal(setPreviewTitle(set), `[${base.id}] ${base.name} (Prerelease)`);
+    assert.equal(setFullLabel(set), setPreviewTitle(set));
+  }
+  const standardDon = cards.find(card => card.id === 'op-don-549342');
+  assert.equal(standardDon.setId, 'OP01');
+  assert.equal(resolveAlias('op-TCG456320',catalog.aliases),standardDon.id);
+  assert.ok(!cards.some(card => card.id === 'op-TCG456320'));
+  assert.equal(cardPopupVersions(cards,standardDon,catalog.sets).filter(card => card.id === standardDon.id).length, 1, 'Il DON standard deve avere una sola versione, anche con più appartenenze');
+  assert.ok(cards.some(card => card.id === 'op-TCG434340'), 'Il DON timbrato Prerelease non deve essere unito allo standard');
+  assert.ok(cards.some(card => card.id === 'op-TCG544805'), 'Il DON 3D non deve essere unito allo standard');
   const defaults = { game: 'all', art: 'all', query: '' };
   assert.equal(filterCards(cards, { ...defaults, query: 'MITSUHIRO charizard' })[0].id, 'pk-base1-4');
   assert.equal(filterCards(cards, { ...defaults, query: 'base2-17' }).length, 1);
@@ -410,11 +681,12 @@ async function test() {
     assert.equal(new Set(versions.map(version => version.versionKey)).size, versions.length, `Edizione duplicata nel popup: ${code}`);
     for (const card of family) {
       assert.equal(JSON.stringify(cardPopupVersions(family, card, catalog.sets).map(version => version.versionKey)), expected, `Famiglia popup incompleta: ${card.id}`);
-      for (const product of card.productVersions || [{setId:card.setId}]) assert.ok(versions.some(version => version.id === card.id && version.setId === product.setId), `Prodotto nascosto nel popup: ${card.id}/${product.setId}`);
+      for (const product of card.category === 'DON!!' ? [{setId:card.setId}] : card.productVersions || [{setId:card.setId}]) assert.ok(versions.some(version => version.id === card.id && version.setId === product.setId), `Prodotto nascosto nel popup: ${card.id}/${product.setId}`);
     }
   }
   for (const set of catalog.sets.filter(set => /_PRE$/.test(set.id))) {
-    assert.ok(set.name.includes('Super Prerelease'));
+    assert.ok(set.name.endsWith('(Prerelease)'));
+    assert.equal(setPreviewTitle(set), `[${set.id.split('_')[0]}] ${set.name}`);
     assert.ok(!/pre[- ]release/i.test(set.name));
   }
   assert.equal(formatSetName('Worst Generation (Super Pre-Release)', 'onepiece'), 'Worst Generation (Super Prerelease)');
@@ -428,12 +700,12 @@ async function test() {
     catalog:{...catalog,cards}, state:{sets:['onepiece:FAMILY_DECK_JP']}, results:[law],
     currentCardId:undefined, currentCardSetId:undefined, filteredCardIds:[], filteredCardIndex:0,
     imageLanguages:new Map(), resolveAlias, cardPopupVersions, selectPopupVersion, cardDisplaySet,
-    languageImages, popupReleaseDateRows, factValue, setFullLabel,
+    languageImages, popupReleaseDateRows, factValue, setFullLabel, cardRarities,
     $:selector => popupNodes[selector],
     esc:value => String(value ?? '').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'),
-    icon:() => '', numbersLabel:card => card.code, dateLabel:date => date,
+    icon:() => '', numbersLabel:card => card.code, dateLabel:date => date, shortDateLabel:date => date, finishName:finish => finish,
     languageName:code => ({en:'Inglese',ja:'Giapponese'}[code] || code),
-    favoriteMarkup:() => '<button>Aggiungi ai preferiti</button>',
+    favoriteMarkup:() => '<button class="detail-favorite">Cuore</button>', reviewDrafts:new Map(),
   });
   new Script(app.slice(app.indexOf('function openCard('), app.indexOf('function stepCard('))).runInContext(popupContext);
   runInContext("openCard('op-ST02-009')", popupContext);
@@ -443,21 +715,101 @@ async function test() {
   assert.match(popupDialog.innerHTML, /ST02_009_JAP.webp/);
   assert.ok(!popupDialog.innerHTML.includes('id="image-language"'), 'Il Family Deck non deve offrire una lingua inglese inesistente');
   variantList.scrollLeft = 137;
+  assert.equal((popupDialog.innerHTML.match(/class="release-date-row"/g) || []).length, 1);
+  assert.ok(!popupDialog.innerHTML.includes('release-date-spacer'));
   runInContext("openCard('op-ST02-009', 'variant', 'ST02')", popupContext);
   assert.equal(runInContext('currentCardSetId', popupContext), 'ST02', 'Il click su ST02 deve prevalere sul filtro Family Deck');
   assert.match(popupDialog.innerHTML, /id="image-language"/);
   assert.match(popupDialog.innerHTML, /ST02_009.webp/);
+  const dateLine = popupDialog.innerHTML.match(/<div class="release-date-row">([\s\S]*?)<\/div>/)[1];
+  assert.equal((dateLine.match(/<time /g) || []).length, 2, 'Date JAP e INT sulla stessa riga');
+  const codeLine = popupDialog.innerHTML.match(/<div class="card-identity-row">([\s\S]*?)<\/div>/)[1];
+  assert.ok(codeLine.includes('Codice / Rarità') && codeLine.includes('ST02-009') && codeLine.includes('SR'));
   assert.equal(variantList.scrollLeft, 137);
   assert.equal((popupDialog.innerHTML.match(/aria-pressed="true"/g) || []).length, 1);
   runInContext("openCard('op-TCG415805', 'variant', 'ST02_PRE')", popupContext);
   assert.equal(runInContext('currentCardSetId', popupContext), 'ST02_PRE');
-  assert.match(popupDialog.innerHTML, /Super Prerelease/);
-  assert.match(popupDialog.innerHTML, /2022-09-30/);
+  assert.match(popupDialog.innerHTML, /\(Prerelease\)/);
+  assert.match(popupDialog.innerHTML, /2022-11-18/);
   assert.ok(!popupDialog.innerHTML.includes('id="image-language"'));
   assert.equal(variantList.scrollLeft, 137);
   assert.equal(JSON.stringify(runInContext('filteredCardIds', popupContext)), JSON.stringify(['op-ST02-009']));
   runInContext("openCard('op-TCG415805', 'refresh')", popupContext);
   assert.equal(runInContext('currentCardSetId', popupContext), 'ST02_PRE');
+  popupContext.state.sets = [];
+  runInContext("openCard('pk-base1-4')", popupContext);
+  assert.match(popupDialog.innerHTML, /Numero \/ Rarità/);
+  assert.equal((popupDialog.innerHTML.match(/class="release-date-row"/g) || []).length, 1, 'Anche Pokémon usa la riga compatta delle date');
+  assert.match(popupDialog.innerHTML, /<time /);
+
+  // Exercise routing from the grouped Double Pack directory tile.
+  const routeNodes = {'#game-picker':{},'#image-dialog':{open:false},'#card-dialog':{open:false}};
+  const routeContext = createContext({catalog, state:{game:'onepiece'}, location:{hash:'#catalogo/onepiece/DOUBLE_PACKS'}, window:{scrollTo(){}}, $:selector=>routeNodes[selector], closeFilterPanels(){}, setMobileFiltersOpen(){}, populateFilters(){}, render(){}, catalogSetSelections});
+  new Script(app.slice(app.indexOf('function readRoute()'),app.indexOf('function favoriteMarkup('))).runInContext(routeContext);
+  runInContext('readRoute()',routeContext);
+  assert.equal(JSON.stringify(routeContext.state.sets),JSON.stringify(packKeys));
+  assert.equal(routeContext.state.view,'catalog');
+  assert.equal(routeContext.state.art,'all', 'La raccolta Double Pack deve mostrare subito tutti i disegni DON');
+  assert.equal(routeContext.state.query,'');
+  routeContext.location.hash='';
+  runInContext('readRoute()',routeContext);
+  assert.equal(routeContext.state.view,'expansions','La homepage senza hash deve aprire Espansioni');
+  routeContext.location.hash='#catalogo/pokemon/base1';
+  runInContext('readRoute()',routeContext);
+  assert.equal(routeContext.state.view,'catalog','I link diretti al catalogo devono continuare a funzionare');
+  assert.equal(JSON.stringify(routeContext.state.sets),JSON.stringify(['pokemon:base1']));
+  // Review notes are appended atomically, isolated from collection notes and card metadata.
+  const noteRoot=path.join(root,'temp','review-notes-tests');
+  await mkdir(noteRoot,{recursive:true});
+  const noteFixture={cards:{'pk-base1-4':{issues:['KEEP_ME']}},sets:{'pokemon:base1':{marker:'unchanged'}},marker:'preserve'};
+  await writeFile(path.join(noteRoot,'CARD_REVIEW.json'),JSON.stringify(noteFixture));
+  const notePayload={cardId:'pk-base1-4',setId:'base1',language:'en',text:'Prima osservazione'};
+  const firstNote=await saveObservation(noteRoot,catalog,notePayload);
+  await Promise.all(['Seconda osservazione','Terza osservazione'].map(text=>saveObservation(noteRoot,catalog,{...notePayload,text})));
+  await saveObservation(noteRoot,catalog,{...notePayload,id:firstNote.id});
+  let noteRegistry=JSON.parse(await readFile(path.join(noteRoot,'CARD_REVIEW.json'),'utf8'));
+  assert.equal(noteRegistry.userObservations.entries.length,3,'Nessuna nota persa nei salvataggi concorrenti o duplicata al retry');
+  assert.deepEqual(noteRegistry.cards,noteFixture.cards);
+  assert.deepEqual(noteRegistry.sets,noteFixture.sets);
+  assert.equal(noteRegistry.marker,'preserve');
+  for (const change of [{cardId:'missing'},{setId:'missing'},{language:'xx'},{text:' '},{text:'x'.repeat(5001)}]) await assert.rejects(()=>saveObservation(noteRoot,catalog,{...notePayload,...change}));
+  const noteServer=http.createServer((req,res)=>handleObservationRequest(req,res,noteRoot,async()=>catalog));
+  await new Promise(resolve=>noteServer.listen(0,'127.0.0.1',resolve));
+  try {
+    const origin=`http://127.0.0.1:${noteServer.address().port}`;
+    const post=(originHeader,text)=>fetch(origin+'/api/card-observations',{method:'POST',headers:{Origin:originHeader,'Content-Type':'application/json'},body:JSON.stringify({...notePayload,text})});
+    assert.equal((await post('https://unrelated.example','Rejected')).status,403);
+    assert.equal((await post(origin,'Osservazione via endpoint locale')).status,201);
+    noteRegistry=JSON.parse(await readFile(path.join(noteRoot,'CARD_REVIEW.json'),'utf8'));
+    assert.equal(noteRegistry.userObservations.entries.length,4);
+  } finally {await new Promise(resolve=>noteServer.close(resolve));}
+  // Dropdowns match the visible field, using local coordinates inside a mobile drawer.
+  const optionPanel = {style:{}};
+  const filterAnchor = {top:200,bottom:240,left:15,width:270};
+  const filterBox = {top:180,bottom:240};
+  const filterPositionContext=createContext({
+    window:{innerHeight:844},mobileFilterMedia:{matches:true},
+    $:selector=>selector==='.filter-value'?{getBoundingClientRect:()=>filterAnchor}:selector==='.filter-options'?optionPanel:{getBoundingClientRect:()=>({bottom:108})},
+  });
+  new Script(app.slice(app.indexOf('function positionFilterPanel('),app.indexOf("$$('.multi-filter').forEach"))).runInContext(filterPositionContext);
+  filterPositionContext.filter={getBoundingClientRect:()=>filterBox};
+  runInContext('positionFilterPanel(filter)',filterPositionContext);
+  assert.equal(optionPanel.style.width,'270px');
+  assert.equal(optionPanel.style.left,'0px');
+  assert.equal(optionPanel.style.top,'65px');
+  assert.equal(optionPanel.style.position,'absolute');
+  filterPositionContext.mobileFilterMedia.matches=false;
+  runInContext('positionFilterPanel(filter)',filterPositionContext);
+  assert.equal(optionPanel.style.width,'270px');
+  assert.equal(optionPanel.style.left,'15px');
+  assert.equal(optionPanel.style.top,'245px');
+  assert.equal(optionPanel.style.position,'fixed');
+  filterPositionContext.mobileFilterMedia.matches=true;
+  Object.assign(filterAnchor,{top:720,bottom:760});
+  Object.assign(filterBox,{top:700,bottom:760});
+  runInContext('positionFilterPanel(filter)',filterPositionContext);
+  assert.equal(optionPanel.style.bottom,'45px');
+  assert.equal(optionPanel.style.top,'auto');
   const crossSetCards = [
     {id:'original',game:'onepiece',code:'OP01-016',setId:'OP01',isAlternative:false},
     {id:'special',game:'onepiece',code:'OP01-016',setId:'OP05',rarity:'SP CARD',isAlternative:true},
@@ -476,8 +828,12 @@ async function test() {
   assert.equal(filterCards(cards, { ...defaults, onlyFavorites: true }, favorites)[0].id, favorites[0]);
   assert.equal(filterCards(cards, { ...defaults, onlyFavorites: true }, new Set(favorites))[0].id, favorites[0]);
   for (const id of ['op-OP01-051AA2', 'op-ST01-012AA5', 'op-ST03-009AA', 'op-ST04-003AA6']) assert.ok(filterCards(cards, { ...defaults, sets: ['onepiece:OP03'] }).some(card => card.id === resolveAlias(id, catalog.aliases)));
-  const dons = filterCards(cards, { ...defaults, game: 'onepiece', categories: ['DON!!'], traits: ['Blue'] });
-  assert.equal(dons.length, cards.filter(card => card.game === 'onepiece' && card.category === 'DON!!').length, 'Il filtro DON!! deve ignorare il colore anche per i nuovi prodotti');
+  const dons = filterCards(cards, { ...defaults, game: 'onepiece', categories: ['DON!!'] });
+  assert.equal(dons.length, cards.filter(card => card.game === 'onepiece' && card.category === 'DON!!').length);
+  for (const color of ['Red','Green','Blue','Purple','Black','Yellow']) {
+    assert.equal(filterCards(cards, {...defaults,game:'onepiece',categories:['DON!!'],traits:[color]}).length,0,'I DON non appartengono a nessun colore');
+    assert.ok(filterCards(cards, {...defaults,game:'onepiece',traits:[color]}).every(card=>card.category!=='DON!!'));
+  }
   const originalDonIds = new Set(['op-don-549342','op-don-456059','op-don-482273','op-don-498519','op-don-OP04','op-don-OP05','op-don-OP06','op-don-OP07','op-don-OP08','op-don-OP09','op-don-OP10','op-don-OP11','op-don-OP12','op-don-OP13','op-don-672185','op-don-672188','op-don-686650','op-don-698313','op-don-712747','op-don-712748','op-don-712749','op-don-712750','op-don-735288','op-don-677560','op-don-677566','op-don-677568','op-don-677570','op-don-728077','op-don-725205','op-don-EB02','op-TCG434340']);
   const originalDons = dons.filter(card => originalDonIds.has(card.id));
   assert.equal(originalDons.length, originalDonIds.size, 'Gli ID DON!! dei preferiti esistenti vanno conservati');
@@ -576,6 +932,7 @@ else {
   const port = Number(portIndex >= 0 ? process.argv[portIndex + 1] : process.env.PORT || 5300);
   const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.png': 'image/png' };
   const server = http.createServer(async (request, response) => {
+    if (request.url?.split('?')[0]==='/api/card-observations') return handleObservationRequest(request,response,root,readCatalog);
     if (!['GET', 'HEAD'].includes(request.method)) { response.writeHead(405, { Allow: 'GET, HEAD' }); response.end(); return; }
     try {
       const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);

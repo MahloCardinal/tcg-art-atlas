@@ -4,17 +4,34 @@ const emptyCollection = () => ({ schemaVersion: 1, favorites: [], notes: {} });
 const emptyLibrary = () => ({ schemaVersion: 2, lists: [{ id: 'preferiti', name: 'Preferiti', favorites: [], notes: {} }], defaultListId: null });
 const normalize = (text) => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-const traitNames = { Grass: 'Erba', Fire: 'Fuoco', Water: 'Acqua', Lightning: 'Elettro', Psychic: 'Psico', Fighting: 'Lotta', Darkness: 'Buio', Metal: 'Acciaio', Dragon: 'Drago', Fairy: 'Folletto', Colorless: 'Incolore', Trainer: 'Allenatore', Energy: 'Energia', Red: 'Rosso', Green: 'Verde', Blue: 'Blu', Purple: 'Viola', Black: 'Nero', Yellow: 'Giallo' };
+const traitNames = { Grass: 'Erba', Fire: 'Fuoco', Water: 'Acqua', Lightning: 'Elettro', Psychic: 'Psico', Fighting: 'Lotta', Darkness: 'Buio', Metal: 'Acciaio', Dragon: 'Drago', Fairy: 'Folletto', Colorless: 'Incolore', Trainer: 'Addestramento', Stadium: 'Stadio', Energy: 'Energia', Red: 'Rosso', Green: 'Verde', Blue: 'Blu', Purple: 'Viola', Black: 'Nero', Yellow: 'Giallo' };
 const categoryNames = { LEADER: 'Leader', CHARACTER: 'Personaggio', EVENT: 'Evento', STAGE: 'Stage', 'DON!!': 'DON!!' };
 const onepieceRarityNames = { C: 'Common', UC: 'Uncommon', R: 'Rare', SR: 'Super Rare', SEC: 'Secret Rare', 'SP CARD': 'Special Card', TR: 'Treasure Rare', L: 'Leader' };
 const rarityOrders = {
-  pokemon: ['Common', 'Uncommon', 'Rare', 'Holo Rare', 'Shining Rare', 'Promo', 'Unknown'],
+  pokemon: ['Common', 'Uncommon', 'Rare', 'Holo Rare', 'Double Rare', 'Super Rare', 'Ultra Rare', 'Prism Rare', 'LEGEND', 'Shining Rare', 'Gold Star', 'Promo', 'Unknown'],
   onepiece: ['C', 'UC', 'R', 'SR', 'SEC', 'SP CARD', 'TR', 'L', 'DON!!'],
 };
+const pokemonRarityAliases = {'Common (C)':'Common','Uncommon (U)':'Uncommon','Rare (R)':'Rare','Double Rare (RR)':'Double Rare','Super Rare (SR)':'Super Rare','Ultra Rare (UR)':'Ultra Rare'};
+const canonicalRarity = (value, game) => game === 'pokemon' ? pokemonRarityAliases[value] || value : value;
+const cardRarities = card => [...new Set((card.rarities || [card.rarity]).map(value => canonicalRarity(value,card.game)))];
+const traitColors = {Grass:'#8bd58b',Fire:'#ff9878',Water:'#82bfff',Lightning:'#ffe05a',Psychic:'#d9a1ec',Fighting:'#e8a17b',Darkness:'#b7a9d2',Metal:'#b9cbd5',Dragon:'#d8bd74',Fairy:'#f2accf',Colorless:'#e1e3e8',Trainer:'#b9c5de',Stadium:'#9ccdb2',Energy:'#e9d497',Unknown:'#a6adbf',Red:'#ff8585',Green:'#88d59c',Blue:'#82bfff',Purple:'#c6a2f4',Black:'#20232d',Yellow:'#ffe05a'};
+function orderedTraits(values, game) {
+  const last = game === 'pokemon' ? ['Trainer','Stadium','Energy','Unknown'] : ['Unknown'];
+  const rank = value => last.includes(value) ? last.indexOf(value) + 1 : 0;
+  return [...new Set(values.filter(value => value && value !== 'DON!!'))].sort((a,b) => rank(a)-rank(b) || (traitNames[a] || a).localeCompare(traitNames[b] || b,'it'));
+}
+function hasCatalogFilters(filters) {
+  return !!(filters.query?.trim() || ['sets','categories','rarities','traits'].some(key=>filters[key]?.length) || (filters.art && filters.art !== 'standard'));
+}
+function hasExpansionFilters(filters) {
+  return !!(filters.expansionQuery?.trim() || filters.expansionLanguage !== 'en' || filters.expansionCategory !== 'expansion');
+}
+const validListName = name => typeof name === 'string' && /^[\p{L}\p{N}_.,-]{1,15}$/u.test(name);
+
 function orderedRarities(values, game) {
   const order = rarityOrders[game] || [];
   const rank = value => order.includes(value) ? order.indexOf(value) : order.length;
-  return [...new Set(values)].sort((a, b) => rank(a) - rank(b));
+  return [...new Set(values.filter(value => typeof value === 'string' && value.trim()).map(value => canonicalRarity(value,game)))].sort((a, b) => rank(a) - rank(b));
 }
 function cardTraits(card) {
   return card.game === 'pokemon' ? card.types?.length ? card.types : [card.category === 'Trainer' ? 'Trainer' : card.category === 'Energy' ? 'Energy' : 'Unknown'] : card.category === 'DON!!' ? [] : card.colors?.length ? card.colors : ['Unknown'];
@@ -24,6 +41,15 @@ function languageImages(card) {
   return versions.map(version => ({ ...version, language: ({ jp: 'ja', jap: 'ja', ita: 'it', eng: 'en', source: 'und' }[String(version.language).toLowerCase()] || String(version.language).toLowerCase()) }));
 }
 const matchesAny = (selected, values) => !selected || selected === 'all' || (Array.isArray(selected) ? !selected.length || selected.some(value => values.includes(value)) : values.includes(selected));
+
+function pageNumber(value, pages, current = 1) {
+  if (!/^\d+$/.test(String(value))) return current;
+  const number = Number(value);
+  return Number.isSafeInteger(number) ? Math.max(1, Math.min(number, Math.max(1, pages))) : current;
+}
+function listExportFilename(name) {
+  return String(name).trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_') + '_TCGArtAtlas.json';
+}
 
 function filterCards(cards, filters, favorites = []) {
   const query = normalize(filters.query || '').trim().split(/\s+/).filter(Boolean);
@@ -35,16 +61,21 @@ function filterCards(cards, filters, favorites = []) {
     matchesAny(filters.categories, [card.category]) &&
     matchesAny(filters.sets ?? filters.set, (card.setIds || [card.setId]).map(set => `${card.game}:${set}`)) &&
     (!filters.art || filters.art === 'all' || card.isAlternative === (filters.art === 'alternative') || (filters.art === 'standard' && !standardCodes.has(`${card.game}:${card.code}`))) &&
-    matchesAny(filters.rarities ?? filters.rarity, card.rarities || [card.rarity]) &&
-    (matchesAny(filters.traits, cardTraits(card)) || (card.game === 'onepiece' && card.category === 'DON!!' && filters.categories?.includes('DON!!'))) &&
+    matchesAny((filters.rarities ?? filters.rarity)?.map?.(value=>canonicalRarity(value,card.game)) || canonicalRarity(filters.rarities ?? filters.rarity,card.game), cardRarities(card)) &&
+    matchesAny(filters.traits, cardTraits(card)) &&
     (!filters.onlyFavorites || favoriteSet.has(card.id)) &&
-    query.every(word => normalize([card.name, card.code, ...(card.codes || []), ...(card.numbers || []), card.setName, card.setId, card.illustrator, card.artwork, card.variantLabel].join(' ')).includes(word))
+    query.every(word => normalize([card.name, card.code, ...(card.codes || []), card.number, ...(card.numbers || []), card.illustrator].join(' ')).includes(word))
   );
   if (filters.sort === 'index' && filters.game === 'onepiece' && filters.sets?.length === 1) {
     const direction = filters.sets[0] === 'onepiece:P' ? -1 : 1;
     result.sort((a, b) => direction * a.code.localeCompare(b.code, 'en', {numeric:true}) ||
       (direction < 0 ? (b.releaseDate || '').localeCompare(a.releaseDate || '') : 0) || Number(a.isAlternative) - Number(b.isAlternative));
   }
+  if (filters.sort === 'index-desc') result.sort((a, b) => {
+    const number = card => String(card.game === 'onepiece' ? card.code : card.printedNumber || card.number || card.code);
+    return number(b).localeCompare(number(a), 'en', {numeric:true}) || b.code.localeCompare(a.code, 'en', {numeric:true}) || Number(a.isAlternative) - Number(b.isAlternative);
+  });
+  if (filters.sort === 'name-desc') result.sort((a, b) => b.name.localeCompare(a.name, 'it') || a.id.localeCompare(b.id));
   if (filters.sort === 'name') result.sort((a, b) => a.name.localeCompare(b.name, 'it') || a.id.localeCompare(b.id));
   if (filters.sort === 'recent') result.sort((a, b) => (b.releaseDate || '').localeCompare(a.releaseDate || ''));
   if (filters.sort === 'oldest') result.sort((a, b) => (a.releaseDate || '').localeCompare(b.releaseDate || ''));
@@ -78,7 +109,7 @@ function cardProductImages(card, setId) {
 }
 function cardPopupVersions(cards, card, sets) {
   return cardVariants(cards, card).flatMap(other => {
-    const products = other.game === 'onepiece' ? other.productVersions || [{ setId: other.setId }] : [{ setId: other.setId }];
+    const products = other.game === 'onepiece' && other.category !== 'DON!!' ? other.productVersions || [{ setId: other.setId }] : [{ setId: other.setId }];
     return products.map(product => {
       const set = sets.find(set => set.game === other.game && set.id === product.setId);
       const images = cardProductImages(other, product.setId);
@@ -136,7 +167,12 @@ function formatSetName(name, game) {
     return part.toLocaleLowerCase('en').replace(/\p{L}/u, letter => letter.toLocaleUpperCase('en'));
   }).join('');
 }
+function prereleaseSetCode(set) {
+  return set.game === 'onepiece' ? /^(OP\d{2}|ST\d{2}|EB\d{2}|PRB\d{2})_(?:PRE|RELEASE)$/.exec(set.id)?.[1] : undefined;
+}
 function setPreviewTitle(set) {
+  const prerelease = prereleaseSetCode(set);
+  if (prerelease) return `[${prerelease}] ${set.name.replace(/\s*\([^)]*\)\s*$/, '')} (Prerelease)`;
   if (set.game !== 'onepiece') return set.name;
   let name = set.name.replace(/^(?:Extra|Premium)\s+Booster\b\s*[:–-]?\s*/i, '');
   if (/^ST\d{2}(?:_PRE)?$/.test(set.id)) name = name.replace(/^(?:(?:red|green|blue|purple|black|yellow)(?:\/(?:red|green|blue|purple|black|yellow))*)\s+/i, '');
@@ -144,6 +180,7 @@ function setPreviewTitle(set) {
   return /^(?:(?:OP|EB|PRB|ST|LD|SD)\d{2}(?:_PRE)?|P)$/.test(set.id) ? `[${set.id.replace('_PRE', ' PRE')}] ${name}` : name;
 }
 function setFullLabel(set) {
+  if (prereleaseSetCode(set)) return setPreviewTitle(set);
   return set.game === 'onepiece' && /^(?:(?:OP|EB|PRB|ST|LD|SD)\d{2}(?:_PRE)?|P)$/.test(set.id) ? `[${set.id.replace('_PRE', ' PRE')}] ${set.name}` : set.name;
 }
 function setFilterLabel(set, labels = new Map()) {
@@ -157,8 +194,7 @@ function releaseDateRows(set) {
   return rows.length ? rows : [{ region: '', date: '' }];
 }
 function popupReleaseDateRows(set) {
-  const rows = releaseDateRows(set);
-  return rows.length === 1 ? [...rows, { empty: true }] : rows;
+  return releaseDateRows(set);
 }
 function factValue(value) {
   const text = String(value ?? '').trim();
@@ -177,6 +213,18 @@ function expansionCategoryMap(sets) {
   const counts = new Map();
   for (const set of sets) counts.set(set.category || 'other', (counts.get(set.category || 'other') || 0) + 1);
   return new Map(sets.map(set => [`${set.game}:${set.id}`, (counts.get(set.category || 'other') || 0) > 2 ? set.category || 'other' : 'other']));
+}
+// A directory shortcut selects the real products; inventories remain separate.
+function expansionTiles(sets) {
+  const packs = sets.filter(set => set.game === 'onepiece' && /^DP\d+$/.test(set.id));
+  if (!packs.length) return sets;
+  const lead = packs[0];
+  return [...sets.filter(set => !packs.includes(set)), { ...lead, id: 'DOUBLE_PACKS', name: 'Double Pack Set', setIds: packs.map(set => set.id) }];
+}
+function catalogSetSelections(game, setId, sets, aliases = {}) {
+  if (game === 'onepiece' && setId === 'DOUBLE_PACKS') return sets.filter(set => set.game === game && /^DP\d+$/.test(set.id)).map(set => `${game}:${set.id}`);
+  const key = resolveAlias(`${game}:${setId}`, aliases);
+  return sets.some(set => `${set.game}:${set.id}` === key) ? [key] : [];
 }
 function filterExpansionSets(sets, filters, categories = expansionCategoryMap(sets.filter(set => set.game === filters.game))) {
   const words = normalize(filters.query || '').trim().split(/\s+/).filter(Boolean);
@@ -212,6 +260,29 @@ function groupExpansionSets(sets) {
   }
   return [...groups].map(([name, items]) => ({ name, sets: items.sort(compareExpansionDates) }))
     .sort((a, b) => Math.min(...a.sets.map(set => set.groupOrder ?? 999)) - Math.min(...b.sets.map(set => set.groupOrder ?? 999)));
+}
+
+function portableList(list, cards, aliases = {}) {
+  const byId = new Map(cards.map(card=>[card.id,card]));
+  const ids = [...new Set(list.favorites.map(id=>resolveAlias(id,aliases)))];
+  return {name:list.name,cards:ids.map(id=>({code:byId.get(id)?.code || null,variant:id}))};
+}
+function portableContent(value, cards, aliases = {}) {
+  if (!value || typeof value.name !== 'string' || !value.name.trim() || value.name.length>80 || !Array.isArray(value.cards) || value.cards.length>50000) throw new Error('JSON della lista non valido.');
+  const byId = new Map(cards.map(card=>[card.id,card]));
+  const favorites = value.cards.map(entry=>{
+    if (!entry || typeof entry !== 'object' || (entry.code!==null && (typeof entry.code!=='string' || !entry.code || entry.code.length>200))) throw new Error('Codice carta non valido.');
+    if (entry.variant !== undefined) {
+      if (typeof entry.variant !== 'string' || !entry.variant || entry.variant.length>200) throw new Error('Variante non valida.');
+      const id=resolveAlias(entry.variant,aliases),card=byId.get(id);
+      if (card && entry.code!==null && ![card.code,...(card.codes || [])].includes(entry.code)) throw new Error('Codice e variante non corrispondono.');
+      return id;
+    }
+    const matches=cards.filter(card=>[card.code,...(card.codes || [])].includes(entry.code));
+    if (!matches.length || new Set(matches.map(card=>card.game)).size>1) throw new Error('Codice mancante o ambiguo: '+entry.code);
+    return (matches.find(card=>!card.isAlternative) || matches[0]).id;
+  });
+  return {schemaVersion:1,favorites:[...new Set(favorites)],notes:{}};
 }
 
 function validateCollection(value, knownIds) {
@@ -250,8 +321,8 @@ function validateLibrary(value) {
 function listContent(list) {
   return validateCollection({ schemaVersion: 1, favorites: list.favorites, notes: list.notes });
 }
-function importListContent(library, listId, value) {
-  const incoming = validateCollection(value);
+function importListContent(library, listId, value, cards = [], aliases = {}) {
+  const incoming = Array.isArray(value?.cards) ? portableContent(value,cards,aliases) : validateCollection(value);
   if (!library.lists.some(list => list.id === listId)) throw new Error('La lista scelta non è più disponibile.');
   return { ...library, lists: library.lists.map(list => {
     if (list.id !== listId) return list;
@@ -281,7 +352,7 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const shapes = {
-  cards: '<rect x="6" y="3" width="13" height="18" rx="2"/><path d="M3 6v14a2 2 0 0 0 2 2"/><path d="m10 10 2-3 3 3-3 4Z"/>',
+  cards: '<rect x="3" y="5" width="14" height="16" rx="2"/><path d="M7 2h12a2 2 0 0 1 2 2v13M6 15h8M6 18h5"/><circle cx="10" cy="10" r="2.5"/>',
   layers: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
@@ -289,16 +360,18 @@ const shapes = {
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   left: '<path d="m15 5-7 7 7 7"/>',
   right: '<path d="m9 5 7 7-7 7"/>',
-  up: '<path d="m5 15 7-7 7 7"/>',
+  up: '<path d="m6 15 6-6 6 6"/>',
   search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
   reset: '<path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/>',
   artists: '<path d="m15 4 5 5M4 20l4-1 12-12-4-4L4 15v5Z"/><path d="M3 22h18"/>',
+  external: '<path d="M14 3h7v7m0-7L10 14M10 3H3v18h18v-7"/>',
   expand: '<path d="M8 3H3v5M16 3h5v5M3 16v5h5m13-5v5h-5"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[name] || shapes.cards}</svg>`;
 $$('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); });
 
-const state = { game: 'pokemon', view: 'catalog', illustrator: '', artistGame: 'all', artistQuery: '', artistFilter: 'all', expansionQuery: '', expansionLanguage: 'all', expansionCategory: 'expansion', query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1, pageSize: 200, size: 'medium' };
+const state = { game: 'pokemon', view: 'expansions', illustrator: '', artistGame: 'all', artistQuery: '', artistFilter: 'pokemon', expansionQuery: '', expansionLanguage: 'en', expansionCategory: 'expansion', query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1, pageSize: 200, size: 'medium' };
 let catalog;
 let collection = emptyLibrary();
 let activeListId = collection.lists[0].id;
@@ -308,7 +381,10 @@ let favoriteIndex = { ids: new Set(), known: [] };
 let setLabels = new Map();
 let illustratorIndex = [];
 let expansionCategories = new Map();
+const collapsedExpansionGroups = new Set();
 let results = [];
+const reviewDrafts = new Map();
+let reviewFileHandle;
 let currentCardId;
 let currentCardSetId;
 let filteredCardIds = [];
@@ -370,6 +446,7 @@ const favoriteIds = () => favoriteIndex.ids;
 const knownFavorites = () => favoriteIndex.known;
 const numbersLabel = card => card.game === 'pokemon' ? Object.hasOwn(card, 'printedNumber') ? card.printedNumber ? '#' + card.printedNumber : 'Senza numero' : '#' + (card.numbers || [card.number]).join(' / ') : card.code;
 const dateLabel = date => new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
+const shortDateLabel = (date, year = 'numeric') => new Intl.DateTimeFormat('it-IT', { day: '2-digit', month: '2-digit', year, timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
 
 function toast(message) {
   $('#toast').textContent = message;
@@ -384,9 +461,9 @@ function persist() {
 function populateFilters() {
   const sets = groupExpansionSets(catalog.sets.filter(set => set.game === state.game)).flatMap(group => group.sets);
   const cards = catalog.cards.filter(card => card.game === state.game);
-  const rarities = orderedRarities(cards.flatMap(card => card.rarities || [card.rarity]), state.game);
-  const traits = [...new Set(cards.flatMap(cardTraits))].sort((a, b) => (traitNames[a] || a).localeCompare(traitNames[b] || b, 'it'));
-  const checkbox = (key, value, label) => `<label class="check-option"><input type="checkbox" data-filter="${key}" value="${esc(value)}"/><span>${esc(label)}</span></label>`;
+  const rarities = orderedRarities(cards.flatMap(cardRarities), state.game);
+  const traits = orderedTraits(cards.flatMap(cardTraits),state.game);
+  const checkbox = (key, value, label) => `<label class="check-option"${key === 'traits' && value !== 'all' ? ` data-trait="${esc(value)}" style="--trait-color:${traitColors[value] || traitColors.Unknown}"` : ''}><input type="checkbox" data-filter="${key}" value="${esc(value)}"/><span>${esc(label)}</span></label>`;
   for (const [id, key, options] of [
     ['set-filter', 'sets', sets.map(set => [`${set.game}:${set.id}`, setFilterLabel(set, setLabels)])],
     ['category-filter', 'categories', Object.entries(categoryNames).filter(([value]) => cards.some(card => card.category === value))],
@@ -414,22 +491,77 @@ function syncFilters() {
     root.classList.toggle('has-selection', count > 0);
   }
 }
+const mobileFilterMedia = window.matchMedia('(max-width: 700px)');
+let mobileFiltersOpen = false;
+function currentFilterPanel() {
+  if (state.view === 'expansions') return state.game === 'pokemon' ? $('#expansion-filters') : null;
+  return state.view === 'catalog' ? $('#filters') : null;
+}
+function syncMobileFilters() {
+  const headerBottom = Math.max(0, $('.app-header').getBoundingClientRect().bottom);
+  document.documentElement.style.setProperty('--filter-header-height', `${headerBottom}px`);
+  const panel = currentFilterPanel();
+  const available = mobileFilterMedia.matches && !!panel;
+  if (!available) mobileFiltersOpen = false;
+  const open = available && mobileFiltersOpen;
+  const toggle = $('#mobile-filter-toggle');
+  toggle.hidden = !available;
+  toggle.setAttribute('aria-expanded', String(open));
+  toggle.setAttribute('aria-label', open ? 'Chiudi filtri' : 'Apri filtri');
+  if (panel) toggle.setAttribute('aria-controls', panel.id);
+  $('#mobile-filter-backdrop').hidden = !open;
+  document.documentElement.classList.toggle('mobile-filters-open', open);
+  for (const candidate of [$('#filters'), $('#expansion-filters')]) {
+    candidate.classList.toggle('mobile-drawer-open', open && candidate === panel);
+    candidate.inert = mobileFilterMedia.matches && (!open || candidate !== panel);
+    if (mobileFilterMedia.matches && (!open || candidate !== panel)) candidate.setAttribute('aria-hidden', 'true');
+    else candidate.removeAttribute('aria-hidden');
+  }
+}
+function setMobileFiltersOpen(open) {
+  mobileFiltersOpen = open;
+  if (!open) closeFilterPanels();
+  syncMobileFilters();
+}
+function toggleMobileFilters(focusSearch = false) {
+  if (!currentFilterPanel()) return;
+  // Stop momentum before locking the page, then open on the initial touch.
+  if (!mobileFiltersOpen) window.scrollTo({top:window.scrollY,behavior:'instant'});
+  setMobileFiltersOpen(!mobileFiltersOpen);
+  if (mobileFiltersOpen && focusSearch) $('input[type="search"]', currentFilterPanel()).focus({preventScroll:true});
+}
+let mobileTogglePointerHandled = false;
+$('#mobile-filter-toggle').addEventListener('pointerdown', event => {
+  mobileTogglePointerHandled = event.isPrimary && event.button === 0 && event.pointerType !== 'mouse';
+  if (!mobileTogglePointerHandled) return;
+  event.preventDefault();
+  toggleMobileFilters();
+});
+$('#mobile-filter-toggle').addEventListener('click', event => {
+  if (mobileTogglePointerHandled && event.detail) { mobileTogglePointerHandled = false; return; }
+  toggleMobileFilters(event.detail === 0);
+});
+$('#mobile-filter-backdrop').addEventListener('click', () => setMobileFiltersOpen(false));
+mobileFilterMedia.addEventListener('change', () => setMobileFiltersOpen(false));
 function closeFilterPanels(except) {
   $$('.multi-filter[open]').forEach(panel => { if (panel !== except) panel.open = false; });
 }
 function positionFilterPanel(filter) {
-  const anchor = $('summary', filter).getBoundingClientRect();
+  const anchor = $('.filter-value', filter).getBoundingClientRect();
   const panel = $('.filter-options', filter);
-  const availableWidth = window.innerWidth - 20;
-  Object.assign(panel.style, { width: 'max-content', maxWidth: `${availableWidth}px` });
-  const width = Math.min(availableWidth, Math.max(220, Math.ceil(panel.getBoundingClientRect().width)));
-  const below = window.innerHeight - anchor.bottom - 16;
-  const above = anchor.top - 16;
+  const mobile = mobileFilterMedia.matches;
+  const filterBox = filter.getBoundingClientRect();
+  const headerBottom = Math.max(0, $('.app-header').getBoundingClientRect().bottom);
+  const below = window.innerHeight - anchor.bottom - 12;
+  const above = anchor.top - headerBottom - 12;
   const upward = below < 170 && above > below;
-  const maxHeight = Math.max(80, Math.min(300, upward ? above : below));
-  Object.assign(panel.style, { width: `${width}px`, left: `${Math.max(10, Math.min(anchor.left, window.innerWidth - width - 10))}px`, maxHeight: `${maxHeight}px`, top: 'auto', bottom: 'auto' });
-  if (upward) panel.style.bottom = `${window.innerHeight - anchor.top + 5}px`;
-  else panel.style.top = `${anchor.bottom + 5}px`;
+  const maxHeight = Math.max(40, Math.min(260, upward ? above : below));
+  Object.assign(panel.style, {
+    position: mobile ? 'absolute' : 'fixed', width: `${anchor.width}px`, maxWidth: `${anchor.width}px`,
+    left: mobile ? '0px' : `${anchor.left}px`, maxHeight: `${maxHeight}px`, top: 'auto', bottom: 'auto',
+  });
+  if (upward) panel.style.bottom = `${mobile ? filterBox.bottom - anchor.top + 5 : window.innerHeight - anchor.top + 5}px`;
+  else panel.style.top = `${mobile ? anchor.bottom - filterBox.top + 5 : anchor.bottom + 5}px`;
 }
 $$('.multi-filter').forEach(filter => filter.addEventListener('toggle', () => {
   if (!filter.open) return;
@@ -440,12 +572,13 @@ document.addEventListener('click', event => {
   if (!event.target.closest('.multi-filter')) closeFilterPanels();
   if (!event.target.closest('.game-picker')) $('#game-picker').open = false;
 });
-window.addEventListener('resize', () => closeFilterPanels());
+window.addEventListener('resize', () => { closeFilterPanels(); syncMobileFilters(); });
 window.addEventListener('scroll', event => {
   if (!(event.target instanceof Element) || !event.target.closest('.filter-options')) closeFilterPanels();
 }, true);
 function syncBackToTop() {
-  $('#back-to-top').hidden = ['expansions', 'illustrators'].includes(state.view) || !results.length || window.scrollY < 240 || $('.catalog-toolbar').getBoundingClientRect().bottom > 0;
+  const expansions = state.view === 'expansions';
+  backTop.hidden = state.view === 'illustrators' || window.scrollY < 240 || (expansions ? !$('#expansions-empty').hidden : !results.length || $('.catalog-toolbar').getBoundingClientRect().bottom > 0);
   if (!backTop.hidden) positionBackTop();
 }
 window.addEventListener('scroll', syncBackToTop, { passive: true });
@@ -474,7 +607,7 @@ function renderIllustrators() {
   $('#illustrators-empty').hidden = !!artists.length;
 }
 function expansionDatesMarkup(set) {
-  return releaseDateRows(set).map(row => `<span class="regional-date">${row.region ? `<span class="region-code">${esc(row.region)}:</span>` : ''}${row.date ? `<time datetime="${esc(row.date)}">${dateLabel(row.date)}</time>` : '<span>N.D.</span>'}</span>`).join('');
+  return releaseDateRows(set).map(row => `<span class="regional-date">${row.region ? `<span class="region-code">${esc(row.region)}:</span>` : ''}${row.date ? `<time datetime="${esc(row.date)}" title="${esc(dateLabel(row.date))}">${shortDateLabel(row.date, '2-digit')}</time>` : '<span>N.D.</span>'}</span>`).join('');
 }
 function renderExpansions() {
   const pokemon = state.game === 'pokemon';
@@ -484,31 +617,39 @@ function renderExpansions() {
   $('#expansions-title').textContent = `Espansioni ${gameName(state.game)}`;
   $('#expansion-filters').hidden = !pokemon;
   if ($('#expansion-search').value !== state.expansionQuery) $('#expansion-search').value = state.expansionQuery;
-  $('#expansion-language').value = state.expansionLanguage;
+  $$('[data-expansion-language]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.expansionLanguage === state.expansionLanguage)));
   $('#expansion-category').value = state.expansionCategory;
+  $('#reset-expansion-filters').disabled = !hasExpansionFilters(state);
   $('#expansions-empty').hidden = !!sets.length;
-  $('#expansions-grid').innerHTML = groupExpansionSets(sets).map((group, index) => `<section class="expansion-group" aria-labelledby="set-group-${index}"><h3 id="set-group-${index}" class="expansion-group-title">${esc(group.name)}</h3><div class="expansions-grid">${group.sets.map(set => `<a class="expansion-tile" data-set-game="${set.game}" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}" title="${esc(setPreviewTitle(set))}"><div class="expansion-art">${expansionArtwork(set)}</div><div class="expansion-caption"><div class="expansion-name">${set.symbol ? `<img class="set-symbol" src="${esc(set.symbol)}" alt="" width="22" height="22" loading="lazy"/>` : ''}<h4>${esc(setPreviewTitle(set))}</h4></div><div class="expansion-meta">${expansionDatesMarkup(set)}</div></div></a>`).join('')}</div></section>`).join('');
+  $('#expansions-grid').innerHTML = groupExpansionSets(expansionTiles(sets)).map((group, index) => {
+    const key = `${state.game}:${group.name}`;
+    const collapsed = collapsedExpansionGroups.has(key);
+    const gridId = `set-group-grid-${index}`;
+    const toggle = `<button class="expansion-group-toggle" data-expansion-group="${esc(key)}" aria-expanded="${!collapsed}" aria-controls="${gridId}" aria-label="${collapsed ? 'Espandi' : 'Comprimi'} ${esc(group.name)}">${icon('up')}</button>`;
+    return `<section class="expansion-group" aria-labelledby="set-group-${index}"><h3 id="set-group-${index}" class="expansion-group-title">${toggle}<span class="expansion-group-name">${esc(group.name)}</span></h3><div id="${gridId}" class="expansions-grid" ${collapsed ? 'hidden' : ''}>${group.sets.map(set => `<a class="expansion-tile" data-set-game="${set.game}" href="#catalogo/${set.game}/${encodeURIComponent(set.id)}" title="${esc(setPreviewTitle(set))}"><div class="expansion-art">${expansionArtwork(set)}</div><div class="expansion-caption"><div class="expansion-name">${set.symbol ? `<img class="set-symbol" src="${esc(set.symbol)}" alt="" width="22" height="22" loading="lazy"/>` : ''}<h4>${esc(setPreviewTitle(set))}</h4></div><div class="expansion-meta">${expansionDatesMarkup(set)}</div></div></a>`).join('')}</div></section>`;
+  }).join('');
   loadProductImages();
+  syncBackToTop();
 }
 function navigate(view, game = state.game, setId) {
   const route = `${view === 'expansions' ? 'espansioni' : view === 'illustrators' ? 'illustratori' : view === 'favorites' ? 'preferiti' : 'catalogo'}/${game}${setId ? '/' + encodeURIComponent(setId) : ''}`;
   if (location.hash.slice(1) === route) readRoute(); else location.hash = route;
 }
 function readRoute() {
+  setMobileFiltersOpen(false);
   closeFilterPanels();
   $('#game-picker').open = false;
   if ($('#image-dialog').open) $('#image-dialog').close();
   if ($('#card-dialog').open) $('#card-dialog').close();
   const [view, game, rawSet] = location.hash.slice(1).split('/');
-  state.view = view === 'illustratore' ? 'illustrator' : view === 'illustratori' ? 'illustrators' : view === 'espansioni' ? 'expansions' : view === 'preferiti' ? 'favorites' : 'catalog';
+  state.view = view === 'illustratore' ? 'illustrator' : view === 'illustratori' ? 'illustrators' : view === 'espansioni' ? 'expansions' : view === 'preferiti' ? 'favorites' : view === 'catalogo' ? 'catalog' : 'expansions';
   if (state.view !== 'illustrator' && ['pokemon', 'onepiece'].includes(game)) state.game = game;
   try { state.illustrator = state.view === 'illustrator' ? decodeURIComponent(game || '') : ''; } catch { state.illustrator = ''; }
   state.artistGame = 'all';
   let setId;
   try { setId = decodeURIComponent(rawSet || ''); } catch { setId = ''; }
-  const setKey = resolveAlias(`${state.game}:${setId}`, catalog.setAliases);
-  setId = setKey.slice(state.game.length + 1);
-  Object.assign(state, { query: '', sets: state.view !== 'illustrator' && catalog.sets.some(set => set.game === state.game && set.id === setId) ? [`${state.game}:${setId}`] : [], categories: [], rarities: [], traits: [], art: ['illustrator', 'favorites'].includes(state.view) ? 'all' : 'standard', sort: 'index', page: 1 });
+  const selectedSets = catalogSetSelections(state.game, setId, catalog.sets, catalog.setAliases);
+  Object.assign(state, { query: '', sets: state.view !== 'illustrator' ? selectedSets : [], categories: [], rarities: [], traits: [], art: ['illustrator', 'favorites'].includes(state.view) || (state.game === 'onepiece' && setId === 'DOUBLE_PACKS') ? 'all' : 'standard', sort: 'index', page: 1 });
   populateFilters(); render();
   window.scrollTo({ top: 0 });
 }
@@ -516,7 +657,7 @@ function favoriteMarkup(card, detail = false) {
   const on = favoriteIds().has(card.id);
   const remove = state.view === 'favorites' && on;
   const label = remove ? `Rimuovi da ${activeList().name}` : on ? 'Gestisci liste' : 'Aggiungi ai preferiti';
-  return `<button class="${detail ? 'detail-favorite primary-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${esc(label)}: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}${detail ? `<span>${esc(remove ? `Rimuovi da ${activeList().name}` : on ? 'Gestisci liste' : 'Aggiungi ai preferiti')}</span>` : ''}</button>`;
+  return `<button class="${detail ? 'detail-favorite icon-button' : 'favorite-button'} ${on ? 'is-favorite' : ''}" data-favorite="${esc(card.id)}" aria-label="${esc(label)}: ${esc(card.name)} — ${esc(card.code)} — ${esc(card.variantLabel)}" aria-pressed="${on}">${icon('heart')}</button>`;
 }
 function tile(card, index) {
   const images = cardProductImages(card, cardDisplaySet(card, state.sets, catalog.sets).id);
@@ -529,7 +670,6 @@ function render() {
   favoriteIndex = state.view === 'favorites' ? indexFavorites(catalog.cards, activeList().favorites, catalog.aliases) : allFavorites;
   $$('[data-game]').forEach(button => { const active = button.dataset.game === state.game; button.classList.toggle('active', active); button.setAttribute('aria-pressed', active); });
   $$('[data-view]').forEach(button => { const active = button.dataset.view === state.view || (state.view === 'illustrator' && button.dataset.view === 'illustrators'); button.classList.toggle('active', active); if (active) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); });
-  $('#favorite-count').textContent = allFavorites.known.length;
   $('#home-link').href = `#espansioni/${state.game}`;
   $('#home-link').setAttribute('aria-label', `TCG Art Atlas — Espansioni ${gameName(state.game)}`);
   $('#current-game-logo').src = new URL(`logos/${state.game}_logo.webp`, assetBase).href;
@@ -537,17 +677,21 @@ function render() {
   const expansions = state.view === 'expansions';
   const artist = state.view === 'illustrator';
   const directory = state.view === 'illustrators';
+  const favorites = state.view === 'favorites';
   $('#illustrators-page').hidden = !directory;
   $('#expansions-page').hidden = !expansions;
   $('#cards-page').hidden = expansions || directory;
-  $('#filters').hidden = expansions || artist || directory;
-  $('.layout').classList.toggle('show-expansions', expansions || artist || directory);
+  $('#filters').hidden = expansions || artist || directory || favorites;
+  $('.layout').classList.toggle('show-expansions', expansions || artist || directory || favorites);
+  $('.app-header').classList.toggle('directory-header', expansions || artist || directory || favorites);
+  syncMobileFilters();
   $('#illustrator-heading').hidden = !artist;
   $('#favorites-heading').hidden = state.view !== 'favorites';
   if (state.view === 'favorites') renderFavoriteLists();
   if (directory) { renderIllustrators(); syncBackToTop(); return; }
   if (expansions) { renderExpansions(); syncBackToTop(); return; }
-  results = visibleCardResults(filterCards(catalog.cards, { ...state, game: artist ? state.artistGame : state.game, illustrator: artist ? state.illustrator : '', onlyFavorites: state.view === 'favorites' }, favoriteIds()), state.art);
+  const filters = favorites ? {game:state.game,art:'all',sort:'index',onlyFavorites:true} : {...state,game:artist ? state.artistGame : state.game,illustrator:artist ? state.illustrator : ''};
+  results = visibleCardResults(filterCards(catalog.cards, filters, favoriteIds()), filters.art);
   if (artist && state.artistGame === 'all') results.sort((a, b) => Number(a.game === 'onepiece') - Number(b.game === 'onepiece'));
   if (artist) {
     $('#illustrator-title').textContent = state.illustrator || 'Illustratore';
@@ -562,11 +706,12 @@ function render() {
   $('#results-count').innerHTML = `<strong>${results.length}</strong> ${results.length === 1 ? 'carta' : 'carte'}`;
   $('#gallery').dataset.size = state.size;
   $('#gallery').innerHTML = page.map((card, index) => `${artist && (index === 0 || page[index - 1].game !== card.game) ? `<h3 class="gallery-game-heading">${esc(gameName(card.game))}</h3>` : ''}${tile(card, index)}`).join('');
-  $('#page-info').textContent = $('#page-info-bottom').textContent = `${state.page}/${pages}`;
+  $$('[data-page-jump]').forEach(input => { input.value = state.page; input.disabled = pages < 2; input.style.width = `${Math.max(2, String(pages).length) + 1}ch`; });
+  $$('[data-page-total]').forEach(total => { total.textContent = pages; });
   $$('[data-page]').forEach(button => { button.disabled = Number(button.dataset.page) < 0 ? state.page <= 1 : state.page >= pages; });
   $('#page-bottom').hidden = pages < 2;
   $('#empty-state').hidden = !!results.length;
-  if (!results.length) $('#empty-state').innerHTML = `<p>${state.view === 'favorites' && !knownFavorites().length ? 'Nessuna carta di questa lista nel gioco selezionato.' : 'Nessuna carta trovata.'}</p><button class="secondary-button" data-action="reset">Azzera filtri</button>`;
+  if (!results.length) $('#empty-state').innerHTML = `<p>${state.view === 'favorites' && !knownFavorites().length ? 'Nessuna carta di questa lista nel gioco selezionato.' : 'Nessuna carta trovata.'}</p>${favorites ? '' : `<button class="secondary-button filter-reset" data-action="reset" ${hasCatalogFilters(state) ? '' : 'disabled'}>${icon('reset')}<span>Azzera filtri</span></button>`}`;
   renderFilterChips();
   syncBackToTop();
 }
@@ -583,11 +728,30 @@ function renderFilterChips() {
   if (state.art !== 'standard') items.push(['art', '', state.art === 'all' ? 'Tutti gli artwork' : 'Artwork alternativi']);
   $('#filter-count').textContent = items.length ? `${items.length} ${items.length === 1 ? 'filtro attivo' : 'filtri attivi'}` : 'Nessun filtro attivo';
   $('#filter-count').classList.toggle('active', !!items.length);
+  $('#reset-filters').disabled = !hasCatalogFilters(state);
   $('#filter-chips').hidden = !items.length;
   $('#filter-chips').innerHTML = items.map(([key, value, label]) => `<button class="filter-chip" data-remove-filter="${key}" data-filter-value="${esc(value)}" aria-label="Rimuovi filtro: ${esc(label)}">${esc(label)}${icon('close')}</button>`).join('');
 }
 
+function goToPage(value) {
+  const page = pageNumber(value, Math.ceil(results.length / state.pageSize), state.page);
+  if (page === state.page) { $$('[data-page-jump]').forEach(input => { input.value = state.page; }); return; }
+  state.page = page;
+  render();
+  $('.catalog-toolbar').scrollIntoView({block:'start',behavior:'instant'});
+}
+document.addEventListener('input', event => {
+  if (event.target.matches('[data-page-jump]')) event.target.value = event.target.value.replace(/[^0-9]/g, '');
+});
+document.addEventListener('change', event => {
+  if (event.target.matches('[data-page-jump]')) goToPage(event.target.value);
+});
+document.addEventListener('keydown', event => {
+  if (event.target.matches('[data-page-jump]') && event.key === 'Enter') { event.preventDefault(); goToPage(event.target.value); }
+});
+
 function resetFilters() {
+  if (!hasCatalogFilters(state)) return;
   Object.assign(state, { query: '', sets: [], categories: [], art: 'standard', rarities: [], traits: [], sort: 'index', page: 1 });
   populateFilters(); render();
 }
@@ -604,10 +768,6 @@ function renderFavoriteLists() {
   $('#favorite-list').value = activeListId;
   $('#default-favorite-list').value = collection.defaultListId || activeListId;
   $('#auto-save-list').checked = !!collection.defaultListId;
-  const list = activeList();
-  const index = indexFavorites(catalog.cards, list.favorites, catalog.aliases);
-  const unavailable = index.ids.size - index.known.length;
-  $('#favorite-list-summary').textContent = `${index.ids.size} artwork nella lista.${unavailable ? ` ${unavailable} fuori dal catalogo attuale, conservati nell’export.` : ''}`;
   $('#delete-list').disabled = collection.lists.length === 1;
 }
 function refreshFavorites(message) {
@@ -635,6 +795,7 @@ function toggleFavorite(id) {
 }
 function openListName(action) {
   pendingListAction = action;
+  $('#list-name-form button[type="submit"]').textContent = action === 'rename' ? 'Aggiorna nome' : 'Crea lista';
   $('#list-name-title').textContent = action === 'rename' ? 'Rinomina lista' : 'Nuova lista';
   $('#list-name').value = action === 'rename' ? activeList().name : '';
   $('#list-name-error').textContent = '';
@@ -666,8 +827,6 @@ function openCard(id, mode = 'card', productSetId) {
   const prints = card.printings || [{ code: card.code, number: card.number, rarity: card.rarity, finishes: card.finishes }];
   const facts = [
     ['Espansione', `<button class="text-button" data-open-set="${esc(displaySet.id)}" data-set-game="${card.game}">${esc(setFullLabel(displaySet))}</button>`, true],
-    [card.game === 'pokemon' ? 'Numero' : 'Codice', esc(numbersLabel(card)), true],
-    ['Rarità', (card.rarities || [card.rarity]).join(' / ')],
     ['Illustratore', card.illustrator ? `<a href="#illustratore/${encodeURIComponent(card.illustrator)}" data-illustrator="${esc(card.illustrator)}">${esc(card.illustrator)}</a>` : 'N.D.', true],
   ];
   const printVersions = card.game === 'pokemon' ? [
@@ -677,14 +836,14 @@ function openCard(id, mode = 'card', productSetId) {
   dialog.innerHTML = `
     <button class="detail-close icon-button" data-close="card-dialog" aria-label="Chiudi carta">${icon('close')}</button>
     <div class="detail-body">
-    <div class="detail-art"><div class="detail-image-frame"><a class="detail-image-open" data-enlarge-image href="${esc(image.image)}" target="_blank" rel="noopener" aria-label="Mostra a schermo intero: ${esc(card.name)}"><img id="detail-image" src="${esc(image.image)}" width="${card.imageWidth}" height="${card.imageHeight}" alt="${esc(card.name)} — ${esc(card.code)} — ${esc(languageName(image.language))}"/></a><a class="detail-fullscreen" data-enlarge-image href="${esc(image.image)}" target="_blank" rel="noopener">${icon('expand')}Mostra a schermo intero</a></div></div>
+    <div class="detail-art"><div class="detail-image-frame"><button class="detail-image-open" data-enlarge-image aria-label="Schermo intero: ${esc(card.name)}"><img id="detail-image" src="${esc(image.image)}" width="${card.imageWidth}" height="${card.imageHeight}" alt="${esc(card.name)} — ${esc(card.code)} — ${esc(languageName(image.language))}"/></button><div class="detail-image-actions"><button class="detail-fullscreen" data-enlarge-image>${icon('expand')}Schermo intero</button><a class="detail-new-tab" data-image-tab href="${esc(image.image)}" target="_blank" rel="noopener">Immagine in una nuova scheda${icon('external')}</a></div></div></div>
     <div class="detail-info"><div class="detail-info-content">
-      <header class="detail-heading"><h2 id="detail-title">${esc(card.name)}</h2></header>
-      <dl class="detail-facts">${facts.map(([name, value, markup]) => `<div><dt>${esc(name)}</dt><dd${name === 'Numero' || name === 'Codice' ? ' class="card-number"' : ''}>${markup ? factValue(value) : esc(factValue(value))}</dd></div>`).join('')}
+      <header class="detail-heading">${favoriteMarkup(card, true)}<h2 id="detail-title">${esc(card.name)}</h2></header>
+      <dl class="detail-facts">${facts.map(([name, value, markup], index) => `<div><dt>${esc(name)}</dt><dd>${markup ? factValue(value) : esc(factValue(value))}</dd></div>${index === 0 ? `<div class="card-identity-row"><dt>${card.game === 'pokemon' ? 'Numero' : 'Codice'} / Rarità</dt><dd class="inline-facts"><span class="card-number">${esc(numbersLabel(card))}</span><span>${esc(factValue(cardRarities(card).join(' / ')))}</span></dd></div>` : ''}`).join('')}
         <div class="language-row"><dt>${versions.length > 1 ? '<label for="image-language">Lingua</label>' : 'Lingua'}</dt><dd>${versions.length > 1 ? `<select id="image-language">${versions.map(version => `<option value="${esc(version.language)}" ${version.language === image.language ? 'selected' : ''}>${esc(languageName(version.language))}</option>`).join('')}</select>` : `<span>${esc(languageName(image.language))}</span>`}</dd></div>
-        ${card.game === 'onepiece' ? popupReleaseDateRows(displaySet).map(row => row.empty ? '<div class="release-date-row release-date-spacer" aria-hidden="true"><dt></dt><dd></dd></div>' : `<div class="release-date-row"><dt>${row.region ? `Uscita ${esc(row.region)}` : 'Uscita set'}</dt><dd>${row.date ? dateLabel(row.date) : 'N.D.'}</dd></div>`).join('') : ''}
+        <div class="release-date-row"><dt>Uscita</dt><dd class="inline-facts release-date-values">${popupReleaseDateRows(displaySet).map(row => `<span>${row.region ? `<span class="region-code">${esc(row.region)}:</span> ` : ''}${row.date ? `<time datetime="${esc(row.date)}" title="${esc(dateLabel(row.date))}">${shortDateLabel(row.date)}</time>` : 'N.D.'}</span>`).join('')}</dd></div>
       </dl>
-      ${favoriteMarkup(card, true)}
+      <form class="card-observation-form" data-card-id="${esc(card.id)}" data-product-set="${esc(currentCardSetId)}" data-version-key="${esc(activeVersion.versionKey)}" data-language="${esc(image.language)}"><label for="card-observation">Osservazioni</label><div class="observation-fields"><textarea id="card-observation" name="text" maxlength="5000" rows="2" placeholder="Segnala un problema della carta o di questa variante…" required>${esc(reviewDrafts.get(activeVersion.versionKey)?.text || '')}</textarea><button type="submit" class="secondary-button">Invia</button></div><p class="observation-status" role="status" aria-live="polite"></p></form>
         ${variants.length > 1 || printVersions.length ? `<section class="variants" aria-label="Versioni della carta"><h3>Versioni</h3>${printVersions.length ? `<ul class="print-versions">${printVersions.map(value => `<li>${esc(value)}</li>`).join('')}</ul>` : ''}${variants.length > 1 ? `<div class="variant-list" tabindex="0" aria-label="Versioni disponibili">${variants.map(other => `<button class="variant-thumb ${other.versionKey === activeVersion.versionKey ? 'selected' : ''}" data-variant="${esc(other.id)}" data-variant-set="${esc(other.setId)}" title="${esc(other.variantLabel)}" aria-label="${esc(other.variantLabel)} — ${esc(other.code)}" aria-pressed="${other.versionKey === activeVersion.versionKey}"><img src="${esc(other.image)}" alt="" loading="lazy"/><span>${esc(other.variantLabel)}</span></button>`).join('')}</div>` : ''}</section>` : ''}
     </div><nav class="detail-navigation page-controls" aria-label="Navigazione carte filtrate"><button class="icon-button" data-step="-1" aria-label="Carta precedente" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('left')}</button><span aria-live="polite">${filteredCardIndex + 1}/${filteredCardIds.length}</span><button class="icon-button" data-step="1" aria-label="Carta successiva" ${filteredCardIds.length < 2 ? 'disabled' : ''}>${icon('right')}</button></nav></div></div>`;
   if (!dialog.open) dialog.showModal();
@@ -700,7 +859,7 @@ function stepCard(delta) {
 }
 document.addEventListener('click', event => {
   const enlarge = event.target.closest('[data-enlarge-image]');
-  if (enlarge && window.matchMedia('(max-width: 700px)').matches) {
+  if (enlarge) {
     event.preventDefault();
     const image = $('#detail-image');
     $('#image-dialog').dataset.cardGame = $('#card-dialog').dataset.cardGame;
@@ -730,7 +889,7 @@ document.addEventListener('click', event => {
   }
   if (button.id === 'back-to-top') {
     if (backTopSuppressClick) { backTopSuppressClick = false; if (event.detail) return; }
-    const target = $('#filters').hidden ? $('.catalog-toolbar') : $('#search');
+    const target = state.view === 'expansions' ? $('#expansions-page') : $('#filters').hidden ? $('.catalog-toolbar') : $('#search');
     target.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     return;
@@ -743,7 +902,7 @@ document.addEventListener('click', event => {
   if (button.dataset.artistGame) { state.artistGame = button.dataset.artistGame; state.page = 1; render(); return; }
   if (button.dataset.view) return navigate(button.dataset.view);
   if (button.dataset.openSet) { $('#card-dialog').close(); navigate('catalog', button.dataset.setGame, button.dataset.openSet); return; }
-  if (button.dataset.page) { state.page += Number(button.dataset.page); render(); $('.catalog-toolbar').scrollIntoView({ block: 'start' }); return; }
+  if (button.dataset.page) return goToPage(state.page + Number(button.dataset.page));
   if (button.dataset.step) return stepCard(Number(button.dataset.step));
   if (button.id === 'reset-filters' || button.dataset.action === 'reset') return resetFilters();
   if (button.hasAttribute('data-new-list')) return openListName('create');
@@ -765,17 +924,32 @@ document.addEventListener('click', event => {
     $('#delete-list-dialog').close();
   }
   if (button.id === 'export-list') {
-    const blob = new Blob([JSON.stringify({ ...listContent(activeList()), exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `tcg-art-atlas-carte-${new Date().toISOString().slice(0, 10)}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); toast('Contenuto della lista esportato');
+    const blob = new Blob([JSON.stringify(portableList(activeList(),catalog.cards,catalog.aliases), null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = listExportFilename(activeList().name); a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); toast('Contenuto della lista esportato');
   }
 });
 $('#illustrator-search').addEventListener('input', event => { state.artistQuery = event.target.value; renderIllustrators(); });
+$('#expansions-grid').addEventListener('click', event => {
+  const button = event.target.closest('[data-expansion-group]');
+  if (!button) return;
+  const collapsed = button.getAttribute('aria-expanded') === 'true';
+  const key = button.dataset.expansionGroup;
+  if (collapsed) collapsedExpansionGroups.add(key); else collapsedExpansionGroups.delete(key);
+  button.setAttribute('aria-expanded', String(!collapsed));
+  const name = $('.expansion-group-name', button.closest('.expansion-group-title')).textContent;
+  button.setAttribute('aria-label', `${collapsed ? 'Espandi' : 'Comprimi'} ${name}`);
+  document.getElementById(button.getAttribute('aria-controls')).hidden = collapsed;
+});
 $('#expansion-search').addEventListener('input', event => { state.expansionQuery = event.target.value; renderExpansions(); });
-$('#expansion-language').addEventListener('change', event => { state.expansionLanguage = event.target.value; renderExpansions(); });
+$('#expansion-languages').addEventListener('click', event => {
+  const button = event.target.closest('[data-expansion-language]');
+  if (!button) return;
+  state.expansionLanguage = button.dataset.expansionLanguage; renderExpansions();
+});
 $('#expansion-category').addEventListener('change', event => { state.expansionCategory = event.target.value; renderExpansions(); });
-$('#reset-expansion-filters').addEventListener('click', () => { state.expansionQuery = ''; state.expansionLanguage = 'all'; state.expansionCategory = 'all'; renderExpansions(); });
+$('#reset-expansion-filters').addEventListener('click', () => { if (!hasExpansionFilters(state)) return; state.expansionQuery = ''; state.expansionLanguage = 'en'; state.expansionCategory = 'expansion'; renderExpansions(); });
 $('#search').addEventListener('input', event => { state.query = event.target.value; state.page = 1; render(); });
-$('#home-link').addEventListener('click', event => { event.preventDefault(); navigate($('[data-view]').dataset.view); });
+$('#home-link').addEventListener('click', event => { event.preventDefault(); navigate('expansions'); });
 $('#page-size').addEventListener('change', event => {
   const size = Number(event.target.value);
   if ([100, 200, 300].includes(size)) { state.pageSize = size; state.page = 1; render(); }
@@ -797,9 +971,57 @@ document.addEventListener('change', event => {
     if (!version) return;
     imageLanguages.set(`${card.id}:${currentCardSetId}`, version.language);
     $('#detail-image').src = version.image;
+    $('.card-observation-form').dataset.language = version.language;
     $('#detail-image').alt = `${card.name} — ${card.code} — ${languageName(version.language)}`;
-    $$('[data-enlarge-image]').forEach(link => { link.href = version.image; });
+    $$('[data-image-tab]').forEach(link => { link.href = version.image; });
   }
+});
+document.addEventListener('input', event => {
+  if (event.target.id !== 'card-observation') return;
+  const key = event.target.form.dataset.versionKey;
+  reviewDrafts.set(key, {text:event.target.value, id:crypto.randomUUID()});
+});
+document.addEventListener('submit', async event => {
+  const form=event.target;
+  if (!form.matches('.card-observation-form')) return;
+  event.preventDefault();
+  const text=$('textarea',form).value.trim();
+  if (!text) return;
+  const key=form.dataset.versionKey;
+  const draft=reviewDrafts.get(key) || {text,id:crypto.randomUUID()};
+  reviewDrafts.set(key,draft);
+  const payload={id:draft.id,cardId:form.dataset.cardId,setId:form.dataset.productSet,language:form.dataset.language,text};
+  const submit=$('button[type="submit"]',form),status=$('.observation-status',form);
+  submit.disabled=true;status.textContent='Salvataggio…';
+  try {
+    let savedLocally = false;
+    if (location.protocol==='http:' && ['localhost','127.0.0.1'].includes(location.hostname)) {
+      const response=await fetch(new URL('api/card-observations',assetBase),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      if (![404,405].includes(response.status)) {
+        const result=await response.json().catch(()=>({error:'Risposta del server non valida.'}));
+        if (!response.ok) throw new Error(result.error || 'Salvataggio non riuscito.');
+        if (result.status!=='saved' || result.id!==payload.id) throw new Error('Il server non ha confermato la scrittura in CARD_REVIEW.json.');
+        savedLocally=true;
+      }
+    }
+    if (!savedLocally) {
+      if (!window.showOpenFilePicker) throw new Error('Per scrivere in CARD_REVIEW.json avvia il sito con npm run dev.');
+      if (!reviewFileHandle) [reviewFileHandle]=await window.showOpenFilePicker({multiple:false,types:[{description:'CARD_REVIEW.json del progetto',accept:{'application/json':['.json']}}]});
+      const file=await reviewFileHandle.getFile();
+      if (file.name!=='CARD_REVIEW.json') {reviewFileHandle=undefined;throw new Error('Seleziona il file CARD_REVIEW.json del progetto.');}
+      const registry=JSON.parse(await file.text());
+      const entry=globalThis.TCG_REVIEW_NOTES.createObservation(catalog,payload);
+      globalThis.TCG_REVIEW_NOTES.appendObservation(registry,entry);
+      const writable=await reviewFileHandle.createWritable();
+      await writable.write(JSON.stringify(registry,null,2)+'\n');await writable.close();
+    }
+    const unchanged=reviewDrafts.get(key)?.id===draft.id;
+    if (unchanged) reviewDrafts.delete(key);
+    if (form.isConnected) { if (unchanged) $('textarea',form).value='';status.textContent='Salvato in CARD_REVIEW.json.'; }
+  } catch(error) {
+    if (error.name==='AbortError') status.textContent='Salvataggio annullato. Il testo resta disponibile.';
+    else status.textContent=error.message || 'Salvataggio non riuscito. Il testo resta disponibile.';
+  } finally {submit.disabled=false;}
 });
 $('#favorite-list').addEventListener('change', event => {
   activeListId = event.target.value; state.page = 1; render();
@@ -821,7 +1043,7 @@ $('#favorite-form').addEventListener('submit', event => {
 $('#list-name-form').addEventListener('submit', event => {
   event.preventDefault();
   const name = $('#list-name').value.trim();
-  if (!name) { $('#list-name-error').textContent = 'Inserisci un nome per la lista.'; return; }
+  if (!validListName(name)) { $('#list-name-error').textContent = 'Usa da 1 a 15 lettere o numeri. Sono ammessi anche - _ . ,'; return; }
   const current = pendingListAction === 'rename' ? activeList() : null;
   if (collection.lists.some(list => list.id !== current?.id && normalize(list.name) === normalize(name))) {
     $('#list-name-error').textContent = 'Esiste già una lista con questo nome.'; return;
@@ -842,7 +1064,7 @@ $('#import-list').addEventListener('change', async event => {
   const targetId = activeList().id;
   try {
     if (file.size > 2_000_000) throw new Error('Il backup supera i 2 MB.');
-    collection = importListContent(collection, targetId, JSON.parse(await file.text()));
+    collection = importListContent(collection, targetId, JSON.parse(await file.text()),catalog.cards,catalog.aliases);
     refreshFavorites(`Contenuto importato in ${collection.lists.find(list => list.id === targetId).name}`);
   } catch (error) { toast(error instanceof SyntaxError ? 'JSON non valido.' : error.message); }
   event.target.value = '';
@@ -853,9 +1075,10 @@ $$('dialog').forEach(dialog => {
 document.addEventListener('keydown', event => {
   if ($$('dialog[open]').some(dialog => dialog.id !== 'card-dialog')) return;
   const editing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
-  if (event.key === '/' && ['catalog', 'favorites'].includes(state.view) && !editing && !$$('dialog[open]').length) { event.preventDefault(); $('#search').focus(); }
+  if (event.key === '/' && state.view === 'catalog' && !editing && !$$('dialog[open]').length) { event.preventDefault(); $('#search').focus(); }
   if ($('#card-dialog').open && !editing && !document.activeElement.closest('.variant-list') && ['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); stepCard(event.key === 'ArrowRight' ? 1 : -1); }
   if (event.key === 'Escape') {
+    if (mobileFiltersOpen) { setMobileFiltersOpen(false); $('#mobile-filter-toggle').focus(); return; }
     const openFilter = $('.multi-filter[open]');
     if (openFilter) { closeFilterPanels(); $('summary', openFilter).focus(); }
     else if ($('#game-picker').open) $('#game-picker').open = false;
