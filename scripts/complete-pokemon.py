@@ -14,6 +14,14 @@ PREFIX='globalThis.TCG_ART_ATLAS_CATALOG='
 BASE='https://pokemon.cardcorpus.com/v1/'
 TCG_SETS={'english/aquapolis':'ecard2','english/skyridge':'ecard3',**{'english/'+slug:'ex'+str(i) for i,slug in enumerate(['ex-ruby-sapphire','ex-sandstorm','ex-dragon','ex-team-magma-vs-team-aqua','ex-hidden-legends','ex-firered-leafgreen','ex-team-rocket-returns','ex-deoxys','ex-emerald','ex-unseen-forces','ex-delta-species','ex-legend-maker','ex-holon-phantoms','ex-crystal-guardians','ex-dragon-frontiers','ex-power-keepers'],1)},'english/nintendo-black-star-promos':'np',**{'english/'+slug:'dp'+str(i) for i,slug in enumerate(['diamond-pearl','mysterious-treasures','secret-wonders','great-encounters','majestic-dawn','legends-awakened','stormfront'],1)},'english/diamond-pearl-black-star-promos':'dpp',**{'english/'+slug:'pl'+str(i) for i,slug in enumerate(['platinum','rising-rivals','supreme-victors','arceus'],1)},**{'english/'+slug:'hgss'+str(i) for i,slug in enumerate(['heartgold-soulsilver','unleashed','undaunted','triumphant'],1)},'english/heartgold-soulsilver-black-star-promos':'hsp','english/black-white':'bw1','english/emerging-powers':'bw2','english/noble-victories':'bw3','english/next-destinies':'bw4','english/dark-explorers':'bw5','english/dragons-exalted':'bw6','english/call-of-legends':'col1','english/black-white-black-star-promos':'bwp'}
 LOCK=threading.Lock()
+TCG_SETS.update({'english/'+slug:'bw'+str(i) for i,slug in enumerate(['boundaries-crossed','plasma-storm','plasma-freeze','plasma-blast','legendary-treasures'],7)})
+TCG_SETS.update({'english/'+slug:'xy'+str(i) for i,slug in enumerate(['xy-base-set','flashfire','furious-fists','phantom-forces','primal-clash','roaring-skies','ancient-origins'],1)})
+TCG_SETS.update({'english/xy-black-star-promos':'xyp'})
+TCG_SETS.update({'english/'+slug:'xy'+str(i) for i,slug in enumerate(['breakthrough','breakpoint','fates-collide','steam-siege','evolutions'],8)})
+TCG_SETS.update({'english/'+slug:'sm'+str(i) for i,slug in enumerate(['sun-moon','guardians-rising','burning-shadows'],1)})
+TCG_SETS.update({'english/generations':'g1','english/sun-moon-black-star-promos':'smp'})
+TCG_SETS['english/sm-black-star-promos']='smp'
+TCG_SETS.update({'english/crimson-invasion':'sm4','english/shining-legends':'sm35'})
 def read(path):return json.loads(path.read_text('utf-8-sig'))
 def write_atomic(path,content):
  pending=path.with_name(path.name+'.pending')
@@ -102,6 +110,7 @@ def prepare():
   return {'language':lang,'image':target,'pictureId':image_id,'sourceSet':ref}
  exclusions=read(CACHE/'source-entry-exclusions.json') if (CACHE/'source-entry-exclusions.json').exists() else {}
  type_overrides=read(CACHE/'type-overrides.json') if (CACHE/'type-overrides.json').exists() else {}
+ identity_overrides=read(CACHE/'printed-identity-overrides.json') if (CACHE/'printed-identity-overrides.json').exists() else {}
  native_overrides=read(CACHE/'native-scan-overrides.json') if (CACHE/'native-scan-overrides.json').exists() else {}
  manual=read(CACHE/'manual-counterparts.json') if (CACHE/'manual-counterparts.json').exists() else {}
  exceptions=read(CACHE/'counterpart-exceptions.json') if (CACHE/'counterpart-exceptions.json').exists() else {}
@@ -175,6 +184,10 @@ def prepare():
    if counterpart:versions.append(register(scan_id(counterpart),counterpart['language'],counterpart['set'],counterpart['id']))
    record={'id':card_id,'game':'pokemon','name':source.get('englishName') or source['name'],'code':code,'number':source.get('number',{}).get('short',source['id']),'printedNumber':source.get('number',{}).get('printed',''),'setId':pub['id'],'releaseDate':pub['releaseDate'],'rarity':{'Common (C)':'Common','Uncommon (U)':'Uncommon','Rare (R)':'Rare','Super Rare (SR)':'Super Rare','Ultra Rare (UR)':'Ultra Rare','Double Rare (RR)':'Double Rare'}.get(source.get('rarity'),source.get('rarity') or 'Unknown'),'category':category,'isAlternative':False,'variantGroup':card_id,'variantLabel':'Prima edizione' if editions else 'Standard','illustrator':source.get('credit') or (metadata or {}).get('artist',''),'types':types,'finishes':list(dict.fromkeys(finish(v.get('finish','non_holo')) for v in variants)) or ['normal'],'editions':editions}
    proof={'sourceUrl':BASE+'sets/'+ref+'.json','catalogReference':{'set':ref,'card':source['id']},'paintingId':paint,'sourceImageUrl':images.get(main['pictureId'],{}).get('url',f"https://img.cardcorpus.com/s1/960/{main['pictureId']}.avif"),'typeReference':type_reference,'imageVariantId':image_variant_id,'counterpart':link if counterpart else None,'variantInventory':variants,'counterpartException':exceptions.get(ref+'#'+source['id'])}
+   if source_key in identity_overrides:
+    correction=identity_overrides[source_key]
+    assert set(correction['values']) <= {'number','printedNumber'}
+    record.update(correction['values']);proof['printedIdentityReview']=correction
    rows.append({'card':record,'versions':versions,'metadata':proof});set_rows.append(record['id'])
    seen_signatures=set();default=next((v for v in variants if v['id']==source.get('defaultVariant')),variants[0] if variants else {})
    visible_keys={'edition','stamp','painting','artwork','errorState'}

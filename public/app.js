@@ -84,21 +84,32 @@ function filterCards(cards, filters, favorites = []) {
   return result;
 }
 
-// One grid entry per printed card code; artworks remain individually addressable.
+function cardArtworkKey(card) {
+  return `${card.game}:${card.game === 'pokemon' && card.artworkGroup ? card.artworkGroup : card.code}`;
+}
+// Verified Pokemon reprints share an illustration; each printed card keeps its own ID.
 function groupCardResults(cards) {
   const groups = new Map();
   for (const card of cards) {
-    const key = `${card.game}:${card.code}`;
+    const key = cardArtworkKey(card);
     const previous = groups.get(key);
     if (!previous || (previous.isAlternative && !card.isAlternative)) groups.set(key, card);
   }
   return [...groups.values()];
 }
 function visibleCardResults(cards, art = 'standard') {
-  return art === 'standard' ? groupCardResults(cards) : cards;
+  if (art === 'standard') return groupCardResults(cards);
+  const illustrations = new Set();
+  return cards.filter(card => {
+    if (card.game !== 'pokemon' || !card.artworkGroup) return true;
+    const key = cardArtworkKey(card);
+    if (illustrations.has(key)) return false;
+    illustrations.add(key);
+    return true;
+  });
 }
 function cardVariants(cards, card) {
-  return cards.filter(other => other.game === card.game && other.code === card.code)
+  return cards.filter(other => cardArtworkKey(other) === cardArtworkKey(card))
     .sort((a, b) => Number(a.isAlternative) - Number(b.isAlternative) || (a.releaseDate || '').localeCompare(b.releaseDate || '') || a.id.localeCompare(b.id));
 }
 // A scan can be reused by several products without hiding those product editions.
@@ -114,7 +125,9 @@ function cardPopupVersions(cards, card, sets) {
       const set = sets.find(set => set.game === other.game && set.id === product.setId);
       const images = cardProductImages(other, product.setId);
       const image = images.find(image => image.language === other.imageLanguage) || images[0];
-      const label = other.game === 'onepiece' && (product.setId !== other.setId || !other.variantLabel || other.variantLabel === 'Standard') && set ? setPreviewTitle(set) : other.variantLabel;
+      const label = other.game === 'pokemon' && other.artworkGroup
+        ? `${set?.name || other.setId} · ${Object.hasOwn(other, 'printedNumber') && !other.printedNumber ? 'Senza numero' : other.printedNumber || other.number || other.code}${other.variantLabel && other.variantLabel !== 'Standard' ? ` · ${other.variantLabel}` : ''}`
+        : other.game === 'onepiece' && (product.setId !== other.setId || !other.variantLabel || other.variantLabel === 'Standard') && set ? setPreviewTitle(set) : other.variantLabel;
       return { ...other, setId: product.setId, versionKey: `${other.id}:${product.setId}`, variantLabel: label, imageVersions: images, image: image.image };
     });
   });
@@ -242,7 +255,7 @@ function indexIllustrators(cards) {
     if (!artists.has(key)) artists.set(key, { name, games: new Map() });
     const artist = artists.get(key);
     if (!artist.games.has(card.game)) artist.games.set(card.game, new Set());
-    artist.games.get(card.game).add(card.code);
+    artist.games.get(card.game).add(cardArtworkKey(card));
   }
   return [...artists.values()].map(artist => ({ name: artist.name, games: Object.fromEntries([...artist.games].map(([game, codes]) => [game, codes.size])) }))
     .sort((a, b) => a.name.localeCompare(b.name, 'it', { sensitivity: 'base' }));
@@ -807,7 +820,7 @@ function openCard(id, mode = 'card', productSetId) {
   const card = catalog.cards.find(card => card.id === id);
   if (!card) return;
   const previous = catalog.cards.find(card => card.id === currentCardId);
-  const variantScroll = previous?.game === card.game && previous?.code === card.code && $('#card-dialog').open ? $('.variant-list')?.scrollLeft || 0 : 0;
+  const variantScroll = previous && cardArtworkKey(previous) === cardArtworkKey(card) && $('#card-dialog').open ? $('.variant-list')?.scrollLeft || 0 : 0;
   currentCardId = id;
   const dialog = $('#card-dialog');
   dialog.dataset.cardGame = card.game;

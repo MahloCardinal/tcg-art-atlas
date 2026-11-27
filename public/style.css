@@ -198,8 +198,8 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 [data-card-game=pokemon] { --card-radius: 3.5% / 2.5%; }
 [data-card-game=onepiece] { --card-radius: 4.5% / 3.2%; }
 .art-open img, .detail-image-frame img, .variant-thumb img { object-fit: cover; border-radius: var(--card-radius); }
-.favorite-button { position: absolute; top: 9px; right: 9px; width: 27px; height: 27px; padding: 5px; display: grid; place-items: center; border: 1px solid #555d70; background: #161920ed; border-radius: 50%; color: #d1d6e2; box-shadow: 0 1px 4px #0004; }
-.favorite-button svg { width: 15px; height: 15px; }
+.favorite-button { position: absolute; top: 9px; right: 9px; width: 34px; height: 34px; padding: 6px; display: grid; place-items: center; border: 1px solid #555d70; background: #161920ed; border-radius: 50%; color: #d1d6e2; box-shadow: 0 1px 4px #0004; }
+.favorite-button svg { width: 19px; height: 19px; }
 .favorite-button:hover { background: #3e3e32; border-color: var(--accent); }
 .favorite-button.is-favorite { color: var(--accent); background: #343127; border-color: #a38d36; }
 .is-favorite svg { fill: currentColor; }
@@ -316,7 +316,7 @@ dialog::backdrop { background: #090b12cf; backdrop-filter: blur(4px); animation:
   .expansion-tile:hover .expansion-art img { transform: scale(1.04); }
   .expansion-tile:hover .expansion-product { transform: scale(1.04); }
   .card-art img { transition: transform .3s var(--ease-out); }
-  .art-open:hover img { transform: scale(1.025); }
+  .card-tile:hover .art-open img, .card-tile:focus-within .art-open img { transform: scale(1.025); }
   .favorite-button { transition: transform .2s var(--ease-out), color .18s, background-color .18s, border-color .18s; }
   .favorite-button:hover { transform: scale(1.08); }
 }
@@ -387,7 +387,7 @@ dialog::backdrop { background: #090b12cf; backdrop-filter: blur(4px); animation:
   .gallery[data-size=large] { --card-width: 172px; }
   .card-caption { padding: 6px; }
   .card-name { font-size: 14px; }
-  .favorite-button { width: 26px; height: 26px; top: 8px; right: 8px; }
+  .favorite-button { width: 32px; height: 32px; top: 8px; right: 8px; }
   .card-dialog { --detail-top: 20px; width: calc(100% - 20px); height: calc(100dvh - 20px); max-height: calc(100dvh - 20px); }
   .detail-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, .9fr) minmax(0, 1fr); }
   .detail-art { padding: var(--detail-top) 20px 12px; }
@@ -438,7 +438,7 @@ dialog::backdrop { background: #090b12cf; backdrop-filter: blur(4px); animation:
   .card-tile:hover .card-art, .card-tile:focus-within .card-art { transform: translateY(-6px); }
   .card-tile:hover .art-open img, .card-tile:focus-within .art-open img { filter: drop-shadow(0 15px 10px #0008); }
 }
-.art-open img { transition: filter .22s var(--ease-out); }
+.art-open img { transition: transform .22s var(--ease-out), filter .22s var(--ease-out); }
 @media(min-width:701px) and (max-width:1100px) {
   #expansions-page:is([data-game=onepiece], [data-game=pokemon]) .expansions-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
@@ -455,7 +455,7 @@ dialog::backdrop { background: #090b12cf; backdrop-filter: blur(4px); animation:
   .card-caption { padding: 10px 0 4px; }
   .gallery { gap: 20px 12px; }
 }
-@media(prefers-reduced-motion:reduce) { .card-art, .art-open img { transition: none; } .card-tile:hover .card-art, .card-tile:focus-within .card-art { transform: none; } }
+@media(prefers-reduced-motion:reduce) { .card-art, .art-open img { transition: none; } .card-tile:hover .card-art, .card-tile:focus-within .card-art, .card-tile:hover .art-open img, .card-tile:focus-within .art-open img { transform: none; } }
 
 @media(max-width:700px) {
   .filter-bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(142px, 43vw); grid-template-columns: none; overflow-x: auto; padding: 0 0 10px; gap: 10px; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: #61697a transparent; }

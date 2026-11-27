@@ -128,7 +128,7 @@ async function test() {
   const { catalog, app, audit } = await check();
   const context = createContext({ URL, Intl });
   new Script(app).runInContext(context);
-  const { canonicalRarity, cardRarities, orderedTraits, hasCatalogFilters, hasExpansionFilters, validListName, portableList, pageNumber, listExportFilename, filterCards, groupCardResults, cardVariants, cardProductImages, cardPopupVersions, selectPopupVersion, cardDisplaySet, groupExpansionSets, formatSetName, setFilterLabel, setPreviewTitle, setFullLabel, releaseDateRows, popupReleaseDateRows, factValue, compareExpansionDates, filterExpansionSets, expansionTiles, catalogSetSelections, prereleaseSetCode, expansionCategoryMap, indexIllustrators, filterIllustrators, indexFavorites, setDisplayLabels, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, validateLibrary, emptyLibrary, listContent, importListContent, assignFavoriteLists, visibleCardResults, orderedRarities, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({canonicalRarity,cardRarities,orderedTraits,hasCatalogFilters,hasExpansionFilters,validListName,portableList,pageNumber,listExportFilename,filterCards,groupCardResults,cardVariants,cardProductImages,cardPopupVersions,selectPopupVersion,cardDisplaySet,groupExpansionSets,formatSetName,setFilterLabel,setPreviewTitle,setFullLabel,releaseDateRows,popupReleaseDateRows,factValue,compareExpansionDates,filterExpansionSets,expansionTiles,catalogSetSelections,prereleaseSetCode,expansionCategoryMap,indexIllustrators,filterIllustrators,indexFavorites,setDisplayLabels,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,validateLibrary,emptyLibrary,listContent,importListContent,assignFavoriteLists,visibleCardResults,orderedRarities,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
+  const { cardArtworkKey, canonicalRarity, cardRarities, orderedTraits, hasCatalogFilters, hasExpansionFilters, validListName, portableList, pageNumber, listExportFilename, filterCards, groupCardResults, cardVariants, cardProductImages, cardPopupVersions, selectPopupVersion, cardDisplaySet, groupExpansionSets, formatSetName, setFilterLabel, setPreviewTitle, setFullLabel, releaseDateRows, popupReleaseDateRows, factValue, compareExpansionDates, filterExpansionSets, expansionTiles, catalogSetSelections, prereleaseSetCode, expansionCategoryMap, indexIllustrators, filterIllustrators, indexFavorites, setDisplayLabels, resolveAlias, validateCollection, mergeCollections, emptyCollection, languageImages, loadCollection, validateLibrary, emptyLibrary, listContent, importListContent, assignFavoriteLists, visibleCardResults, orderedRarities, STORAGE_KEY, LEGACY_STORAGE_KEYS } = runInContext('({cardArtworkKey,canonicalRarity,cardRarities,orderedTraits,hasCatalogFilters,hasExpansionFilters,validListName,portableList,pageNumber,listExportFilename,filterCards,groupCardResults,cardVariants,cardProductImages,cardPopupVersions,selectPopupVersion,cardDisplaySet,groupExpansionSets,formatSetName,setFilterLabel,setPreviewTitle,setFullLabel,releaseDateRows,popupReleaseDateRows,factValue,compareExpansionDates,filterExpansionSets,expansionTiles,catalogSetSelections,prereleaseSetCode,expansionCategoryMap,indexIllustrators,filterIllustrators,indexFavorites,setDisplayLabels,resolveAlias,validateCollection,mergeCollections,emptyCollection,languageImages,loadCollection,validateLibrary,emptyLibrary,listContent,importListContent,assignFavoriteLists,visibleCardResults,orderedRarities,STORAGE_KEY,LEGACY_STORAGE_KEYS})', context);
   // Compact lists keep exact artworks in portable JSON and validate names only on edit.
   for (const name of ['Preferiti','Pokemon-1','A_B.C,D','Pokémon']) assert.ok(validListName(name));
   for (const name of ['', 'Due parole','1234567890123456','A/B','A!']) assert.ok(!validListName(name));
@@ -430,6 +430,108 @@ async function test() {
   assert.equal(thirtyBilingual,2836);
   const tinyFossil=thirtyCards.find(card=>card.id==='pk-jp_cry-from-the-mysterious-root-fossil-v-unlimited-non-holo');
   assert.ok(audit.cards[tinyFossil.id].issues.includes('LOW_RESOLUTION_SCAN'));
+  const newThirtyBatch=audit.pokemonCompletionBatches['2012-2015-next-thirty'];
+  assert.equal(newThirtyBatch.coverage.length,30);
+  assert.equal(newThirtyBatch.coverage.reduce((n,entry)=>n+entry.sourceCount,0),3002);
+  assert.equal(newThirtyBatch.artworkRecords,3692);
+  assert.equal(newThirtyBatch.addedCardIds.length,3662);
+  const newThirtySets=new Set(newThirtyBatch.coverage.map(entry=>entry.setId));
+  const newThirtyCards=cards.filter(card=>card.game==='pokemon' && newThirtySets.has(card.setId));
+  for (const entry of newThirtyBatch.coverage) {
+    const inventory=audit.sets[`pokemon:${entry.setId}`];
+    const members=newThirtyCards.filter(card=>card.setId===entry.setId);
+    assert.equal(inventory.preview,false);
+    assert.equal(inventory.completionBatch,'2012-2015-next-thirty');
+    assert.equal(members.filter(card=>!card.isAlternative).length,entry.sourceCount);
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      assert.equal(audit.cards[id].metadata.catalogReference.set,entry.sourceSet);
+      assert.equal(audit.cards[id].metadata.catalogReference.card,entry.sourceCardIds[index]);
+    }
+    for (const card of members) {
+      if(card.category==='Pokemon') assert.ok(card.types.length && audit.cards[card.id].metadata.typeReference,`Nuovo Pokemon senza tipo verificato: ${card.id}`);
+      if(card.isAlternative) {
+        const metadata=audit.cards[card.id].metadata;
+        const variant=metadata.variantInventory.find(variant=>variant.id===metadata.variantId);
+        assert.ok(variant && ['edition','stamp','painting','artwork','errorState'].some(key=>Object.hasOwn(variant.differsFromStandard || {},key)),`Variante duplicata per sola finitura: ${card.id}`);
+      }
+    }
+  }
+  const xySunMoonBatch=audit.pokemonCompletionBatches['2015-2017-next-twenty'];
+  assert.equal(xySunMoonBatch.coverage.length,20);
+  assert.equal(xySunMoonBatch.coverage.reduce((n,entry)=>n+entry.sourceCount,0),1904);
+  assert.equal(xySunMoonBatch.artworkRecords,2181);
+  assert.equal(xySunMoonBatch.addedCardIds.length,2161);
+  const xySunMoonSets=new Set(xySunMoonBatch.coverage.map(entry=>entry.setId));
+  const xySunMoonCards=cards.filter(card=>card.game==='pokemon' && xySunMoonSets.has(card.setId));
+  let xySunMoonBilingual=0;
+  for (const entry of xySunMoonBatch.coverage) {
+    const inventory=audit.sets[`pokemon:${entry.setId}`];
+    const members=xySunMoonCards.filter(card=>card.setId===entry.setId);
+    assert.equal(inventory.preview,false);
+    assert.equal(inventory.completionBatch,'2015-2017-next-twenty');
+    assert.equal(members.filter(card=>!card.isAlternative).length,entry.sourceCount);
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      assert.equal(audit.cards[id].metadata.catalogReference.set,entry.sourceSet);
+      assert.equal(audit.cards[id].metadata.catalogReference.card,entry.sourceCardIds[index]);
+      if(languageImages(card).length===2) xySunMoonBilingual++;
+      else assert.ok(audit.cards[id].metadata.counterpartException,`Controparte assente senza motivazione: ${id}`);
+    }
+    for (const card of members) {
+      const metadata=audit.cards[card.id].metadata;
+      if(card.category==='Pokemon') assert.ok(card.types.length && metadata.typeReference,`Pokemon XY/SM privo di tipo verificato: ${card.id}`);
+      if(card.isAlternative) {
+        const variant=metadata.variantInventory.find(variant=>variant.id===metadata.variantId);
+        assert.ok(variant && ['edition','stamp','painting','artwork','errorState'].some(key=>Object.hasOwn(variant.differsFromStandard || {},key)),`Variante duplicata per sola finitura: ${card.id}`);
+      }
+    }
+  }
+  assert.equal(xySunMoonBilingual,1893);
+  const nextFiveBatch=audit.pokemonCompletionBatches['2017-next-five'];
+  assert.equal(nextFiveBatch.coverage.length,5);
+  assert.equal(nextFiveBatch.coverage.reduce((count,set)=>count+set.sourceCount,0),447);
+  assert.equal(nextFiveBatch.artworkRecords,463);
+  assert.equal(nextFiveBatch.addedCardIds.length,458);
+  let nextFiveBilingual=0;
+  for (const entry of nextFiveBatch.coverage) {
+    const inventory=audit.sets[`pokemon:${entry.setId}`];
+    const members=cards.filter(card=>card.game==='pokemon' && card.setId===entry.setId);
+    assert.equal(inventory.preview,false);
+    assert.equal(inventory.completionBatch,'2017-next-five');
+    assert.equal(members.filter(card=>!card.isAlternative).length,entry.sourceCount);
+    assert.equal(new Set(members.map(card=>card.code)).size,entry.sourceCount);
+    for (const [index,id] of entry.standardCardIds.entries()) {
+      const card=members.find(card=>card.id===id);
+      assert.ok(card && !card.isAlternative);
+      const metadata=audit.cards[id].metadata;
+      assert.equal(metadata.catalogReference.set,entry.sourceSet);
+      assert.equal(metadata.catalogReference.card,entry.sourceCardIds[index]);
+      if(languageImages(card).length===2) nextFiveBilingual++;
+      else assert.ok(metadata.counterpartException,`Controparte assente senza motivazione: ${id}`);
+    }
+    for (const card of members) {
+      const metadata=audit.cards[card.id].metadata;
+      if(card.category==='Pokemon') assert.ok(card.types.length && metadata.typeReference,`Nuovo Pokemon privo di tipo verificato: ${card.id}`);
+      if(card.isAlternative) {
+        const variant=metadata.variantInventory.find(variant=>variant.id===metadata.variantId);
+        assert.ok(variant && ['edition','stamp','painting','artwork','errorState'].some(key=>Object.hasOwn(variant.differsFromStandard || {},key)),`Variante duplicata per sola finitura: ${card.id}`);
+      }
+    }
+  }
+  assert.equal(nextFiveBilingual,444);
+  const unnumberedEnergies=xySunMoonCards.filter(card=>card.printedNumber==='');
+  assert.equal(unnumberedEnergies.length,18,'Le 18 Energie prive di numero non devono ereditare la sequenza artificiale della fonte');
+  for (const card of unnumberedEnergies) {
+    assert.equal(card.category,'Energy');
+    assert.equal(card.number,'');
+    assert.ok(audit.cards[card.id].metadata.printedIdentityReview?.sha256);
+    assert.ok(cardPopupVersions(cards,card,catalog.sets).filter(version=>version.id===card.id).every(version=>version.variantLabel.includes('Senza numero')),'Non esporre il codice interno come numero della stampa');
+  }
   assert.equal(cards.find(card=>card.id==='op-OP18-035').illustrator,'22');
   assert.equal(audit.cards['op-OP18-035'].metadata.illustratorAttribution.manualReview,true);
   assert.deepEqual(Array.from(cards.find(card=>card.id==='op-FAMILY_DECK_JP-preview-ST01-001_p1').colors),['Red']);
@@ -699,7 +801,7 @@ async function test() {
   const popupContext = createContext({
     catalog:{...catalog,cards}, state:{sets:['onepiece:FAMILY_DECK_JP']}, results:[law],
     currentCardId:undefined, currentCardSetId:undefined, filteredCardIds:[], filteredCardIndex:0,
-    imageLanguages:new Map(), resolveAlias, cardPopupVersions, selectPopupVersion, cardDisplaySet,
+    imageLanguages:new Map(), resolveAlias, cardArtworkKey, cardPopupVersions, selectPopupVersion, cardDisplaySet,
     languageImages, popupReleaseDateRows, factValue, setFullLabel, cardRarities,
     $:selector => popupNodes[selector],
     esc:value => String(value ?? '').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'),
@@ -761,7 +863,7 @@ async function test() {
   // Review notes are appended atomically, isolated from collection notes and card metadata.
   const noteRoot=path.join(root,'temp','review-notes-tests');
   await mkdir(noteRoot,{recursive:true});
-  const noteFixture={cards:{'pk-base1-4':{issues:['KEEP_ME']}},sets:{'pokemon:base1':{marker:'unchanged'}},marker:'preserve'};
+  const noteFixture={cards:{'pk-base1-4':{issues:['KEEP_ME']},'op-ST02-009':{issues:[]},'op-OP01-001AA':{issues:[]}},userObservations:{schemaVersion:1,entries:[]},sets:{'pokemon:base1':{marker:'unchanged'}},marker:'preserve'};
   await writeFile(path.join(noteRoot,'CARD_REVIEW.json'),JSON.stringify(noteFixture));
   const notePayload={cardId:'pk-base1-4',setId:'base1',language:'en',text:'Prima osservazione'};
   const firstNote=await saveObservation(noteRoot,catalog,notePayload);
@@ -772,6 +874,7 @@ async function test() {
   assert.deepEqual(noteRegistry.cards,noteFixture.cards);
   assert.deepEqual(noteRegistry.sets,noteFixture.sets);
   assert.equal(noteRegistry.marker,'preserve');
+  assert.equal(Object.keys(noteRegistry).at(-1),'userObservations','Le osservazioni devono essere l’ultima sezione anche se esistevano già');
   for (const change of [{cardId:'missing'},{setId:'missing'},{language:'xx'},{text:' '},{text:'x'.repeat(5001)}]) await assert.rejects(()=>saveObservation(noteRoot,catalog,{...notePayload,...change}));
   const noteServer=http.createServer((req,res)=>handleObservationRequest(req,res,noteRoot,async()=>catalog));
   await new Promise(resolve=>noteServer.listen(0,'127.0.0.1',resolve));
@@ -783,6 +886,29 @@ async function test() {
     noteRegistry=JSON.parse(await readFile(path.join(noteRoot,'CARD_REVIEW.json'),'utf8'));
     assert.equal(noteRegistry.userObservations.entries.length,4);
   } finally {await new Promise(resolve=>noteServer.close(resolve));}
+  const selectedEdition=await saveObservation(noteRoot,catalog,{cardId:'op-ST02-009',setId:'FAMILY_DECK_JP',language:'ja',text:'Controlla questa ristampa'});
+  assert.equal(selectedEdition.versionKey,'op-ST02-009:FAMILY_DECK_JP');
+  assert.equal(selectedEdition.cardSnapshot.setId,'FAMILY_DECK_JP');
+  assert.equal(selectedEdition.cardSnapshot.imageLanguage,'ja');
+  assert.deepEqual(selectedEdition.cardSnapshot.imageVersions.map(image=>image.language),['ja']);
+  assert.equal(selectedEdition.cardSnapshot.releaseDate,catalog.sets.find(set=>set.game==='onepiece' && set.id==='FAMILY_DECK_JP').releaseDate);
+  assert.equal(selectedEdition.cardSnapshot.releaseDates?.ja || selectedEdition.cardSnapshot.releaseDate,'2023-04-29');
+  assert.equal(selectedEdition.variantLabel,'Family Deck Set');
+  assert.ok(selectedEdition.image.endsWith('_JAP.webp'));
+  assert.equal(catalog.cards.find(card=>card.id==='op-ST02-009').setId,'ST02','Lo snapshot non deve modificare il catalogo');
+  const activeAlternative=catalog.cards.find(card=>card.id==='op-OP01-001AA');
+  const selectedAlternative=await saveObservation(noteRoot,catalog,{cardId:activeAlternative.id,setId:activeAlternative.setId,language:activeAlternative.imageLanguage,text:'Controlla solo questo artwork',cardSnapshot:{id:'wrong'}});
+  assert.equal(selectedAlternative.cardId,activeAlternative.id);
+  assert.equal(selectedAlternative.cardSnapshot.id,activeAlternative.id);
+  assert.equal(selectedAlternative.cardSnapshot.isAlternative,true,'Registrare l’artwork attivo, senza sostituirlo con la carta standard');
+  noteRegistry=JSON.parse(await readFile(path.join(noteRoot,'CARD_REVIEW.json'),'utf8'));
+  noteRegistry.laterMaintenance={keep:true};
+  await writeFile(path.join(noteRoot,'CARD_REVIEW.json'),JSON.stringify(noteRegistry));
+  await saveObservation(noteRoot,catalog,{...notePayload,id:firstNote.id});
+  noteRegistry=JSON.parse(await readFile(path.join(noteRoot,'CARD_REVIEW.json'),'utf8'));
+  assert.equal(noteRegistry.userObservations.entries.length,6);
+  assert.equal(Object.keys(noteRegistry).at(-1),'userObservations');
+  assert.equal(noteRegistry.laterMaintenance.keep,true);
   // Dropdowns match the visible field, using local coordinates inside a mobile drawer.
   const optionPanel = {style:{}};
   const filterAnchor = {top:200,bottom:240,left:15,width:270};
@@ -910,11 +1036,113 @@ async function test() {
     assert.deepEqual(Array.from(view('alternative'),card=>card.id), ['alt1','alt2']);
     assert.deepEqual(Array.from(view('standard'),card=>card.id), ['normal']);
     const actual = cards.filter(card => card.game === game);
-    assert.equal(visibleCardResults(filterCards(cards,{game,art:'all'}),'all').length, actual.length);
+    const expectedArtworkCount=game==='pokemon' ? new Set(actual.map(card=>card.artworkGroup || card.id)).size : actual.length;
+    assert.equal(visibleCardResults(filterCards(cards,{game,art:'all'}),'all').length, expectedArtworkCount);
   }
   const grouped = groupCardResults([{id:'a',game:'onepiece',code:'OP01-003',isAlternative:true},{id:'b',game:'onepiece',code:'OP01-003',isAlternative:false},{id:'c',game:'onepiece',code:'OP01-004',isAlternative:false}]);
   assert.equal(grouped.length, 2);
   assert.equal(grouped[0].id, 'b');
+  const reprints=[
+    {id:'print-a',game:'pokemon',name:'Alakazam',code:'A-1',number:'1',setId:'A',artworkGroup:'drawing-one',isAlternative:false,image:'a.webp',imageLanguage:'en'},
+    {id:'print-b',game:'pokemon',name:'Alakazam',code:'B-7',number:'7',setId:'B',artworkGroup:'drawing-one',isAlternative:false,image:'b.webp',imageLanguage:'ja'},
+    {id:'different-drawing',game:'pokemon',name:'Alakazam',code:'C-2',number:'2',setId:'C',artworkGroup:'drawing-two',isAlternative:false,image:'c.webp',imageLanguage:'en'},
+  ];
+  assert.deepEqual(Array.from(visibleCardResults(reprints,'all'),card=>card.id),['print-a','different-drawing'],'Riunire soltanto le ristampe della stessa illustrazione');
+  assert.deepEqual(Array.from(cardVariants(reprints,reprints[1]),card=>card.id),['print-a','print-b']);
+  assert.deepEqual(Array.from(cardVariants(reprints,reprints[2]),card=>card.id),['different-drawing'],'Stesso nome non significa stessa illustrazione');
+  const filteredReprint=visibleCardResults(filterCards(reprints,{game:'pokemon',sets:['pokemon:B'],art:'all'}),'all');
+  assert.deepEqual(Array.from(filteredReprint,card=>card.id),['print-b'],'Il filtro del set deve conservare la stampa e il codice selezionati');
+  assert.equal(cardVariants(reprints,filteredReprint[0]).length,2,'Il popup deve includere le ristampe degli altri set');
+  const printOptions=cardPopupVersions(reprints,reprints[0],[{game:'pokemon',id:'A',name:'Expansion A'},{game:'pokemon',id:'B',name:'Expansion B'},{game:'pokemon',id:'C',name:'Expansion C'}]);
+  assert.deepEqual(Array.from(printOptions,card=>card.variantLabel),['Expansion A · 1','Expansion B · 7']);
+  assert.equal(selectPopupVersion(printOptions,'print-b','B').image,'b.webp');
+  const savedPrint=visibleCardResults(filterCards(reprints,{game:'pokemon',art:'all',onlyFavorites:true},['print-b']),'all');
+  assert.deepEqual(Array.from(savedPrint,card=>card.id),['print-b'],'I preferiti devono restare legati alla singola stampa');
+  assert.deepEqual(Array.from(visibleCardResults(reprints.map(card=>({...card,game:'onepiece'})),'all'),card=>card.id),reprints.map(card=>card.id),'I premi One Piece non devono essere riuniti dal nuovo criterio Pokemon');
+  const typeReview=audit.pokemonTypeObservationReview;
+  assert.equal(typeReview.resolved.length,36);
+  for (const resolved of typeReview.resolved) {
+    const card=cards.find(card=>card.id===resolved.cardId);
+    assert.deepEqual(card.types,resolved.types);
+    assert.ok(!audit.cards[card.id].issues.includes('MISSING_TYPES'));
+    const note=audit.userObservations.entries.find(note=>note.id===resolved.noteId);
+    assert.equal(note.status,'resolved');
+    assert.equal(note.cardId,card.id);
+    if (/Terra/i.test(note.text)) assert.deepEqual(card.types,['Fighting']);
+  }
+  const artworkAudit=audit.pokemonArtworkGrouping;
+  const grassReview=audit.pokemonGrassListTypeReview;
+  assert.equal(grassReview.resolved.length,99);
+  assert.equal(new Set(grassReview.resolved.map(item=>item.cardId)).size,99);
+  assert.match(grassReview.sourceList.sha256,/^[a-f0-9]{64}$/);
+  for (const proof of grassReview.resolved) {
+    const card=cards.find(card=>card.id===proof.cardId);
+    assert.equal(card?.game,'pokemon');
+    assert.equal(card.category,'Pokemon');
+    assert.deepEqual(card.types,['Grass']);
+    assert.deepEqual(proof.previousTypes,[]);
+    assert.deepEqual(proof.types,['Grass']);
+    assert.match(proof.sha256,/^[a-f0-9]{64}$/);
+    assert.ok(proof.comparison && audit.cards[card.id].metadata.typeReference);
+    assert.ok(!audit.cards[card.id].issues.includes('MISSING_TYPES'));
+    assert.ok(!audit.pokemonDeferredVariantAssociation.cardIds.includes(card.id));
+  }
+  const groupedPrintIds=new Set();
+  const actualCards=new Map(cards.map(card=>[card.id,card]));
+  const meadowJP=actualCards.get('pk-jp_collection-x-008-vivillon-v1');
+  const meadowEN=actualCards.get('pk-cc_xy-base-set-17-vivillon');
+  const elegantJP=actualCards.get('pk-jp_collection-x-008-vivillon-v2');
+  const highPlainsEN=actualCards.get('pk-cc_xy-base-set-17-vivillon-high-plains-orange');
+  assert.equal(cardArtworkKey(meadowJP),cardArtworkKey(meadowEN),'Collegare le stampe Meadow con la stessa illustrazione');
+  assert.equal(new Set([meadowJP,elegantJP,highPlainsEN].map(cardArtworkKey)).size,3,'Stesso nome, numero e posa non devono unire motivi alari diversi di Vivillon');
+  assert.deepEqual(elegantJP.types,['Grass']);
+  assert.deepEqual(Array.from(languageImages(elegantJP),image=>image.language),['ja']);
+  assert.deepEqual(Array.from(languageImages(highPlainsEN),image=>image.language),['en']);
+  assert.equal(meadowJP.imageWidth,742);
+  assert.equal(meadowJP.imageHeight,1044);
+  assert.equal(cardArtworkKey(actualCards.get('pk-jp_plasma-gale-076')),cardArtworkKey(actualCards.get('pk-cc_boundaries-crossed-149')),'Riunire Skyla tramite confronto documentato anche se i paintingId sorgente sono diversi');
+  assert.equal(cardArtworkKey(actualCards.get('pk-jp_hail-blizzard-054')),cardArtworkKey(actualCards.get('pk-cc_dark-explorers-106')),'Collegare Groudon-EX al set precedente senza cambiare gli ID');
+  const professorStamp=actualCards.get('pk-cc_xy-base-set-122-v-crosshatch-holo-professor-program-stamp');
+  assert.equal(professorStamp.imageWidth,720);
+  assert.equal(professorStamp.imageHeight,1000);
+  assert.equal(cardArtworkKey(professorStamp),cardArtworkKey(actualCards.get('pk-cc_xy-base-set-122')),'Il timbro resta una stampa selezionabile della stessa illustrazione');
+  assert.equal(artworkAudit.pendingImageComparisons.length,0);
+  assert.equal(artworkAudit.batches['2012-2015-next-thirty'].importedCardIds.length,3692);
+  assert.equal(artworkAudit.batches['2015-2017-next-twenty'].importedCardIds.length,2181);
+  assert.equal(artworkAudit.batches['2017-next-five'].importedCardIds.length,463);
+  const clefairyBase=actualCards.get('pk-base1-5');
+  const clefairyEvolutions=actualCards.get('pk-cc_evolutions-63');
+  assert.equal(cardArtworkKey(clefairyBase),cardArtworkKey(clefairyEvolutions),'La ristampa Evolutions mantiene la stessa illustrazione del Base Set');
+  assert.deepEqual(clefairyBase.types,['Colorless']);
+  assert.deepEqual(clefairyEvolutions.types,['Fairy'],'Condividere un’illustrazione non autorizza a copiare il tipo fra ristampe');
+  assert.deepEqual(Array.from(visibleCardResults(filterCards([clefairyBase,clefairyEvolutions],{game:'pokemon',art:'all',traits:['Fairy']}),'all'),card=>card.id),[clefairyEvolutions.id]);
+  assert.equal(cardArtworkKey(actualCards.get('pk-base1-4')),cardArtworkKey(actualCards.get('pk-cc_evolutions-11')),'Charizard Evolutions condivide il popup con l’illustrazione originale');
+  const newAlakazam=xySunMoonCards.filter(card=>card.category==='Pokemon' && /alakazam/i.test(card.name));
+  assert.equal(visibleCardResults(newAlakazam,'all').length,5,'Conservare le cinque diverse illustrazioni dei nuovi Alakazam-EX');
+  for (const [jp,en] of [['023','25'],['024','26'],['080','117'],['081','118'],['088','125']]) assert.equal(cardArtworkKey(actualCards.get(`pk-jp_awakening-psychic-king-${jp}`)),cardArtworkKey(actualCards.get(`pk-cc_fates-collide-${en}`)));
+  assert.equal(cardArtworkKey(actualCards.get('pk-cc_sun-moon-164')),cardArtworkKey(actualCards.get('pk-jp_enhanced-expansion-pack-sun-moon-069')),'Riunire l’illustrazione dell’Energia 2017 nelle lingue verificate');
+  assert.notEqual(cardArtworkKey(actualCards.get('pk-cc_sun-moon-164')),cardArtworkKey(actualCards.get('pk-cc_evolutions-91')),'Le Energie con simbolo uguale e illustrazione diversa rimangono separate');
+  assert.deepEqual(actualCards.get('pk-jp_facing-a-new-trial-032').types,['Fighting']);
+  assert.deepEqual(actualCards.get('pk-jp_cruel-traitor-010').types,['Fire','Grass']);
+  for (const group of artworkAudit.groups) {
+    assert.ok(group.cardIds.length>1);
+    for (const id of group.cardIds) {
+      assert.ok(!groupedPrintIds.has(id),`Stampa in più gruppi: ${id}`);
+      groupedPrintIds.add(id);
+      assert.equal(actualCards.get(id)?.game,'pokemon');
+      assert.equal(actualCards.get(id).artworkGroup,group.id);
+    }
+  }
+  for (const card of cards.filter(card=>card.artworkGroup)) assert.ok(groupedPrintIds.has(card.id));
+  const alakazam=cards.filter(card=>card.game==='pokemon' && /alakazam/i.test(card.name) && card.releaseDate<'2012-01-01');
+  assert.equal(alakazam.length,27,'Conservare tutti gli ID delle stampe di Alakazam');
+  assert.equal(visibleCardResults(alakazam,'all').length,9,'Le nove illustrazioni di Alakazam devono restare separate');
+  const expedition=cardVariants(cards,actualCards.get('pk-ecard1-1'));
+  assert.deepEqual(new Set(expedition.map(card=>card.id)),new Set(['pk-ecard1-1','pk-ecard1-33','pk-jp-E1-084','pk-jp-E1-116','pk-cc_e-card-box-toppers-1']));
+  const skyridge=cardVariants(cards,actualCards.get('pk-cc_skyridge-h1'));
+  assert.equal(skyridge.length,5);
+  assert.ok(skyridge.every(card=>!expedition.some(print=>print.id===card.id)),'Expedition e Skyridge hanno illustrazioni diverse');
+  assert.equal(cardVariants(cards,actualCards.get('pk-base1-1')).length,3,'Riunire la ristampa Base Set 2 e Legendary Collection con il Base Set');
   assert.equal(resolveAlias('legacy', {legacy:'duplicate', duplicate:'canonical'}), 'canonical');
   for (const game of ['pokemon','onepiece']) {
     const groups = groupExpansionSets(catalog.sets.filter(set => set.game === game));
